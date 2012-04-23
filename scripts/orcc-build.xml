@@ -1,0 +1,280 @@
+<project name="Headless Orcc build" default="build">
+	
+	<!-- This ant build file use "ant-contrib" library. See http://ant-contrib.sourceforge.net/
+	or simply install it with your system package manager -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+	<!-- Default build type is nightly, specify another type
+	in command line	with "-D" option if needed  -->
+	<property name="build.type">nightly</property>
+	
+	<property file="headless-config.properties" />
+	
+	<patternset id="commonCopyRules">
+		<!-- .project and .classpath files MUST be included to let xtext
+		detect original eclipse projects names and path -->
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
+		<exclude name="**/bin"/>
+		<exclude name="**/bin/**"/>
+		<exclude name="**/.settings"/>
+		<exclude name="**/.settings/**"/>
+		<exclude name="**/src-gen"/>
+		<exclude name="**/src-gen/**"/>
+		<exclude name="**/xtend-gen"/>
+		<exclude name="**/xtend-gen/**"/>
+	</patternset>
+	
+	<target name="build" depends="clean, init, cal-gen, xtend-gen, pde-build" />
+
+	<target name="init">
+
+		<!-- set commonly used paths -->
+		<path id="equinox.launcher.path">
+			<fileset dir="${eclipse.build.root}/plugins">
+				<include name="org.eclipse.equinox.launcher_*.jar" />
+			</fileset>
+		</path>
+		<property name="equinox.launcher" refid="equinox.launcher.path" />
+	
+		<path id="pde.classpath">
+			<dirset dir="${eclipse.build.root}/plugins">
+				<include name="org.eclipse.pde.build_*" />
+			</dirset>
+		</path>
+		<property name="pde.build.dir" refid="pde.classpath" />
+		
+		<path id="emf.classpath">
+			<dirset dir="${path.build.directory}/plugins/">
+				<include name="net.sf.orcc.cal/src" />
+				<include name="net.sf.orcc.cal.ui/src" />
+			</dirset>
+			<fileset dir="${path.scripts}">
+				<include name="antlr-generator-3.2.0.jar" />
+			</fileset>
+			<fileset dir="${eclipse.build.root}/plugins/">
+				<include name="*.jar"/>
+				<exclude name="*ui*.jar" />
+				<exclude name="*source*.jar" />
+			</fileset>
+		</path>
+		
+		<path id="xtext.classpath">
+			<fileset dir="${eclipse.build.root}/plugins/">
+				<include name="*antlr*.jar"/>
+				<include name="*/*antlr*.jar"/>
+				<include name="*guava*.jar"/>
+				<include name="*inject*.jar"/>
+				<include name="*icu*.jar"/>
+				<include name="*common*.jar"/>
+				<include name="*emf*.jar"/>
+				<include name="*log4j*.jar"/>
+				<include name="*jdt.co*.jar"/>
+				<include name="*xtext*.jar"/>
+				<include name="*xbase*.jar"/>
+				<include name="*xtend2*.jar"/>
+				<exclude name="*ui*.jar" />
+				<exclude name="*source*.jar" />
+			</fileset>
+		</path>
+		
+		<if>
+			<equals arg1="${build.type}" arg2="nightly"/>
+			<then>
+				<echo message="Configuring properties for a Nightly build" />
+				<property name="p2.keep.only.latest.version" value="false" />
+				<property name="repo.name" value="Orcc nightly builds" />
+				<property name="pde.buildType" value="N" />
+				
+			</then>
+			<elseif>
+				<equals arg1="${build.type}" arg2="testing"/>
+				<then>
+					<echo message="Configuring properties for a Testing build" />
+					<property name="p2.keep.only.latest.version" value="true" />
+					<delete dir="${path.update.site}" />
+					<property name="repo.name" value="Tests repository" />
+					<property name="pde.buildType" value="I" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${build.type}" arg2="release"/>
+				<then>
+					<echo message="Configuring properties for a Realease build" />
+					<property name="p2.keep.only.latest.version" value="false" />
+					<property name="repo.name" value="Open RVC-CAL Compiler repository" />
+					<property name="pde.buildType" value="R" />
+				</then>
+			</elseif>
+			<else>
+				<fail>Unknown build type : ${build.type}</fail>
+			</else>
+		</if>
+		
+		<!-- Copy orcc feature and plugins source folders to build directory -->
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/orcc/eclipse/plugins/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		<copy todir="${path.build.directory}/features/net.sf.orcc" overwrite="true">
+			<fileset dir="${path.svn.checkout}/orcc/eclipse/feature/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy graphiti feature and plugins source folders to build directory -->
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/graphiti-editor/plugins/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/graphiti-editor/bundles/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		<copy todir="${path.build.directory}/features/net.sf.graphiti" overwrite="true">
+			<fileset dir="${path.svn.checkout}/graphiti-editor/feature/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy dftools plugins source folders to build directory -->
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/dftools/eclipse/plugins/">
+				<patternset refid="commonCopyRules" />
+				<include name="net.sf.dftools.models/**" />
+			</fileset>
+		</copy>
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/dftools/eclipse/bundles/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy orcc2hdl plugins source folders to build directory -->
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/orc2hdl/eclipse/plugins/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="cal-gen" depends="init">
+		<echo message="Executing Mwe2Launcher"/>
+		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true"
+					failonerror="true" classpathref="emf.classpath"
+					dir="${path.build.directory}/plugins/net.sf.orcc.cal">
+			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2"/>
+		</java>
+	</target>
+	
+	<target name="xtend-gen" depends="init">
+		<java classname="org.eclipse.xtext.xtend2.compiler.batch.Main" fork="true"
+					failonerror="true" classpathref="xtext.classpath"
+					dir="${path.build.directory}/plugins/net.sf.dftools.models">
+			<arg value="-d"/>
+			<arg value="xtend-gen"/>
+			<arg value="src"/>
+    	</java>
+	</target>
+
+	<!--
+        This target actually executes the PDE Build process by launching the
+        Eclipse antRunner application.
+    -->
+	<target name="pde-build" depends="init">
+		
+		<echo message="Building net.sf.graphiti feature" />
+		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${pde.build.dir}/scripts/build.xml" />
+			<arg value="-Dbuilder=${path.pde.config}" />
+			<arg value="-DpluginPath=${eclipse.build.root}:${path.build.directory}" />
+			<arg value="-DtopLevelElementId=net.sf.graphiti" />
+			<!-- Options specific to build.type : -->
+			<arg value="-DbuildDirectory=${path.build.directory}" />
+			<arg value="-Dp2.mirror.slicing.latestVersionOnly=${p2.keep.only.latest.version}" />
+			<arg value="-Dp2.build.repo=file:${path.update.site}" />
+			<arg value="-Dp2.metadata.repo.name=${repo.name}" />
+			<arg value="-Dp2.artifact.repo.name=${repo.name}" />
+			<arg value="-DbuildType=${pde.buildType}" />
+			<classpath>
+				<pathelement location="${equinox.launcher}" />
+			</classpath>
+		</java>
+		
+		<echo message="Building net.sf.orcc feature" />
+		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${pde.build.dir}/scripts/build.xml" />
+			<arg value="-Dbuilder=${path.pde.config}" />
+			<arg value="-DpluginPath=${eclipse.build.root}:${path.build.directory}" />
+			<arg value="-DtopLevelElementId=net.sf.orcc" />
+			<!-- Options specific to build.type : -->
+			<arg value="-DbuildDirectory=${path.build.directory}" />
+			<arg value="-Dp2.mirror.slicing.latestVersionOnly=${p2.keep.only.latest.version}" />
+			<arg value="-Dp2.build.repo=file:${path.update.site}" />
+			<arg value="-Dp2.metadata.repo.name=${repo.name}" />
+			<arg value="-Dp2.artifact.repo.name=${repo.name}" />
+			<arg value="-DbuildType=${pde.buildType}" />
+			<classpath>
+				<pathelement location="${equinox.launcher}" />
+			</classpath>
+		</java>
+		
+	</target>
+	
+	<target name="plugins.install" depends="pde-build">
+		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true" dir="${path.scripts}">
+			<arg value="-nosplash" />
+			<arg value="-consoleLog" />
+			<arg value="-application" />
+			<arg value="org.eclipse.equinox.p2.director" />
+
+			<arg value="-destination" />
+			<arg value="${eclipse.runtime.root}" />
+
+			<arg value="-artifactRepository" />
+			<arg value="file:${path.update.site}" />
+			<arg value="-metadataRepository" />
+			<arg value="file:${path.update.site}" />
+			<arg value="-repository" />
+			<arg value="${eclipse.runtime.repos}" />
+
+			<arg value="-installIU" />
+			<arg value="net.sf.graphiti.feature.group,net.sf.orcc.feature.group" />
+		</exec>
+	</target>
+
+	<target name="plugins.uninstall">
+		<!--
+		If it is first launch after eclipse setup, orcc and graphiti are not installed and uninstall task
+		will fail, so we set failonerror attribute to false
+		 -->
+		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="false" dir="${path.scripts}">
+			<arg value="-nosplash" />
+			<arg value="-consoleLog" />
+			<arg value="-application" />
+			<arg value="org.eclipse.equinox.p2.director" />
+
+			<arg value="-destination" />
+			<arg value="${eclipse.runtime.root}" />
+
+			<arg value="-metadataRepository" />
+			<arg value="file:${path.update.site}" />
+			<arg value="-uninstallIU" />
+			<arg value="net.sf.graphiti.feature.group,net.sf.orcc.feature.group" />
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${path.build.directory}" />
+	</target>
+	
+</project>

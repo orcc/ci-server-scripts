@@ -1,0 +1,94 @@
+<!--
+These tasks must be launched after orcc-build, to ensure eclipse used for runtime is correctly configured.
+Orcc and graphiti plugins must have been installed before executing this routine.
+
+Properties calProject, backendType and topNetwork must be specified to launch properly :
+	calProject : name of project to compile & run (RVC, System, etc.)
+	backendType : backend tu use (c, java, llvm, etc.)
+	topNetwork : complete name of the top network (org.mpeg4.part2.Top_RVC, etc.)
+-->
+<project name="Headless Orcc runtime" default="run">
+
+	<!-- This ant build file use "ant-contrib" library. See http://ant-contrib.sourceforge.net/
+	or simply install it with your system package manager -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+	<!-- Load properties file -->
+	<property file="headless-config.properties" />
+
+	<target name="run" depends="init, setup-workspace, frontend-exec, backend-exec, clean-workspace" />
+
+	<target name="init">
+		<if>
+			<not>
+				<and>
+					<isset property="calProject" />
+					<isset property="backendType" />
+					<isset property="topNetwork" />
+				</and>
+			</not>
+			<then>
+				<fail>You must specify properties calProject, backendType and topNetwork</fail>
+			</then>
+		</if>
+		
+		<if>
+			<isset property="test.transformations"/>
+			<then>
+				<property name="option.transfo" value="-t"/>
+			</then>
+			<else>
+				<property name="option.transfo" value=""/>
+			</else>
+		</if>
+
+		<delete dir="${path.output.apps}/${backendType}/${topNetwork}" failonerror="false" />
+	</target>
+
+	<target name="setup-workspace" depends="init">
+		<mkdir dir="${eclipse.runtime.workspace}" />
+		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true">
+			<arg value="-nosplash" />
+			<arg value="-consoleLog" />
+			<arg value="-data" />
+			<arg value="${eclipse.runtime.workspace}" />
+			<arg value="-application" />
+			<arg value="net.sf.orcc.cal.workspaceSetup" />
+			<arg value="${path.svn.checkout}/orc-apps/" />
+		</exec>
+	</target>
+
+	<target name="frontend-exec" depends="setup-workspace">
+		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true">
+			<arg value="-nosplash" />
+			<arg value="-consoleLog" />
+			<arg value="-data" />
+			<arg value="${eclipse.runtime.workspace}" />
+			<arg value="-application" />
+			<arg value="net.sf.orcc.cal.cli" />
+			<arg value="RVC" />
+		</exec>
+	</target>
+
+	<target name="backend-exec" depends="setup-workspace, frontend-exec">
+		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true">
+			<arg value="-nosplash" />
+			<arg value="-consoleLog" />
+			<arg value="-data" />
+			<arg value="${eclipse.runtime.workspace}" />
+			<arg value="-application" />
+			<arg value="net.sf.orcc.backends.${backendType}" />
+			<arg value="-p" />
+			<arg value="${calProject}" />
+			<arg value="-o" />
+			<arg value="${path.output.apps}/${backendType}/${topNetwork}" />
+			<arg value="${option.transfo}" />
+			<arg value="${topNetwork}" />
+		</exec>
+	</target>
+
+	<target name="clean-workspace">
+		<delete dir="${eclipse.runtime.workspace}" />
+	</target>
+
+</project>
