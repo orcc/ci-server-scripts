@@ -6,7 +6,7 @@
 	
 	<!-- Default build type is nightly, specify another type
 	in command line	with "-D" option if needed  -->
-	<property name="build.type">nightly</property>
+	<property name="build.type" value="nightly" />
 	
 	<property file="headless-config.properties" />
 	
