@@ -1,7 +1,9 @@
 <project name="Headless Orcc build" default="build">
 	
 	<!-- This ant build file use "ant-contrib" library. See http://ant-contrib.sourceforge.net/
-	or simply install it with your system package manager -->
+	or simply install it with your system package manager.
+	Additionnaly, see https://bugs.launchpad.net/ubuntu/+source/ant-contrib/+bug/580569 and manually create
+	a symlink to the library on ubuntu	-->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 	
 	<!-- Default build type is nightly, specify another type
