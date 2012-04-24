@@ -16,7 +16,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 	<!-- Load properties file -->
 	<property file="headless-config.properties" />
 
-	<target name="run" depends="init, setup-workspace, frontend-exec, backend-exec, clean-workspace" />
+	<target name="run" depends="clean-workspace, init, setup-workspace, frontend-exec, backend-exec" />
 
 	<target name="init">
 		<if>
