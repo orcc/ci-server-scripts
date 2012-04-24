@@ -82,8 +82,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${calProject}" />
 			<arg value="-o" />
 			<arg value="${path.output.apps}/${backendType}/${topNetwork}" />
-			<arg value="${option.transfo}" />
-			<arg value="${topNetwork}" />
+			<arg value="${option.transfo}${topNetwork}" />
 		</exec>
 	</target>
 
