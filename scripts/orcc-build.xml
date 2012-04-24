@@ -186,7 +186,7 @@
         This target actually executes the PDE Build process by launching the
         Eclipse antRunner application.
     -->
-	<target name="pde-build" depends="init">
+	<target name="pde-build" depends="init, cal-gen, xtend-gen">
 		
 		<echo message="Building net.sf.graphiti feature" />
 		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
@@ -232,7 +232,7 @@
 		
 	</target>
 	
-	<target name="plugins.install" depends="pde-build">
+	<target name="plugins.install">
 		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true" dir="${path.scripts}">
 			<arg value="-nosplash" />
 			<arg value="-consoleLog" />
