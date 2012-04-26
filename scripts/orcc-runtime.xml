@@ -33,7 +33,10 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 		</if>
 		
 		<if>
-			<isset property="test.transformations"/>
+			<and>
+				<isset property="test.transformations"/>
+				<equals arg1="test.transformations" arg2="true" />
+			</and>
 			<then>
 				<property name="option.transfo" value="-d -t "/>
 			</then>
@@ -78,11 +81,12 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${eclipse.runtime.workspace}" />
 			<arg value="-application" />
 			<arg value="net.sf.orcc.backends.${backendType}" />
+			<arg line="${option.transfo}"/>
 			<arg value="-p" />
 			<arg value="${calProject}" />
 			<arg value="-o" />
 			<arg value="${path.output.apps}/${backendType}/${topNetwork}" />
-			<arg value="${option.transfo}${topNetwork}" />
+			<arg value="${topNetwork}" />
 		</exec>
 	</target>
 
