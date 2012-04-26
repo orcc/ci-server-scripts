@@ -35,7 +35,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 		<if>
 			<and>
 				<isset property="test.transformations"/>
-				<equals arg1="test.transformations" arg2="true" />
+				<equals arg1="${test.transformations}" arg2="true" />
 			</and>
 			<then>
 				<property name="option.transfo" value="-d -t "/>
