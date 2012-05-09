@@ -124,6 +124,11 @@
 				<patternset refid="commonCopyRules" />
 			</fileset>
 		</copy>
+		<copy todir="${path.build.directory}/plugins" overwrite="true">
+			<fileset dir="${path.svn.checkout}/orcc/eclipse/bundles/">
+				<patternset refid="commonCopyRules" />
+			</fileset>
+		</copy>
 		
 		<!-- Copy graphiti feature and plugins source folders to build directory -->
 		<copy todir="${path.build.directory}/plugins" overwrite="true">
@@ -138,19 +143,6 @@
 		</copy>
 		<copy todir="${path.build.directory}/features/net.sf.graphiti" overwrite="true">
 			<fileset dir="${path.svn.checkout}/graphiti-editor/feature/">
-				<patternset refid="commonCopyRules" />
-			</fileset>
-		</copy>
-		
-		<!-- Copy dftools plugins source folders to build directory -->
-		<copy todir="${path.build.directory}/plugins" overwrite="true">
-			<fileset dir="${path.svn.checkout}/dftools/eclipse/plugins/">
-				<patternset refid="commonCopyRules" />
-				<include name="net.sf.dftools.models/**" />
-			</fileset>
-		</copy>
-		<copy todir="${path.build.directory}/plugins" overwrite="true">
-			<fileset dir="${path.svn.checkout}/dftools/eclipse/bundles/">
 				<patternset refid="commonCopyRules" />
 			</fileset>
 		</copy>
