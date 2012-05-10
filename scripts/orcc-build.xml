@@ -167,7 +167,7 @@
 	<target name="xtend-gen" depends="init">
 		<java classname="org.eclipse.xtext.xtend2.compiler.batch.Main" fork="true"
 					failonerror="true" classpathref="xtext.classpath"
-					dir="${path.build.directory}/plugins/net.sf.dftools.models">
+					dir="${path.build.directory}/plugins/net.sf.orcc.models">
 			<arg value="-d"/>
 			<arg value="xtend-gen"/>
 			<arg value="src"/>
