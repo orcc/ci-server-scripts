@@ -124,6 +124,7 @@ def main():
         sys.exit("The sequence path must be a valid directory and contains 'MPEG4' subdirectory")
     
     errorsCount = 0
+    warningsCount = 0
     
     for file in fileList:
         if type(file).__name__ == "list":
@@ -134,10 +135,12 @@ def main():
             outputFile = file+".yuv"
         
         if not os.path.exists(clArguments.sequences +"/"+ inputFile):
-            print "Warning : file ", clArguments.sequences, "/", inputFile, " does not exists"
+            print "Warning : file", clArguments.sequences, "/", inputFile, "does not exists"
+            warningsCount += 1
             continue
         if not os.path.exists(clArguments.sequences +"/"+ outputFile):
-            print "Warning : file ", clArguments.sequences, "/", outputFile, " does not exists"
+            print "Warning : file", clArguments.sequences, "/", outputFile, "does not exists"
+            warningsCount += 1
             continue
         
         execPath = [clArguments.decoder, "-i", clArguments.sequences +"/"+ inputFile,
@@ -150,17 +153,21 @@ def main():
         if not clArguments.enableDisplay:
             execPath.append("-n")
         
+        print "Try to decode", inputFile, "and check consistency wit", outputFile, " :"
         commandResult = subprocess.call(execPath)
         
         if commandResult != 0:
-            print("Error with the files ", inputFile, " / ", outputFile)
-            print("Command returned code ", commandResult)
-            ++errorsCount
+            print "Error with the files ", inputFile, " / ", outputFile
+            print "Command returned code ", commandResult
+            errorsCount += 1
     
     if errorsCount != 0:
-        sys.exit("The test suite finished with ", errorsCount, " errors")
-    else:
-        print("The test suite finished with no errors !")
+        sys.exit("The test suite finished with " + str(errorsCount) + " errors and " + str(warningsCount) + " warnings.")
+    elif warningsCount != 0:
+        print "The test suite finished with no errors but", warningsCount, "warnings."
+        sys.exit()
+    else :
+        print "The test suite finished with no errors !"
         sys.exit()
     
 
