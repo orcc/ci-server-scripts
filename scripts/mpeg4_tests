@@ -134,11 +134,11 @@ def main():
             outputFile = file+".yuv"
         
         if not os.path.exists(clArguments.sequences +"/"+ inputFile):
-            print "Warning : file", clArguments.sequences, "/", inputFile, "does not exists"
+            print "Warning : input file", clArguments.sequences+"/"+inputFile, "does not exists"
             warningsCount += 1
             continue
         if not os.path.exists(clArguments.sequences +"/"+ outputFile):
-            print "Warning : file", clArguments.sequences, "/", outputFile, "does not exists"
+            print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
             warningsCount += 1
             continue
         
