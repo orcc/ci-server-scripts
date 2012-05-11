@@ -4,7 +4,6 @@ import argparse
 import subprocess
 import os
 import sys
-from IPython.frontend.process.killableprocess import Popen
 
 VERSION = "0.1"
 
