@@ -6,10 +6,11 @@ import os
 import sys
 
 VERSION = "0.1"
+DEFAULT_FILE_LIST = "mpeg"
 
 def computeFileList():
     global fileList
-    fileList = [
+    mpegFileList = [
         "MPEG4/SIMPLE/I-VOP/hit000",
         "MPEG4/SIMPLE/I-VOP/jvc000",
         "MPEG4/SIMPLE/I-VOP/san000",
@@ -19,10 +20,8 @@ def computeFileList():
         "MPEG4/SIMPLE/P-VOP/hit002",
         "MPEG4/SIMPLE/P-VOP/hit003",
         "MPEG4/SIMPLE/P-VOP/hit004",
-        
         "MPEG4/SIMPLE/P-VOP/hit005",
         "MPEG4/SIMPLE/P-VOP/hit006",
-        
         "MPEG4/SIMPLE/P-VOP/hit007",
         "MPEG4/SIMPLE/P-VOP/hit008",
         "MPEG4/SIMPLE/P-VOP/hit009",
@@ -30,6 +29,7 @@ def computeFileList():
         "MPEG4/SIMPLE/P-VOP/hit011",
         "MPEG4/SIMPLE/P-VOP/hit013",
         "MPEG4/SIMPLE/P-VOP/hit014",
+        
         "MPEG4/SIMPLE/P-VOP/jvc001",
         "MPEG4/SIMPLE/P-VOP/jvc002",
         "MPEG4/SIMPLE/P-VOP/jvc003",
@@ -49,6 +49,7 @@ def computeFileList():
         "MPEG4/SIMPLE/P-VOP/jvc019",
         "MPEG4/SIMPLE/P-VOP/jvc020",
         "MPEG4/SIMPLE/P-VOP/jvc021",
+        
         "MPEG4/SIMPLE/P-VOP/san002",
         "MPEG4/SIMPLE/P-VOP/san003",
         "MPEG4/SIMPLE/P-VOP/san004",
@@ -112,20 +113,66 @@ def computeFileList():
         "MPEG4/SIMPLE/P-VOP/san019",
         "MPEG4/SIMPLE/P-VOP/san020"
     ]
+    
+    avcFileList = [
+        ["AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv", "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.yuv"],
+        ["AVC/CAVLC/general/AVCNL-2/SVA_NL1_B.264", "AVC/CAVLC/general/AVCNL-2/SVA_NL1_B_rec.yuv"],
+        ["AVC/CAVLC/general/AVCNL-3/NL2_Sony_H.jsv", "AVC/CAVLC/general/AVCNL-3/NL2_Sony_H.yuv"],
+        ["AVC/CAVLC/general/AVCNL-4/SVA_NL2_E.264", "AVC/CAVLC/general/AVCNL-4/SVA_NL2_E_rec.yuv"],
+        ["AVC/CAVLC/general/AVCBA-1/BA1_Sony_D.jsv", "AVC/CAVLC/general/AVCBA-1/BA1_Sony_D.yuv"],
+        ["AVC/CAVLC/general/AVCBA-2/SVA_BA1_B.264", "AVC/CAVLC/general/AVCBA-2/SVA_BA1_B_rec.yuv"],
+        ["AVC/CAVLC/general/AVCBA-3/BA2_Sony_F.jsv", "AVC/CAVLC/general/AVCBA-3/BA2_Sony_F.yuv"],
+        ["AVC/CAVLC/general/AVCBA-4/SVA_BA2_D.264", "AVC/CAVLC/general/AVCBA-4/SVA_BA2_D_rec.yuv"],
+        ["AVC/CAVLC/general/AVCBA-5/BA_MW_D.264", "AVC/CAVLC/general/AVCBA-5/BA_MW_D_rec.qcif"],
+        ["AVC/CAVLC/general/AVCBA-6/BANM_MW_D.264", "AVC/CAVLC/general/AVCBA-6/BANM_MW_D_rec.qcif"],
+        ["AVC/CAVLC/general/AVCBA-7/BA1_FT_C.264", "AVC/CAVLC/general/AVCBA-7/BA1_FT_C.yuv"],
+        ["AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.264", "AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.yuv"],
+        ["AVC/CAVLC/general/AVCMQ-2/NLMQ2_JVC_C.264", "AVC/CAVLC/general/AVCMQ-2/NLMQ2_JVC_C.yuv"],
+        ["AVC/CAVLC/general/AVCMQ-3/BAMQ1_JVC_C.264", "AVC/CAVLC/general/AVCMQ-3/BAMQ1_JVC_C.yuv"],
+        ["AVC/CAVLC/general/AVCMQ-4/BAMQ2_JVC_C.264", "AVC/CAVLC/general/AVCMQ-4/BAMQ2_JVC_C.yuv"],
+        ["AVC/CAVLC/general/AVCSL-1/SVA_Base_B.264", "AVC/CAVLC/general/AVCSL-1/SVA_Base_B_rec.yuv"],
+        ["AVC/CAVLC/general/AVCSL-2/SVA_FM1_E.264", "AVC/CAVLC/general/AVCSL-2/SVA_FM1_E_rec.yuv"],
+        ["AVC/CAVLC/general/AVCSQ-1/BASQP1_Sony_C.jsv", "AVC/CAVLC/general/AVCSQ-1/BASQP1_Sony_C.yuv"],
+        ["AVC/CAVLC/general/AVCCI-1/CI_MW_D.264", "AVC/CAVLC/general/AVCCI-1/CI_MW_D_rec.qcif"],
+        ["AVC/CAVLC/general/AVCCI-2/SVA_CL1_E.264", "AVC/CAVLC/general/AVCCI-2/SVA_CL1_E_rec.yuv"],
+        ["AVC/CAVLC/general/AVCCI-3/CI1_FT_B.264", "AVC/CAVLC/general/AVCCI-3/CI1_FT_B.yuv"],
+        ["#AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv", "AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.yuv"],
+        ["AVC/CAVLC/general/AVCAUD-1/AUD_MW_E.264", "AVC/CAVLC/general/AVCAUD-1/AUD_MW_E_rec.qcif"],
+        ["AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D.264", "AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D_rec.qcif"],
+        ["AVC/CAVLC/general/AVCNRF-1/NRF_MW_E.264", "AVC/CAVLC/general/AVCNRF-1/NRF_MW_E_rec.qcif"],
+        ["AVC/CAVLC/general/AVCMPS-1/MPS_MW_A.264", "AVC/CAVLC/general/AVCMPS-1/MPS_MW_A_rec.qcif"],
+        ["AVC/CAVLC/IPCM/AVCPCM-1/CVPCMNL1_SVA_C.264", "AVC/CAVLC/IPCM/AVCPCM-1/CVPCMNL1_SVA_C_rec.yuv"],
+        ["AVC/CAVLC/IPCM/AVCPCM-2/CVPCMNL2_SVA_C.264", "AVC/CAVLC/IPCM/AVCPCM-2/CVPCMNL2_SVA_C_rec.yuv"],
+        ["AVC/CAVLC/Long_Sequence/AVCLS-1/LS_SVA_D.264", "AVC/CAVLC/Long_Sequence/AVCLS-1/LS_SVA_D_rec.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-1/MR1_BT_A.h264", "AVC/CAVLC/MMCO/AVCMR-1/MR1_BT_A.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-2/MR2_TANDBERG_E.264", "AVC/CAVLC/MMCO/AVCMR-2/MR2_TANDBERG_E.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-3/MR3_TANDBERG_B.264", "AVC/CAVLC/MMCO/AVCMR-3/MR3_TANDBERG_B.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-4/MR4_TANDBERG_C.264", "AVC/CAVLC/MMCO/AVCMR-4/MR4_TANDBERG_C.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-5/MR5_TANDBERG_C.264", "AVC/CAVLC/MMCO/AVCMR-5/MR5_TANDBERG_C.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-6/MR1_MW_A.264", "AVC/CAVLC/MMCO/AVCMR-6/MR1_MW_A_rec.qcif"],
+        ["AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A.264", "AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A_rec.qcif"],
+        ["AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.yuv"],
+        ["AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.yuv"]
+    ]
+    
+    fileList = {"mpeg" : mpegFileList, "avc" : avcFileList} 
 
 def main():
     clArguments = parser.parse_args()
+    
+    errorsCount = 0
+    warningsCount = 0
     
     if not os.path.isfile(clArguments.decoder) or not os.access(clArguments.decoder, os.X_OK):
         sys.exit(clArguments.decoder + " is not an executable file !")
     
     if not os.path.isdir(clArguments.sequences) or not os.path.isdir(clArguments.sequences + "/MPEG4"):
         sys.exit("The sequence path must be a valid directory and contains 'MPEG4' subdirectory")
+        
+    if not fileList.has_key(clArguments.filesKey) :
+       clArguments.filesKey = DEFAULT_FILE_LIST
     
-    errorsCount = 0
-    warningsCount = 0
-    
-    for file in fileList:
+    for file in fileList[clArguments.filesKey]:
         if type(file).__name__ == "list":
             inputFile = file[0]
             outputFile = file[1]
@@ -152,21 +199,26 @@ def main():
         if not clArguments.enableDisplay:
             execPath.append("-n")
         
-        print "Try to decode", inputFile, "and check consistency wit", outputFile, " :"
+        print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
         commandResult = subprocess.call(execPath)
         
         if commandResult != 0:
-            print "Error with the files ", inputFile, " / ", outputFile
-            print "Command returned code ", commandResult
+            print "Error with the files", inputFile, "/", outputFile
+            print "Command returned code", commandResult
             errorsCount += 1
     
     if errorsCount != 0:
-        sys.exit("The test suite finished with " + str(errorsCount) + " errors and " + str(warningsCount) + " warnings.")
+        ws, es = ""
+        if errorsCount > 1 : es = "s"
+        if warningsCount > 1 : ws = "s"
+        sys.exit("The test suite finished with " + str(errorsCount) + " error"+es+" and " + str(warningsCount) + " warning"+ws+".")
     elif warningsCount != 0:
-        print "The test suite finished with no errors but", warningsCount, "warnings."
+        s = ""
+        if warningsCount > 1 : s = "s"
+        print "The test suite finished with no errors but", warningsCount, "warning"+s+"."
         sys.exit()
     else :
-        print "The test suite finished with no errors !"
+        print "The test suite finished with no error !"
         sys.exit()
     
 
@@ -177,11 +229,13 @@ def setupCommandLine():
     parser.add_argument("-d", "--decoder", action="store", dest="decoder", required=True,
                         help="Path to decoder which must be used")
     parser.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
-                        help="Path to directory containing sequences (ie : containing MPEG4 folder)")
+                        help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder)")
     parser.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
                         help="Number of times input is read for every file")
     parser.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
                         help="Pass this argument to disable display when testing decoders")
+    parser.add_argument("-f", "--filestypes", choices=["mpeg","avc"], default=DEFAULT_FILE_LIST, dest="filesKey", 
+                        help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"'")
 
 if __name__ == "__main__":
     setupCommandLine()
