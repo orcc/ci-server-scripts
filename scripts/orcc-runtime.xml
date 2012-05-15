@@ -39,9 +39,11 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			</and>
 			<then>
 				<property name="option.transfo" value="-d -t "/>
+				<property name="target.subfolder" value="${bacbackendType}-addtransfo"/>
 			</then>
 			<else>
 				<property name="option.transfo" value=""/>
+				<property name="target.subfolder" value="${bacbackendType}"/>
 			</else>
 		</if>
 
@@ -85,7 +87,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="-p" />
 			<arg value="${calProject}" />
 			<arg value="-o" />
-			<arg value="${path.output.apps}/${backendType}/${topNetwork}" />
+			<arg value="${path.output.apps}/${target.subfolder}/${topNetwork}" />
 			<arg value="${topNetwork}" />
 		</exec>
 	</target>
