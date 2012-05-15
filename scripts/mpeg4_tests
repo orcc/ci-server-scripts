@@ -165,7 +165,7 @@ def computeFileList():
         ["AVC/CAVLC/general/AVCCI-2/SVA_CL1_E.264", "AVC/CAVLC/general/AVCCI-2/SVA_CL1_E_rec.yuv"],
         ["AVC/CAVLC/general/AVCCI-3/CI1_FT_B.264", "AVC/CAVLC/general/AVCCI-3/CI1_FT_B.yuv"],
         ["AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv", "AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.yuv"],
-        ["AVC/CAVLC/general/AVCAUD-1/AUD_MW_E.264", "AVC/CAVLC/general/AVCAUD-1/AUD_MW_E_rec.qcif"],
+        #["AVC/CAVLC/general/AVCAUD-1/AUD_MW_E.264", "AVC/CAVLC/general/AVCAUD-1/AUD_MW_E_rec.qcif"],
         ["AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D.264", "AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D_rec.qcif"],
         ["AVC/CAVLC/general/AVCNRF-1/NRF_MW_E.264", "AVC/CAVLC/general/AVCNRF-1/NRF_MW_E_rec.qcif"],
         ["AVC/CAVLC/general/AVCMPS-1/MPS_MW_A.264", "AVC/CAVLC/general/AVCMPS-1/MPS_MW_A_rec.qcif"],
