@@ -47,7 +47,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			</else>
 		</if>
 
-		<delete dir="${path.output.apps}/${backendType}/${topNetwork}" failonerror="false" />
+		<delete dir="${path.output.apps}/${target.subfolder}/${topNetwork}" failonerror="false" />
 	</target>
 
 	<target name="setup-workspace" depends="init">
