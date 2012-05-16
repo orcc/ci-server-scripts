@@ -71,7 +71,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${eclipse.runtime.workspace}" />
 			<arg value="-application" />
 			<arg value="net.sf.orcc.cal.cli" />
-			<arg value="RVC" />
+			<arg value="${calProject}" />
 		</exec>
 	</target>
 
