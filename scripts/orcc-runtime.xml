@@ -72,6 +72,9 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="-application" />
 			<arg value="net.sf.orcc.cal.cli" />
 			<arg value="${calProject}" />
+			<arg value="-vmargs" />
+			<arg value="-Xms40m" />
+			<arg value="-Xmx768m" />
 		</exec>
 	</target>
 
@@ -89,6 +92,9 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="-o" />
 			<arg value="${path.output.apps}/${target.subfolder}/${topNetwork}" />
 			<arg value="${topNetwork}" />
+			<arg value="-vmargs" />
+			<arg value="-Xms40m" />
+			<arg value="-Xmx768m" />
 		</exec>
 	</target>
 
