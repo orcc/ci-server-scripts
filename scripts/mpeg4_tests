@@ -257,8 +257,6 @@ def main():
         print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
         commandResult = subprocess.call(finalCommandLine)
         
-        print finalCommandLine
-        
         if commandResult != 0:
             print "Error with the files", inputFile, "/", outputFile
             print "Command returned code", commandResult
