@@ -188,15 +188,45 @@ def computeFileList():
 def main():
     clArguments = parser.parse_args()
     
+    #print clArguments
+    #sys.exit(0)
+    
     errorsCount = 0
     warningsCount = 0
     
-    if not os.path.isfile(clArguments.decoder) or not os.access(clArguments.decoder, os.X_OK):
-        sys.exit(clArguments.decoder + " is not an executable file !")
+    execPath = []
     
-    if not os.path.isdir(clArguments.sequences) or not os.path.isdir(clArguments.sequences + "/MPEG4"):
-        sys.exit("The sequence path must be a valid directory and contains 'MPEG4' subdirectory")
+    if clArguments.useJade :
+        if clArguments.topXdf == None or not os.path.isfile(clArguments.topXdf):
+            sys.exit("Please use -xdf argument to set the path of a top network")
+        elif clArguments.vtl == None or not os.path.isdir(clArguments.vtl):
+            sys.exit("Please use -vtl argument to set the path of a VTL folder")
+        else:
+            execPath.extend(["Jade", "-xdf", clArguments.topXdf, "-L", clArguments.vtl])
         
+        if clArguments.loopNumber != None:
+            print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
+        
+        if not clArguments.enableDisplay:
+            execPath.append("-nodisplay")
+
+    elif clArguments.useClassic:
+        if clArguments.decoder == None:
+            sys.exit("Please use -d argument to set the path of a decoder")
+        elif not os.path.isfile(clArguments.decoder) or not os.access(clArguments.decoder, os.X_OK):
+            sys.exit(clArguments.decoder + " must be an executable file !")
+        else:
+            execPath.append(clArguments.decoder)
+                    
+        if clArguments.loopNumber != None:
+            execPath.extend(["-l", str(clArguments.loopNumber)])
+        
+        if not clArguments.enableDisplay:
+            execPath.append("-n")
+    
+    if not os.path.isdir(clArguments.sequences) or (not os.path.isdir(clArguments.sequences + "/MPEG4") and not os.path.isdir(clArguments.sequences + "/AVC")):
+        sys.exit("The sequence path must be a valid directory and contains 'MPEG4' or 'AVC' subdirectory")
+    
     if not fileList.has_key(clArguments.filesKey) :
        clArguments.filesKey = DEFAULT_FILE_LIST
     
@@ -217,18 +247,11 @@ def main():
             warningsCount += 1
             continue
         
-        execPath = [clArguments.decoder, "-i", clArguments.sequences +"/"+ inputFile,
-                    "-o", clArguments.sequences +"/"+ outputFile]
-        
-        if clArguments.loopNumber != None:
-            execPath.append("-l")
-            execPath.append(str(clArguments.loopNumber))
-        
-        if not clArguments.enableDisplay:
-            execPath.append("-n")
+        finalCommandLine = list(execPath)
+        finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile, "-o", clArguments.sequences +"/"+ outputFile])
         
         print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
-        commandResult = subprocess.call(execPath)
+        commandResult = subprocess.call(finalCommandLine)
         
         if commandResult != 0:
             print "Error with the files", inputFile, "/", outputFile
@@ -253,17 +276,34 @@ def main():
 def setupCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
     global parser
+    
     parser = argparse.ArgumentParser(description='Execute parser to test video decoding', version=VERSION)
-    parser.add_argument("-d", "--decoder", action="store", dest="decoder", required=True,
+
+    options = parser.add_argument_group(title="Parameters")
+    
+    mode = options.add_mutually_exclusive_group(required=True)
+    mode.add_argument("-jade", action="store_true", default=False, dest="useJade")
+    mode.add_argument("-classic", action="store_true", default=False, dest="useClassic")
+    
+    jade = parser.add_argument_group("Parameters for -jade mode", "Test a decoder in LLVM with Jade toolchain")
+    jade.add_argument("-xdf", action="store", dest="topXdf",
+                            help="Path to the Top_*.xdf network of the decoder")
+    jade.add_argument("-vtl", action="store", dest="vtl",
+                            help="Path to the VTL directory of the decoder")
+    
+    classic = parser.add_argument_group("Parameters for -classic mode", "Test a classic C decoder")
+    classic.add_argument("-d", "--decoder", action="store", dest="decoder",
                         help="Path to decoder which must be used")
-    parser.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
-                        help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder)")
-    parser.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
+    classic.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
                         help="Number of times input is read for every file")
-    parser.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
+    
+    options.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
+                        help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder)")
+    options.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
                         help="Pass this argument to disable display when testing decoders")
-    parser.add_argument("-f", "--filestypes", choices=["mpeg","avc"], default=DEFAULT_FILE_LIST, dest="filesKey", 
-                        help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"'")
+    options.add_argument("-f", "--filestypes", choices=["mpeg","avc"], default=DEFAULT_FILE_LIST, dest="filesKey", 
+                        help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"')")
+    
 
 if __name__ == "__main__":
     setupCommandLine()
