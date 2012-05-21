@@ -202,7 +202,11 @@ def main():
         elif clArguments.vtl == None or not os.path.isdir(clArguments.vtl):
             sys.exit("Please use -vtl argument to set the path of a VTL folder")
         else:
-            execPath.extend(["Jade", "-xdf", clArguments.topXdf, "-L", clArguments.vtl])
+            if clArguments.executable != None:
+                execPath.append(clArguments.executable)
+            else:
+                execPath.append("Jade")
+            execPath.extend(["-xdf", clArguments.topXdf, "-L", clArguments.vtl])
         
         if clArguments.loopNumber != None:
             print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
@@ -211,12 +215,12 @@ def main():
             execPath.append("-nodisplay")
 
     elif clArguments.useClassic:
-        if clArguments.decoder == None:
-            sys.exit("Please use -d argument to set the path of a decoder")
-        elif not os.path.isfile(clArguments.decoder) or not os.access(clArguments.decoder, os.X_OK):
-            sys.exit(clArguments.decoder + " must be an executable file !")
+        if clArguments.executable == None:
+            sys.exit("Please use -e argument to set the path of a decoder")
+        elif not os.path.isfile(clArguments.executable) or not os.access(clArguments.executable, os.X_OK):
+            sys.exit(clArguments.executable + " must be an executable file !")
         else:
-            execPath.append(clArguments.decoder)
+            execPath.append(clArguments.executable)
                     
         if clArguments.loopNumber != None:
             execPath.extend(["-l", str(clArguments.loopNumber)])
@@ -252,6 +256,8 @@ def main():
         
         print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
         commandResult = subprocess.call(finalCommandLine)
+        
+        print finalCommandLine
         
         if commandResult != 0:
             print "Error with the files", inputFile, "/", outputFile
@@ -292,11 +298,11 @@ def setupCommandLine():
                             help="Path to the VTL directory of the decoder")
     
     classic = parser.add_argument_group("Parameters for -classic mode", "Test a classic C decoder")
-    classic.add_argument("-d", "--decoder", action="store", dest="decoder",
-                        help="Path to decoder which must be used")
     classic.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
                         help="Number of times input is read for every file")
     
+    options.add_argument("-e", "--executable", action="store", dest="executable",
+                        help="In -classic mode, path to a decoder. In -jade mode, path to Jade executable.")
     options.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
                         help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder)")
     options.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
