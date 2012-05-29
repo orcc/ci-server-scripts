@@ -1,32 +1,32 @@
 <project name="Headless Orcc build" default="build">
-	
+
 	<!-- This ant build file use "ant-contrib" library. See http://ant-contrib.sourceforge.net/
 	or simply install it with your system package manager.
 	Additionnaly, see https://bugs.launchpad.net/ubuntu/+source/ant-contrib/+bug/580569 and manually create
 	a symlink to the library on ubuntu	-->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
 	<!-- Default build type is nightly, specify another type
 	in command line	with "-D" option if needed  -->
 	<property name="build.type" value="nightly" />
-	
+
 	<property file="headless-config.properties" />
-	
+
 	<patternset id="commonCopyRules">
 		<!-- .project and .classpath files MUST be included to let xtext
 		detect original eclipse projects names and path -->
-		<exclude name="**/.svn"/>
-		<exclude name="**/.svn/**"/>
-		<exclude name="**/bin"/>
-		<exclude name="**/bin/**"/>
-		<exclude name="**/.settings"/>
-		<exclude name="**/.settings/**"/>
-		<exclude name="**/src-gen"/>
-		<exclude name="**/src-gen/**"/>
-		<exclude name="**/xtend-gen"/>
-		<exclude name="**/xtend-gen/**"/>
+		<exclude name="**/.svn" />
+		<exclude name="**/.svn/**" />
+		<exclude name="**/bin" />
+		<exclude name="**/bin/**" />
+		<exclude name="**/.settings" />
+		<exclude name="**/.settings/**" />
+		<exclude name="**/src-gen" />
+		<exclude name="**/src-gen/**" />
+		<exclude name="**/xtend-gen" />
+		<exclude name="**/xtend-gen/**" />
 	</patternset>
-	
+
 	<target name="build" depends="clean, init, cal-gen, xtend-gen, pde-build" />
 
 	<target name="init">
@@ -38,59 +38,40 @@
 			</fileset>
 		</path>
 		<property name="equinox.launcher" refid="equinox.launcher.path" />
-	
+
 		<path id="pde.classpath">
 			<dirset dir="${eclipse.build.root}/plugins">
 				<include name="org.eclipse.pde.build_*" />
 			</dirset>
 		</path>
 		<property name="pde.build.dir" refid="pde.classpath" />
-		
-		<path id="emf.classpath">
+
+		<path id="emf.classpath.ref">
 			<dirset dir="${path.build.directory}/plugins/">
 				<include name="net.sf.orcc.cal/src" />
 				<include name="net.sf.orcc.cal.ui/src" />
 			</dirset>
 			<fileset dir="${path.scripts}">
-				<include name="antlr-generator-3.2.0.jar" />
+				<include name="antlr-generator*.jar" />
 			</fileset>
 			<fileset dir="${eclipse.build.root}/plugins/">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 				<exclude name="*ui*.jar" />
 				<exclude name="*source*.jar" />
 			</fileset>
 		</path>
-		
-		<path id="xtext.classpath">
-			<fileset dir="${eclipse.build.root}/plugins/">
-				<include name="*antlr*.jar"/>
-				<include name="*/*antlr*.jar"/>
-				<include name="*guava*.jar"/>
-				<include name="*inject*.jar"/>
-				<include name="*icu*.jar"/>
-				<include name="*common*.jar"/>
-				<include name="*emf*.jar"/>
-				<include name="*log4j*.jar"/>
-				<include name="*jdt.co*.jar"/>
-				<include name="*xtext*.jar"/>
-				<include name="*xbase*.jar"/>
-				<include name="*xtend2*.jar"/>
-				<exclude name="*ui*.jar" />
-				<exclude name="*source*.jar" />
-			</fileset>
-		</path>
-		
+
 		<if>
-			<equals arg1="${build.type}" arg2="nightly"/>
+			<equals arg1="${build.type}" arg2="nightly" />
 			<then>
 				<echo message="Configuring properties for a Nightly build" />
 				<property name="p2.keep.only.latest.version" value="false" />
 				<property name="repo.name" value="Orcc nightly builds" />
 				<property name="pde.buildType" value="N" />
-				
+
 			</then>
 			<elseif>
-				<equals arg1="${build.type}" arg2="testing"/>
+				<equals arg1="${build.type}" arg2="testing" />
 				<then>
 					<echo message="Configuring properties for a Testing build" />
 					<property name="p2.keep.only.latest.version" value="true" />
@@ -100,7 +81,7 @@
 				</then>
 			</elseif>
 			<elseif>
-				<equals arg1="${build.type}" arg2="release"/>
+				<equals arg1="${build.type}" arg2="release" />
 				<then>
 					<echo message="Configuring properties for a Realease build" />
 					<property name="p2.keep.only.latest.version" value="false" />
@@ -112,7 +93,7 @@
 				<fail>Unknown build type : ${build.type}</fail>
 			</else>
 		</if>
-		
+
 		<!-- Copy orcc feature and plugins source folders to build directory -->
 		<copy todir="${path.build.directory}/plugins" overwrite="true">
 			<fileset dir="${path.svn.checkout}/orcc/eclipse/plugins/">
@@ -129,7 +110,7 @@
 				<patternset refid="commonCopyRules" />
 			</fileset>
 		</copy>
-		
+
 		<!-- Copy graphiti feature and plugins source folders to build directory -->
 		<copy todir="${path.build.directory}/plugins" overwrite="true">
 			<fileset dir="${path.svn.checkout}/graphiti-editor/plugins/">
@@ -146,32 +127,67 @@
 				<patternset refid="commonCopyRules" />
 			</fileset>
 		</copy>
-		
+
 		<!-- Copy orcc2hdl plugins source folders to build directory -->
 		<copy todir="${path.build.directory}/plugins" overwrite="true">
 			<fileset dir="${path.svn.checkout}/orc2hdl/eclipse/plugins/">
 				<patternset refid="commonCopyRules" />
 			</fileset>
 		</copy>
+		
+		<!-- Warning : These path/property must be set after copying files into "plugins" subfolder -->
+		<path id="xtend.classpath.ref">
+			<fileset dir="${eclipse.build.root}/plugins/">
+				<include name="org.eclipse.jdt.co*.jar" />
+				<include name="*eclipse.core*.jar" />
+				<include name="*eclipse.osgi*.jar" />
+				<include name="*equinox*.jar" />
+				<include name="*antlr*.jar" />
+				<include name="*javax.inject*.jar" />
+				<include name="*google*.jar" />
+				<include name="*log4j*.jar" />
+				<include name="*emf*.jar" />
+				<include name="*xtend*.jar" />
+				<include name="*xtext*.jar" />
+				<exclude name="*.ui*.jar" />
+				<exclude name="*.source*.jar" />
+			</fileset>
+			<dirset dir="${path.build.directory}/plugins/">
+				<include name="**/src" />
+				<include name="**/src-gen" />
+			</dirset>
+		</path>
+		<property name="xtend.classpath" refid="xtend.classpath.ref" />
 	</target>
-	
+
 	<target name="cal-gen" depends="init">
-		<echo message="Executing Mwe2Launcher"/>
-		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true"
-					failonerror="true" classpathref="emf.classpath"
-					dir="${path.build.directory}/plugins/net.sf.orcc.cal">
-			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2"/>
+		<echo message="Executing Mwe2Launcher" />
+		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true" failonerror="true" classpathref="emf.classpath.ref" dir="${path.build.directory}/plugins/net.sf.orcc.cal">
+			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2" />
 		</java>
 	</target>
-	
+
 	<target name="xtend-gen" depends="init">
-		<java classname="org.eclipse.xtext.xtend2.compiler.batch.Main" fork="true"
-					failonerror="true" classpathref="xtext.classpath"
-					dir="${path.build.directory}/plugins/net.sf.orcc.models">
-			<arg value="-d"/>
-			<arg value="xtend-gen"/>
-			<arg value="src"/>
-    	</java>
+		<echo message="Generate Java class from xtend file for project net.sf.orcc.backends" />
+		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
+			failonerror="true" classpathref="xtend.classpath.ref"
+			dir="${path.build.directory}/plugins/net.sf.orcc.backends">
+			<arg value="-cp" />
+			<arg value="${xtend.classpath}" />
+			<arg value="-d" />
+			<arg value="xtend-gen" />
+			<arg value="src" />
+		</java>
+		<echo message="Generate Java class from xtend file for project net.sf.orcc.models" />
+		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
+			failonerror="true" classpathref="xtend.classpath.ref"
+			dir="${path.build.directory}/plugins/net.sf.orcc.models">
+			<arg value="-cp" />
+			<arg value="${xtend.classpath}" />
+			<arg value="-d" />
+			<arg value="xtend-gen" />
+			<arg value="src" />
+		</java>
 	</target>
 
 	<!--
@@ -179,7 +195,7 @@
         Eclipse antRunner application.
     -->
 	<target name="pde-build" depends="init, cal-gen, xtend-gen">
-		
+
 		<echo message="Building net.sf.graphiti feature" />
 		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
 			<arg value="-application" />
@@ -200,7 +216,7 @@
 				<pathelement location="${equinox.launcher}" />
 			</classpath>
 		</java>
-		
+
 		<echo message="Building net.sf.orcc feature" />
 		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
 			<arg value="-application" />
@@ -221,9 +237,9 @@
 				<pathelement location="${equinox.launcher}" />
 			</classpath>
 		</java>
-		
+
 	</target>
-	
+
 	<target name="plugins.install">
 		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true" dir="${path.scripts}">
 			<arg value="-nosplash" />
@@ -270,5 +286,5 @@
 	<target name="clean">
 		<delete dir="${path.build.directory}" />
 	</target>
-	
+
 </project>
