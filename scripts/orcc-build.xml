@@ -168,7 +168,7 @@
 	</target>
 
 	<target name="xtend-gen" depends="init">
-		<echo message="Generate Java class from xtend file for project net.sf.orcc.backends" />
+		<echo message="Generate xtend-gen content for project net.sf.orcc.backends" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
 			failonerror="true" classpathref="xtend.classpath.ref"
 			dir="${path.build.directory}/plugins/net.sf.orcc.backends">
@@ -178,7 +178,7 @@
 			<arg value="xtend-gen" />
 			<arg value="src" />
 		</java>
-		<echo message="Generate Java class from xtend file for project net.sf.orcc.models" />
+		<echo message="Generate xtend-gen content for project net.sf.orcc.models" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
 			failonerror="true" classpathref="xtend.classpath.ref"
 			dir="${path.build.directory}/plugins/net.sf.orcc.models">
