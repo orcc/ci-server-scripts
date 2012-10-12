@@ -4,8 +4,8 @@ Orcc and graphiti plugins must have been installed before executing this routine
 
 Properties calProject, backendType and topNetwork must be specified to launch properly :
 	calProject : name of project to compile & run (RVC, System, etc.)
-	backendType : backend tu use (c, java, llvm, etc.)
 	topNetwork : complete name of the top network (org.mpeg4.part2.Top_RVC, etc.)
+	inputStimulus : sequence to decode with the application
 -->
 <project name="Headless Orcc runtime" default="run">
 
