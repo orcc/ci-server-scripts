@@ -7,6 +7,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 	backendType : backend tu use (c, java, llvm, etc.)
 	topNetwork : complete name of the top network (org.mpeg4.part2.Top_RVC, etc.)
 	additional.flags : add some option to orcc compiler
+	output : set up output folder hierarchy
 -->
 <project name="Headless Orcc runtime" default="run">
 
@@ -42,7 +43,16 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			</then>
 		</if>
 
-		<delete dir="${path.output.apps}/${target.subfolder}/${topNetwork}" failonerror="false" />
+		<if>
+			<isset property="output"/>
+			<then>
+				<property name="target.subfolder" value="${output}"/>
+			</then>
+			<else>
+				<property name="target.subfolder" value="${backendType}/${topNetwork}"/>
+			</else>
+		</if>
+		<delete dir="${path.output.apps}/${target.subfolder}" failonerror="false" />
 	</target>
 
 	<target name="setup-workspace" depends="init">
@@ -85,7 +95,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="-p" />
 			<arg value="${calProject}" />
 			<arg value="-o" />
-			<arg value="${path.output.apps}/${target.subfolder}/${topNetwork}" />
+			<arg value="${path.output.apps}/${target.subfolder}" />
 			<arg value="${topNetwork}" />
 			<arg value="-vmargs" />
 			<arg value="-Xms40m" />
