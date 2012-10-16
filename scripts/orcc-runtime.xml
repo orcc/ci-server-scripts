@@ -6,6 +6,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 	calProject : name of project to compile & run (RVC, System, etc.)
 	backendType : backend tu use (c, java, llvm, etc.)
 	topNetwork : complete name of the top network (org.mpeg4.part2.Top_RVC, etc.)
+	additional.flags : add some option to orcc compiler
 -->
 <project name="Headless Orcc runtime" default="run">
 
@@ -33,18 +34,12 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 		</if>
 		
 		<if>
-			<and>
-				<isset property="test.transformations"/>
-				<equals arg1="${test.transformations}" arg2="true" />
-			</and>
+			<not>
+				<isset property="additional.flags"/>
+			</not>
 			<then>
-				<property name="option.transfo" value="-d -t "/>
-				<property name="target.subfolder" value="${backendType}-addtransfo"/>
+				<property name="additional.flags" value=""/>
 			</then>
-			<else>
-				<property name="option.transfo" value=""/>
-				<property name="target.subfolder" value="${backendType}"/>
-			</else>
 		</if>
 
 		<delete dir="${path.output.apps}/${target.subfolder}/${topNetwork}" failonerror="false" />
@@ -86,7 +81,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${eclipse.runtime.workspace}" />
 			<arg value="-application" />
 			<arg value="net.sf.orcc.backends.${backendType}" />
-			<arg line="${option.transfo}"/>
+			<arg line="${additional.flags}"/>
 			<arg value="-p" />
 			<arg value="${calProject}" />
 			<arg value="-o" />
