@@ -7,7 +7,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 	topNetwork : complete name of the top network (org.mpeg4.part2.Top_RVC, etc.)
 	inputStimulus : sequence to decode with the application
 -->
-<project name="Headless Orcc runtime" default="run">
+<project name="Headless Orcc simulation" default="run">
 
 	<!-- This ant build file use "ant-contrib" library. See http://ant-contrib.sourceforge.net/
 	or simply install it with your system package manager -->
