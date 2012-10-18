@@ -31,6 +31,17 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 				<fail>You must specify properties calProject, topNetwork and inputStimulus</fail>
 			</then>
 		</if>
+		<if>
+			<not>
+				<isset property="reference.file" />
+			</not>
+			<then>
+				<property name="ref.option" value=""/>
+			</then>
+			<else>
+				<property name="ref.option" value="-r ${reference.file}"/>
+			</else>
+		</if>
 
 		<delete dir="${path.output.apps}/${target.subfolder}/${topNetwork}" failonerror="false" />
 	</target>
@@ -63,7 +74,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 		</exec>
 	</target>
 
-	<target name="simulator-exec" depends="setup-workspace, frontend-exec">
+	<target name="simulator-exec"><!-- depends="setup-workspace, frontend-exec">-->
 		<exec executable="${eclipse.runtime.root}/eclipse" failonerror="true">
 			<arg value="-nosplash" />
 			<arg value="-consoleLog" />
@@ -76,8 +87,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${inputStimulus}" />
 			<arg value="-p" />
 			<arg value="${calProject}" />
-			<!--arg value="-ref" />
-			<arg value="${path.output.apps}/${target.subfolder}/${topNetwork}" /-->
+			<arg value="${ref.option}" />
 			<arg value="${topNetwork}" />
 			<arg value="-vmargs" />
 			<arg value="-Xms40m" />
