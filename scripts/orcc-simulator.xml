@@ -83,11 +83,9 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="-application" />
 			<arg value="net.sf.orcc.simulators.cli" />
 			<arg value="-n" />
-			<arg value="-i" />
-			<arg value="${inputStimulus}" />
-			<arg value="-p" />
-			<arg value="${calProject}" />
-			<arg value="${ref.option}" />
+			<line value="-i ${inputStimulus}" />
+			<line value="-p ${calProject}" />
+			<line value="${ref.option}" />
 			<arg value="${topNetwork}" />
 			<arg value="-vmargs" />
 			<arg value="-Xms40m" />
