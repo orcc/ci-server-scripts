@@ -64,7 +64,7 @@
 		<if>
 			<equals arg1="${build.type}" arg2="nightly" />
 			<then>
-				<echo message="Configuring properties for a Nightly build" />
+				<echo message="Configure properties for a Nightly build" />
 				<property name="p2.keep.only.latest.version" value="true" />
 				<property name="repo.name" value="Orcc nightly builds" />
 				<property name="pde.buildType" value="N" />
@@ -73,7 +73,7 @@
 			<elseif>
 				<equals arg1="${build.type}" arg2="testing" />
 				<then>
-					<echo message="Configuring properties for a Testing build" />
+					<echo message="Configure properties for a Testing build" />
 					<property name="p2.keep.only.latest.version" value="true" />
 					<delete dir="${path.update.site}" />
 					<property name="repo.name" value="Tests repository" />
@@ -83,7 +83,7 @@
 			<elseif>
 				<equals arg1="${build.type}" arg2="release" />
 				<then>
-					<echo message="Configuring properties for a Realease build" />
+					<echo message="Configure properties for a Realease build" />
 					<property name="p2.keep.only.latest.version" value="false" />
 					<property name="repo.name" value="Open RVC-CAL Compiler repository" />
 					<property name="pde.buildType" value="R" />
@@ -135,10 +135,11 @@
 			</fileset>
 		</copy>
 		
-		<!-- Warning : These path/property must be set after copying files into "plugins" subfolder -->
+		<!-- Warning : This path/property must be set after copying files into "plugins" subfolder -->
 		<path id="xtend.classpath.ref">
 			<fileset dir="${eclipse.build.root}/plugins/">
 				<include name="org.eclipse.jdt.co*.jar" />
+				<include name="org.apache.commons.*.jar" />
 				<include name="*eclipse.core*.jar" />
 				<include name="*eclipse.osgi*.jar" />
 				<include name="*equinox*.jar" />
@@ -157,35 +158,31 @@
 				<include name="**/src-gen" />
 			</dirset>
 		</path>
-		<property name="xtend.classpath" refid="xtend.classpath.ref" />
+		<property name="xtend.classpath" refid="xtend.classpath.ref"/>
 	</target>
 
 	<target name="cal-gen" depends="init">
-		<echo message="Executing Mwe2Launcher" />
+		<echo message="Generate Xtext architecture [net.sf.orcc.cal]" />
 		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true" failonerror="true" classpathref="emf.classpath.ref" dir="${path.build.directory}/plugins/net.sf.orcc.cal">
 			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2" />
 		</java>
 	</target>
 
 	<target name="xtend-gen" depends="init">
-		<echo message="Generate xtend-gen content for project net.sf.orcc.backends" />
+		<echo message="Generate Xtend content [net.sf.orcc.backends]" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
 			failonerror="true" classpathref="xtend.classpath.ref"
 			dir="${path.build.directory}/plugins/net.sf.orcc.backends">
-			<arg value="-cp" />
-			<arg value="${xtend.classpath}" />
-			<arg value="-d" />
-			<arg value="xtend-gen" />
+			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-d xtend-gen" />
 			<arg value="src" />
 		</java>
-		<echo message="Generate xtend-gen content for project net.sf.orcc.models" />
+		<echo message="Generate Xtend content [net.sf.orcc.models]" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
 			failonerror="true" classpathref="xtend.classpath.ref"
 			dir="${path.build.directory}/plugins/net.sf.orcc.models">
-			<arg value="-cp" />
-			<arg value="${xtend.classpath}" />
-			<arg value="-d" />
-			<arg value="xtend-gen" />
+			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-d xtend-gen" />
 			<arg value="src" />
 		</java>
 	</target>
