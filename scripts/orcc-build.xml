@@ -185,6 +185,14 @@
 			<arg line="-d xtend-gen" />
 			<arg value="src" />
 		</java>
+		<echo message="Generate Xtend content [net.sf.orc2hdl]" />
+		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
+			failonerror="true" classpathref="xtend.classpath.ref"
+			dir="${path.build.directory}/plugins/net.sf.orc2hdl">
+			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-d xtend-gen" />
+			<arg value="src" />
+		</java>
 	</target>
 
 	<!--
