@@ -64,7 +64,7 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 			<arg value="${eclipse.runtime.workspace}" />
 			<arg value="-application" />
 			<arg value="net.sf.orcc.cal.workspaceSetup" />
-			<arg value="${path.svn.checkout}/orc-apps/" />
+			<arg value="${path.applications}" />
 		</exec>
 	</target>
 
@@ -105,6 +105,10 @@ Properties calProject, backendType and topNetwork must be specified to launch pr
 
 	<target name="clean-workspace">
 		<delete dir="${eclipse.runtime.workspace}" />
+		
+		<delete>
+			<dirset dir="${path.applications}" includes="**/bin/" />
+		</delete>
 	</target>
 
 </project>
