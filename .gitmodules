@@ -1,0 +1,6 @@
+[submodule "orcc"]
+	path = orcc
+	url = git://github.com/orcc/orcc.git
+[submodule "orc-apps"]
+	path = orc-apps
+	url = git://github.com/orcc/orc-apps.git
