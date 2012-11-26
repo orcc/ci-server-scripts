@@ -15,6 +15,8 @@
 	<patternset id="commonCopyRules">
 		<!-- .project and .classpath files MUST be included to let xtext
 		detect original eclipse projects names and path -->
+		<exclude name=".git" />
+		<exclude name=".git/**" />
 		<exclude name="**/.svn" />
 		<exclude name="**/.svn/**" />
 		<exclude name="**/bin" />
@@ -32,21 +34,19 @@
 	<target name="init">
 
 		<!-- set commonly used paths -->
-		<path id="equinox.launcher.path">
+		<path id="equinox.launcher">
 			<fileset dir="${eclipse.build.root}/plugins">
 				<include name="org.eclipse.equinox.launcher_*.jar" />
 			</fileset>
 		</path>
-		<property name="equinox.launcher" refid="equinox.launcher.path" />
 
-		<path id="pde.classpath">
+		<path id="pde.path">
 			<dirset dir="${eclipse.build.root}/plugins">
 				<include name="org.eclipse.pde.build_*" />
 			</dirset>
 		</path>
-		<property name="pde.build.dir" refid="pde.classpath" />
 
-		<path id="emf.classpath.ref">
+		<path id="emf.classpath">
 			<dirset dir="${path.build.directory}/plugins/">
 				<include name="net.sf.orcc.cal/src" />
 				<include name="net.sf.orcc.cal.ui/src" />
@@ -68,14 +68,12 @@
 				<property name="p2.keep.only.latest.version" value="true" />
 				<property name="repo.name" value="Orcc nightly builds" />
 				<property name="pde.buildType" value="N" />
-
 			</then>
 			<elseif>
 				<equals arg1="${build.type}" arg2="testing" />
 				<then>
 					<echo message="Configure properties for a Testing build" />
 					<property name="p2.keep.only.latest.version" value="true" />
-					<delete dir="${path.update.site}" />
 					<property name="repo.name" value="Tests repository" />
 					<property name="pde.buildType" value="I" />
 				</then>
@@ -118,8 +116,58 @@
 			</fileset>
 		</copy>
 		
-		<!-- Warning : This path/property must be set after copying files into "plugins" subfolder -->
-		<path id="xtend.classpath.ref">
+	</target>
+
+	<target name="cal-gen" depends="init">
+		<echo message="Generate Xtext architecture [net.sf.orcc.cal]" />
+		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true" failonerror="true" classpathref="emf.classpath" dir="${path.build.directory}/plugins/net.sf.orcc.cal">
+			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2" />
+		</java>
+	</target>
+	
+	<target name="xtend-tests-FOCK">
+		<path id="xtend.classpath">
+			<fileset dir="${eclipse.build.root}/plugins/">
+				<include name="org.eclipse.jdt.co*.jar" />
+				<include name="org.apache.commons.*.jar" />
+				<include name="*eclipse.core*.jar" />
+				<include name="*eclipse.osgi*.jar" />
+				<include name="*equinox*.jar" />
+				<include name="*antlr*.jar" />
+				<include name="*javax.inject*.jar" />
+				<include name="*google*.jar" />
+				<include name="*log4j*.jar" />
+				<include name="*emf*.jar" />
+				<include name="*xtend*.jar" />
+				<include name="*xtext*.jar" />
+				<exclude name="*.ui*.jar" />
+				<exclude name="*.source*.jar" />
+			</fileset>
+			<dirset dir="${path.build.directory}/plugins/">
+				<include name="**/src" />
+				<include name="**/src-gen" />
+			</dirset>
+			<dirset dir="/home/alorence/orcc_src/orcc/eclipse/plugins/net.sf.orcc.backends">
+				<include name="bin"/>
+			</dirset>
+		</path>
+		
+		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
+			failonerror="true" classpathref="xtend.classpath"
+			dir="${path.build.directory}/plugins">
+			<arg line="-cp ${toString:xtend.classpath}"/>
+			<arg line="-d xtend-genitor" />
+			<arg value="net.sf.orcc.backends/src${path.separator}net.sf.orc2hdl/src${path.separator}net.sf.orcc.models/src" />
+		</java>
+		
+		<fail>TESTS END</fail>
+		
+		
+	</target>
+
+	<target name="xtend-gen" depends="init">
+		
+		<path id="xtend.classpath">
 			<fileset dir="${eclipse.build.root}/plugins/">
 				<include name="org.eclipse.jdt.co*.jar" />
 				<include name="org.apache.commons.*.jar" />
@@ -141,41 +189,34 @@
 				<include name="**/src-gen" />
 			</dirset>
 		</path>
-		<property name="xtend.classpath" refid="xtend.classpath.ref"/>
-	</target>
-
-	<target name="cal-gen" depends="init">
-		<echo message="Generate Xtext architecture [net.sf.orcc.cal]" />
-		<java classname="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher" fork="true" failonerror="true" classpathref="emf.classpath.ref" dir="${path.build.directory}/plugins/net.sf.orcc.cal">
-			<arg value="src/net/sf/orcc/cal/GenerateCal.mwe2" />
-		</java>
-	</target>
-
-	<target name="xtend-gen" depends="init">
+		
 		<echo message="Generate Xtend content [net.sf.orcc.backends]" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
-			failonerror="true" classpathref="xtend.classpath.ref"
+			failonerror="true" classpathref="xtend.classpath"
 			dir="${path.build.directory}/plugins/net.sf.orcc.backends">
-			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-cp ${toString:xtend.classpath}"/>
 			<arg line="-d xtend-gen" />
 			<arg value="src" />
 		</java>
+
 		<echo message="Generate Xtend content [net.sf.orcc.models]" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
-			failonerror="true" classpathref="xtend.classpath.ref"
+			failonerror="true" classpathref="xtend.classpath"
 			dir="${path.build.directory}/plugins/net.sf.orcc.models">
-			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-cp ${toString:xtend.classpath}"/>
 			<arg line="-d xtend-gen" />
 			<arg value="src" />
 		</java>
+		
 		<echo message="Generate Xtend content [net.sf.orc2hdl]" />
 		<java classname="org.eclipse.xtend.core.compiler.batch.Main" fork="true"
-			failonerror="true" classpathref="xtend.classpath.ref"
+			failonerror="true" classpathref="xtend.classpath"
 			dir="${path.build.directory}/plugins/net.sf.orc2hdl">
-			<arg line="-cp ${xtend.classpath}"/>
+			<arg line="-cp ${toString:xtend.classpath}"/>
 			<arg line="-d xtend-gen" />
-			<arg value="src" />
+			<arg value="../net.sf.orcc.backends/xtend-gen${path.separator}src" />
 		</java>
+		
 	</target>
 
 	<!--
@@ -185,11 +226,12 @@
 	<target name="pde-build" depends="init, cal-gen, xtend-gen">
 
 		<echo message="Building net.sf.orcc feature" />
-		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true" dir="${path.scripts}">
+		<java classname="org.eclipse.core.launcher.Main" failonerror="true" fork="true"
+			dir="${path.scripts}" classpathref="equinox.launcher">
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-buildfile" />
-			<arg value="${pde.build.dir}/scripts/build.xml" />
+			<arg value="${toString:pde.path}/scripts/build.xml" />
 			<arg value="-Dbuilder=${path.pde.config}" />
 			<arg value="-DpluginPath=${eclipse.build.root}:${path.build.directory}" />
 			<arg value="-DtopLevelElementId=net.sf.orcc" />
@@ -200,9 +242,6 @@
 			<arg value="-Dp2.metadata.repo.name=${repo.name}" />
 			<arg value="-Dp2.artifact.repo.name=${repo.name}" />
 			<arg value="-DbuildType=${pde.buildType}" />
-			<classpath>
-				<pathelement location="${equinox.launcher}" />
-			</classpath>
 		</java>
 
 	</target>
