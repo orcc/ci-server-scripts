@@ -1,0 +1,6 @@
+autobuild/repository.*
+autobuild/build.dir.*
+autobuild/eclipse-*
+autobuild/apps-outputs
+autobuild/workspace
+
