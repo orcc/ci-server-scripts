@@ -30,10 +30,10 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 
 echo ""
 echo "***********************************************************"
-echo "*    Generate Java sources from Xtend [net.sf.orc2hdl]    *"
+echo "*    Generate Java sources from Xtend [org.xronos.orcc]    *"
 echo "***********************************************************"
 echo ""
-cd $PLUGINSDIR/net.sf.orc2hdl
+cd $PLUGINSDIR/org.xronos.orcc
 rm -fr xtend-gen/*
 java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen ../net.sf.orcc.backends/xtend-gen:src
 
@@ -91,7 +91,7 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-uninstallIU net.sf.orcc.feature.group
 set -e
 
-echo "Uninstall new Orcc feature"
+echo "Install new Orcc feature"
 $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-application org.eclipse.equinox.p2.director \
 						-destination $ECLIPSERUN \
