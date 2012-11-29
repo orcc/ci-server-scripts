@@ -17,6 +17,7 @@ FLAGS=$7
 [ ! -d "$OUTPUT" ] && mkdir -p $OUTPUT
 
 RUNWORKSPACE=$ORCCWORK/workspace
+rm -fr $RUNWORKSPACE/* $RUNWORKSPACE/.*
 mkdir -p $RUNWORKSPACE
 
 echo "Register Orcc projects in eclipse workspace"
