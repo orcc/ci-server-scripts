@@ -5,7 +5,7 @@ source `dirname $0`/defines.sh
 [ -z "$3" ] && echo "Third argument must be the project where is located your top network" && exit 1
 [ -z "$4" ] && echo "Fourth argument must be the qualified name of the top network" && exit 1
 [ ! -f "$5" ] && echo "Fifth argument must be the input stimulus of simulation" && exit 1
-[ -f "$6" ] && REFFILE="-r $6"
+[ -f "$6" ] && REFOPTION="-r $6"
 
 APPDIR=$2
 PROJECT=$3
@@ -40,6 +40,7 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-n \
 						-i $INPUT \
 						-p $PROJECT \
+						$REFOPTION \
 						$NETWORK \
 						-vmargs -Xms40m -Xmx768m
 
