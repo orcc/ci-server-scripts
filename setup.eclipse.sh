@@ -36,5 +36,3 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-repository $ECLIPSEREPOSITORY \
 						-followReferences \
 						-installIU $BUILDDEPS
-
-exit 0

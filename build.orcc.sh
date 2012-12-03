@@ -10,6 +10,8 @@ echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
 java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc/cal/GenerateCal.mwe2
 
+[ "$?" != "0" ] && exit 1
+
 echo ""
 echo "***********************************************************"
 echo "* Generate Java sources from Xtend [net.sf.orcc.backends] *"
@@ -18,6 +20,8 @@ echo ""
 cd $PLUGINSDIR/net.sf.orcc.backends
 rm -fr xtend-gen/*
 java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
+
+[ "$?" != "0" ] && exit 1
 
 echo ""
 echo "***********************************************************"
@@ -28,6 +32,8 @@ cd $PLUGINSDIR/net.sf.orcc.models
 rm -fr xtend-gen/*
 java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
 
+[ "$?" != "0" ] && exit 1
+
 echo ""
 echo "***********************************************************"
 echo "*    Generate Java sources from Xtend [org.xronos.orcc]    *"
@@ -37,6 +43,7 @@ cd $PLUGINSDIR/org.xronos.orcc
 rm -fr xtend-gen/*
 java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen ../net.sf.orcc.backends/xtend-gen:src
 
+[ "$?" != "0" ] && exit 1
 
 echo ""
 echo "***********************************************************"
@@ -77,19 +84,19 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
  						-Dp2.mirror.slicing.latestVersionOnly=$KEEPONLYLATESTVERSIONS \
  						-Dp2.build.repo=file:$LOCALREPO
 
+[ "$?" != "0" ] && exit 1
+
 echo ""
 echo "***********************************************************"
 echo "*       Installing Orcc plugins on eclipse runtime        *"
 echo "***********************************************************"
 echo ""
 echo "Uninstall old Orcc feature"
-# Do not stop the script if uninstallation fail (happen when eclipse has been reinstalled)
-set +e
+
 $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-application org.eclipse.equinox.p2.director \
 						-destination $ECLIPSERUN \
 						-uninstallIU net.sf.orcc.feature.group
-set -e
 
 echo "Install new Orcc feature"
 $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
@@ -100,4 +107,3 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-repository $ECLIPSEREPOSITORY \
 						-installIU net.sf.orcc.feature.group
 
-exit 0

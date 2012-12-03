@@ -22,12 +22,16 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-data $RUNWORKSPACE \
 						$APPDIR
 
+[ "$?" != "0" ] && exit 1
+
 echo "Generate Orcc IR for $PROJECT and projects it depends on"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-application net.sf.orcc.cal.cli \
 						-data $RUNWORKSPACE \
 						$PROJECT \
 						-vmargs -Xms40m -Xmx768m
+
+[ "$?" != "0" ] && exit 1
 
 echo "Run simulation"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
@@ -39,5 +43,3 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						$NETWORK \
 						-vmargs -Xms40m -Xmx768m
 
-
-exit 0
