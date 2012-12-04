@@ -24,7 +24,7 @@ MWECP=$MWECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
 export MWECP
 
 # Classpath for Xtend generation
-XTENDCP=$ECLIPSECP
+XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
 for i in `ls $PLUGINSDIR`
 do
 	[ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
