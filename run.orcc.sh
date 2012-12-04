@@ -28,6 +28,7 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 
 [ "$?" != "0" ] && exit 1
 
+echo ""
 echo "Generate Orcc IR for $PROJECT and projects it depends on"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-application net.sf.orcc.cal.cli \
@@ -37,6 +38,7 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 
 [ "$?" != "0" ] && exit 1
 
+echo ""
 echo "Build application with $BACKEND backend"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-application net.sf.orcc.backends.$BACKEND \
