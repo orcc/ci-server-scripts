@@ -108,7 +108,6 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-application org.eclipse.equinox.p2.director \
 						-destination $ECLIPSERUN \
 						-uninstallIU net.sf.orcc.feature.group \
-						2>/dev/null
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
 
