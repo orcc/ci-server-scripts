@@ -36,6 +36,17 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 
 echo ""
 echo "***********************************************************"
+echo "*    Generate Java sources from Xtend [net.sf.orcc.ui]    *"
+echo "***********************************************************"
+echo ""
+cd $PLUGINSDIR/net.sf.orcc.ui
+rm -fr xtend-gen/*
+java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
+
+[ "$?" != "0" ] && exit 1
+
+echo ""
+echo "***********************************************************"
 echo "*   Generate Java sources from Xtend [org.xronos.orcc]    *"
 echo "***********************************************************"
 echo ""
