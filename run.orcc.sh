@@ -38,6 +38,8 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 
 [ "$?" != "0" ] && exit 1
 
+rm -fr $OUTPUT/*
+
 echo ""
 echo "Build application with $BACKEND backend"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
