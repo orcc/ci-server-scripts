@@ -190,6 +190,106 @@ def computeFileList():
             ["AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A.264", "AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A_rec.qcif"],
             ["AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.yuv"],
             ["AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.yuv"]
+        ],
+
+        # HEVC
+        "hevc" : [
+            "HEVC/BasketballDrill_832x480_50_qp22.bin",
+            "HEVC/BasketballDrill_832x480_50_qp27.bin",
+            "HEVC/BasketballDrill_832x480_50_qp32.bin",
+            "HEVC/BasketballDrill_832x480_50_qp37.bin",
+            "HEVC/BasketballDrillText_832x480_50_qp22.bin",
+            "HEVC/BasketballDrillText_832x480_50_qp27.bin",
+            "HEVC/BasketballDrillText_832x480_50_qp32.bin",
+            "HEVC/BasketballDrillText_832x480_50_qp37.bin",
+            "HEVC/BasketballDrive_1920x1080_50_qp22.bin",
+            "HEVC/BasketballDrive_1920x1080_50_qp27.bin",
+            "HEVC/BasketballDrive_1920x1080_50_qp32.bin",
+            "HEVC/BasketballDrive_1920x1080_50_qp37.bin",
+            "HEVC/BasketballPass_416x240_50_qp22.bin",
+            "HEVC/BasketballPass_416x240_50_qp27.bin",
+            "HEVC/BasketballPass_416x240_50_qp32.bin",
+            "HEVC/BasketballPass_416x240_50_qp37.bin",
+            "HEVC/BlowingBubbles_416x240_50_qp22.bin",
+            "HEVC/BlowingBubbles_416x240_50_qp27.bin",
+            "HEVC/BlowingBubbles_416x240_50_qp32.bin",
+            "HEVC/BlowingBubbles_416x240_50_qp37.bin",
+            "HEVC/BQMall_832x480_60_qp22.bin",
+            "HEVC/BQMall_832x480_60_qp27.bin",
+            "HEVC/BQMall_832x480_60_qp32.bin",
+            "HEVC/BQMall_832x480_60_qp37.bin",
+            "HEVC/BQSquare_416x240_60_qp22.bin",
+            "HEVC/BQSquare_416x240_60_qp27.bin",
+            "HEVC/BQSquare_416x240_60_qp32.bin",
+            "HEVC/BQSquare_416x240_60_qp37.bin",
+            "HEVC/BQTerrace_1920x1080_60_qp22.bin",
+            "HEVC/BQTerrace_1920x1080_60_qp27.bin",
+            "HEVC/BQTerrace_1920x1080_60_qp32.bin",
+            "HEVC/BQTerrace_1920x1080_60_qp37.bin",
+            "HEVC/Cactus_1920x1080_50_qp22.bin",
+            "HEVC/Cactus_1920x1080_50_qp27.bin",
+            "HEVC/Cactus_1920x1080_50_qp32.bin",
+            "HEVC/Cactus_1920x1080_50_qp37.bin",
+            "HEVC/ChinaSpeed_1024x768_30_qp22.bin",
+            "HEVC/ChinaSpeed_1024x768_30_qp27.bin",
+            "HEVC/ChinaSpeed_1024x768_30_qp32.bin",
+            "HEVC/ChinaSpeed_1024x768_30_qp37.bin",
+            "HEVC/FourPeople_1280x720_60_qp22.bin",
+            "HEVC/FourPeople_1280x720_60_qp27.bin",
+            "HEVC/FourPeople_1280x720_60_qp32.bin",
+            "HEVC/FourPeople_1280x720_60_qp37.bin",
+            "HEVC/Johnny_1280x720_60_qp22.bin",
+            "HEVC/Johnny_1280x720_60_qp27.bin",
+            "HEVC/Johnny_1280x720_60_qp32.bin",
+            "HEVC/Johnny_1280x720_60_qp37.bin",
+            "HEVC/Kimono1_1920x1080_24_qp22.bin",
+            "HEVC/Kimono1_1920x1080_24_qp27.bin",
+            "HEVC/Kimono1_1920x1080_24_qp32.bin",
+            "HEVC/Kimono1_1920x1080_24_qp37.bin",
+            "HEVC/KristenAndSara_1280x720_60_qp22.bin",
+            "HEVC/KristenAndSara_1280x720_60_qp27.bin",
+            "HEVC/KristenAndSara_1280x720_60_qp32.bin",
+            "HEVC/KristenAndSara_1280x720_60_qp37.bin",
+            "HEVC/NebutaFestival_2560x1600_60_10bit_crop_qp22.bin",
+            "HEVC/NebutaFestival_2560x1600_60_10bit_crop_qp27.bin",
+            "HEVC/NebutaFestival_2560x1600_60_10bit_crop_qp32.bin",
+            "HEVC/NebutaFestival_2560x1600_60_10bit_crop_qp37.bin",
+            "HEVC/ParkScene_1920x1080_24_qp22.bin",
+            "HEVC/ParkScene_1920x1080_24_qp27.bin",
+            "HEVC/ParkScene_1920x1080_24_qp32.bin",
+            "HEVC/ParkScene_1920x1080_24_qp37.bin",
+            "HEVC/PartyScene_832x480_50_qp22.bin",
+            "HEVC/PartyScene_832x480_50_qp27.bin",
+            "HEVC/PartyScene_832x480_50_qp32.bin",
+            "HEVC/PartyScene_832x480_50_qp37.bin",
+            "HEVC/PeopleOnStreet_2560x1600_30_crop_qp22.bin",
+            "HEVC/PeopleOnStreet_2560x1600_30_crop_qp27.bin",
+            "HEVC/PeopleOnStreet_2560x1600_30_crop_qp32.bin",
+            "HEVC/PeopleOnStreet_2560x1600_30_crop_qp37.bin",
+            "HEVC/RaceHorses_416x240_30_qp22.bin",
+            "HEVC/RaceHorses_416x240_30_qp27.bin",
+            "HEVC/RaceHorses_416x240_30_qp32.bin",
+            "HEVC/RaceHorses_416x240_30_qp37.bin",
+            "HEVC/RaceHorses_832x480_30_qp22.bin",
+            "HEVC/RaceHorses_832x480_30_qp27.bin",
+            "HEVC/RaceHorses_832x480_30_qp32.bin",
+            "HEVC/RaceHorses_832x480_30_qp37.bin",
+            "HEVC/SlideEditing_1280x720_30_qp22.bin",
+            "HEVC/SlideEditing_1280x720_30_qp27.bin",
+            "HEVC/SlideEditing_1280x720_30_qp32.bin",
+            "HEVC/SlideEditing_1280x720_30_qp37.bin",
+            "HEVC/SlideShow_1280x720_20_qp22.bin",
+            "HEVC/SlideShow_1280x720_20_qp27.bin",
+            "HEVC/SlideShow_1280x720_20_qp32.bin",
+            "HEVC/SlideShow_1280x720_20_qp37.bin",
+            "HEVC/SteamLocomotiveTrain_2560x1600_60_10bit_crop_qp22.bin",
+            "HEVC/SteamLocomotiveTrain_2560x1600_60_10bit_crop_qp27.bin",
+            "HEVC/SteamLocomotiveTrain_2560x1600_60_10bit_crop_qp32.bin",
+            "HEVC/SteamLocomotiveTrain_2560x1600_60_10bit_crop_qp37.bin",
+            "HEVC/Traffic_2560x1600_30_crop_qp22.bin",
+            "HEVC/Traffic_2560x1600_30_crop_qp27.bin",
+            "HEVC/Traffic_2560x1600_30_crop_qp32.bin",
+            "HEVC/Traffic_2560x1600_30_crop_qp37.bin"
         ]
     }
 
@@ -279,8 +379,15 @@ def main():
             continue
         
         finalCommandLine = list(execPath)
-        finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile, "-o", clArguments.sequences +"/"+ outputFile])
         
+        finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile])
+        
+        if not clArguments.skipYuv:
+            finalCommandLine.extend(["-o", clArguments.sequences +"/"+ outputFile])
+
+        if clArguments.verbose:
+            print " ".join(finalCommandLine)
+
         print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
         commandResult = subprocess.call(finalCommandLine)
         
@@ -332,10 +439,14 @@ def setupCommandLine():
                         help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder).")
     options.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
                         help="Pass this argument to disable display when testing decoders.")
-    options.add_argument("-f", "--filestypes", choices=["mpeg","avc"], default=DEFAULT_FILE_LIST, dest="filesKey", 
+    options.add_argument("-f", "--filestypes", choices=["mpeg","avc","hevc"], default=DEFAULT_FILE_LIST, dest="filesKey", 
                         help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"')")
     options.add_argument("-q", "--quick", action="store_true", dest="quickTest", default=False,
                         help="Test the decoder on a small subset of sequences.")
+    options.add_argument("--skip-yuv", action="store_true", dest="skipYuv", default=False,
+                        help="Skip the consistency checking using the YUV file.")
+    options.add_argument("--verbose", action="store_true", dest="verbose", default=False,
+                        help="Verbose mode.")
     
 
 if __name__ == "__main__":
