@@ -33,7 +33,7 @@ import subprocess
 import os
 import sys
 
-VERSION = "0.1"
+VERSION = "0.2"
 DEFAULT_FILE_LIST = "mpeg"
 
 def computeFileList():
@@ -43,98 +43,98 @@ def computeFileList():
 
         # MPEG-4 Part2 Simple Profile
         "mpeg" : [
-            "MPEG4/SIMPLE/I-VOP/hit000",
-            "MPEG4/SIMPLE/I-VOP/jvc000",
-            "MPEG4/SIMPLE/I-VOP/san000",
-            "MPEG4/SIMPLE/I-VOP/san001",
+            "MPEG4/SIMPLE/I-VOP/hit000.m4v",
+            "MPEG4/SIMPLE/I-VOP/jvc000.m4v",
+            "MPEG4/SIMPLE/I-VOP/san000.m4v",
+            "MPEG4/SIMPLE/I-VOP/san001.m4v",
             
-            "MPEG4/SIMPLE/P-VOP/hit001",
-            "MPEG4/SIMPLE/P-VOP/hit002",
-            "MPEG4/SIMPLE/P-VOP/hit003",
-            "MPEG4/SIMPLE/P-VOP/hit004",
-            #"MPEG4/SIMPLE/P-VOP/hit005",
-            #"MPEG4/SIMPLE/P-VOP/hit006",
-            "MPEG4/SIMPLE/P-VOP/hit007",
-            "MPEG4/SIMPLE/P-VOP/hit008",
-            "MPEG4/SIMPLE/P-VOP/hit009",
-            "MPEG4/SIMPLE/P-VOP/hit010",
-            "MPEG4/SIMPLE/P-VOP/hit011",
-            "MPEG4/SIMPLE/P-VOP/hit013",
-            "MPEG4/SIMPLE/P-VOP/hit014",
+            "MPEG4/SIMPLE/P-VOP/hit001.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit002.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit003.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit004.m4v",
+            #"MPEG4/SIMPLE/P-VOP/hit005.m4v",
+            #"MPEG4/SIMPLE/P-VOP/hit006.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit007.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit008.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit009.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit010.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit011.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit013.m4v",
+            "MPEG4/SIMPLE/P-VOP/hit014.m4v",
             
-            "MPEG4/SIMPLE/P-VOP/jvc001",
-            "MPEG4/SIMPLE/P-VOP/jvc002",
-            "MPEG4/SIMPLE/P-VOP/jvc003",
-            "MPEG4/SIMPLE/P-VOP/jvc004",
-            "MPEG4/SIMPLE/P-VOP/jvc005",
-            "MPEG4/SIMPLE/P-VOP/jvc006",
-            "MPEG4/SIMPLE/P-VOP/jvc007",
-            "MPEG4/SIMPLE/P-VOP/jvc008",
-            "MPEG4/SIMPLE/P-VOP/jvc009",
-            "MPEG4/SIMPLE/P-VOP/jvc010",
-            "MPEG4/SIMPLE/P-VOP/jvc011",
-            "MPEG4/SIMPLE/P-VOP/jvc014",
-            "MPEG4/SIMPLE/P-VOP/jvc015",
-            "MPEG4/SIMPLE/P-VOP/jvc016",
-            "MPEG4/SIMPLE/P-VOP/jvc017",
-            "MPEG4/SIMPLE/P-VOP/jvc018",
-            "MPEG4/SIMPLE/P-VOP/jvc019",
-            "MPEG4/SIMPLE/P-VOP/jvc020",
-            "MPEG4/SIMPLE/P-VOP/jvc021",
+            "MPEG4/SIMPLE/P-VOP/jvc001.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc002.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc003.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc004.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc005.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc006.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc007.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc008.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc009.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc010.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc011.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc014.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc015.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc016.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc017.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc018.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc019.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc020.m4v",
+            "MPEG4/SIMPLE/P-VOP/jvc021.m4v",
             
-            "MPEG4/SIMPLE/P-VOP/san002",
-            "MPEG4/SIMPLE/P-VOP/san003",
-            "MPEG4/SIMPLE/P-VOP/san004",
-            #"MPEG4/SIMPLE/P-VOP/san005",
-            #"MPEG4/SIMPLE/P-VOP/san006",
-            "MPEG4/SIMPLE/P-VOP/san007",
-            #"MPEG4/SIMPLE/P-VOP/san009",
-            "MPEG4/SIMPLE/P-VOP/san010",
-            "MPEG4/SIMPLE/P-VOP/san011",
-            "MPEG4/SIMPLE/P-VOP/san012",
+            "MPEG4/SIMPLE/P-VOP/san002.m4v",
+            "MPEG4/SIMPLE/P-VOP/san003.m4v",
+            "MPEG4/SIMPLE/P-VOP/san004.m4v",
+            #"MPEG4/SIMPLE/P-VOP/san005.m4v",
+            #"MPEG4/SIMPLE/P-VOP/san006.m4v",
+            "MPEG4/SIMPLE/P-VOP/san007.m4v",
+            #"MPEG4/SIMPLE/P-VOP/san009.m4v",
+            "MPEG4/SIMPLE/P-VOP/san010.m4v",
+            "MPEG4/SIMPLE/P-VOP/san011.m4v",
+            "MPEG4/SIMPLE/P-VOP/san012.m4v",
             
-            #"MPEG4/SIMPLE/Overall/hit016",
-            #"MPEG4/SIMPLE/Overall/hit017",
-            #"MPEG4/SIMPLE/Overall/hit018",
-            #"MPEG4/SIMPLE/Overall/hit019",
-            #"MPEG4/SIMPLE/Overall/hit020",
-            #"MPEG4/SIMPLE/Overall/hit021",
-            #"MPEG4/SIMPLE/Overall/hit022",
-            #"MPEG4/SIMPLE/Overall/hit023",
-            #"MPEG4/SIMPLE/Overall/hit024",
+            #"MPEG4/SIMPLE/Overall/hit016.m4v",
+            #"MPEG4/SIMPLE/Overall/hit017.m4v",
+            #"MPEG4/SIMPLE/Overall/hit018.m4v",
+            #"MPEG4/SIMPLE/Overall/hit019.m4v",
+            #"MPEG4/SIMPLE/Overall/hit020.m4v",
+            #"MPEG4/SIMPLE/Overall/hit021.m4v",
+            #"MPEG4/SIMPLE/Overall/hit022.m4v",
+            #"MPEG4/SIMPLE/Overall/hit023.m4v",
+            #"MPEG4/SIMPLE/Overall/hit024.m4v",
             
-            #"MPEG4/CORE/I-VOP/mat001",
-            #"MPEG4/CORE/I-VOP/mat004",
-            #"MPEG4/CORE/I-VOP/mat005",
-            #"MPEG4/CORE/I-VOP/mat006",
-            #"MPEG4/CORE/I-VOP/mat007",
-            #"MPEG4/CORE/I-VOP/mat008",
-            #"MPEG4/CORE/I-VOP/mat009",
-            #"MPEG4/CORE/I-VOP/mat010",
-            #"MPEG4/CORE/I-VOP/mat013",
-            #"MPEG4/CORE/I-VOP/mat014",
-            #"MPEG4/CORE/I-VOP/mat015",
-            #"MPEG4/CORE/I-VOP/mat016",
+            #"MPEG4/CORE/I-VOP/mat001.m4v",
+            #"MPEG4/CORE/I-VOP/mat004.m4v",
+            #"MPEG4/CORE/I-VOP/mat005.m4v",
+            #"MPEG4/CORE/I-VOP/mat006.m4v",
+            #"MPEG4/CORE/I-VOP/mat007.m4v",
+            #"MPEG4/CORE/I-VOP/mat008.m4v",
+            #"MPEG4/CORE/I-VOP/mat009.m4v",
+            #"MPEG4/CORE/I-VOP/mat010.m4v",
+            #"MPEG4/CORE/I-VOP/mat013.m4v",
+            #"MPEG4/CORE/I-VOP/mat014.m4v",
+            #"MPEG4/CORE/I-VOP/mat015.m4v",
+            #"MPEG4/CORE/I-VOP/mat016.m4v",
             
-            #["MPEG4/SIMPLE/vcon-scs1.bits", "MPEG4/SIMPLE/vcon-scs1.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs2.bits", "MPEG4/SIMPLE/vcon-scs2.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs3.bits", "MPEG4/SIMPLE/vcon-scs3.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs4.cmp", "MPEG4/SIMPLE/vcon-scs4.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs5.cmp", "MPEG4/SIMPLE/vcon-scs5.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs6.cmp", "MPEG4/SIMPLE/vcon-scs6.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs7.cmp", "MPEG4/SIMPLE/vcon-scs7.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs8.bits", "MPEG4/SIMPLE/vcon-scs8.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs9.bits", "MPEG4/SIMPLE/vcon-scs9.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs10.cmp", "MPEG4/SIMPLE/vcon-scs10.yuv"],
-            #["MPEG4/SIMPLE/vcon-scs11.cmp", "MPEG4/SIMPLE/vcon-scs11.yuv"],
+            #"MPEG4/SIMPLE/vcon-scs1.bits",
+            #"MPEG4/SIMPLE/vcon-scs2.bits",
+            #"MPEG4/SIMPLE/vcon-scs3.bits",
+            #"MPEG4/SIMPLE/vcon-scs4.cmp",
+            #"MPEG4/SIMPLE/vcon-scs5.cmp",
+            #"MPEG4/SIMPLE/vcon-scs6.cmp",
+            #"MPEG4/SIMPLE/vcon-scs7.cmp",
+            #"MPEG4/SIMPLE/vcon-scs8.bits",
+            #"MPEG4/SIMPLE/vcon-scs9.bits",
+            #"MPEG4/SIMPLE/vcon-scs10.cmp",
+            #"MPEG4/SIMPLE/vcon-scs11.cmp",
             
             #"MPEG4/foreman_cif_xvid_384kbps_I_P",
             #"MPEG4/foreman_cif_xvid_384kbps_I_P_B",
             #"MPEG4/foreman_cif_xvid_700kbps_I_P_B",
 
-            ["MPEG4/foreman_qcif_30.bit", "MPEG4/foreman_qcif_30.yuv"],
+            "MPEG4/foreman_qcif_30.bit",
 
-            ["MPEG4/old_town_cross_420_720p_MPEG4_SP_6Mbps.bit", "MPEG4/old_town_cross_420_720p_MPEG4_SP_6Mbps.yuv"],
+            "MPEG4/old_town_cross_420_720p_MPEG4_SP_6Mbps.bit",
             
             #"MPEG4/SIMPLE/P-VOP/jvc013",
             #"MPEG4/SIMPLE/P-VOP/hit012",
@@ -152,44 +152,44 @@ def computeFileList():
     
         # MPEG-4 Part10 / MPEG-4 AVC / H264
         "avc" : [
-            ["AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv", "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.yuv"],
-            ["AVC/CAVLC/general/AVCNL-2/SVA_NL1_B.264", "AVC/CAVLC/general/AVCNL-2/SVA_NL1_B_rec.yuv"],
-            ["AVC/CAVLC/general/AVCNL-3/NL2_Sony_H.jsv", "AVC/CAVLC/general/AVCNL-3/NL2_Sony_H.yuv"],
-            ["AVC/CAVLC/general/AVCNL-4/SVA_NL2_E.264", "AVC/CAVLC/general/AVCNL-4/SVA_NL2_E_rec.yuv"],
-            ["AVC/CAVLC/general/AVCBA-1/BA1_Sony_D.jsv", "AVC/CAVLC/general/AVCBA-1/BA1_Sony_D.yuv"],
-            ["AVC/CAVLC/general/AVCBA-2/SVA_BA1_B.264", "AVC/CAVLC/general/AVCBA-2/SVA_BA1_B_rec.yuv"],
-            ["AVC/CAVLC/general/AVCBA-3/BA2_Sony_F.jsv", "AVC/CAVLC/general/AVCBA-3/BA2_Sony_F.yuv"],
-            ["AVC/CAVLC/general/AVCBA-4/SVA_BA2_D.264", "AVC/CAVLC/general/AVCBA-4/SVA_BA2_D_rec.yuv"],
-            ["AVC/CAVLC/general/AVCBA-5/BA_MW_D.264", "AVC/CAVLC/general/AVCBA-5/BA_MW_D_rec.qcif"],
-            ["AVC/CAVLC/general/AVCBA-6/BANM_MW_D.264", "AVC/CAVLC/general/AVCBA-6/BANM_MW_D_rec.qcif"],
-            ["AVC/CAVLC/general/AVCBA-7/BA1_FT_C.264", "AVC/CAVLC/general/AVCBA-7/BA1_FT_C.yuv"],
-            ["AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.264", "AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.yuv"],
-            ["AVC/CAVLC/general/AVCMQ-2/NLMQ2_JVC_C.264", "AVC/CAVLC/general/AVCMQ-2/NLMQ2_JVC_C.yuv"],
-            ["AVC/CAVLC/general/AVCMQ-3/BAMQ1_JVC_C.264", "AVC/CAVLC/general/AVCMQ-3/BAMQ1_JVC_C.yuv"],
-            ["AVC/CAVLC/general/AVCMQ-4/BAMQ2_JVC_C.264", "AVC/CAVLC/general/AVCMQ-4/BAMQ2_JVC_C.yuv"],
-            ["AVC/CAVLC/general/AVCSL-1/SVA_Base_B.264", "AVC/CAVLC/general/AVCSL-1/SVA_Base_B_rec.yuv"],
-            ["AVC/CAVLC/general/AVCSL-2/SVA_FM1_E.264", "AVC/CAVLC/general/AVCSL-2/SVA_FM1_E_rec.yuv"],
-            ["AVC/CAVLC/general/AVCSQ-1/BASQP1_Sony_C.jsv", "AVC/CAVLC/general/AVCSQ-1/BASQP1_Sony_C.yuv"],
-            ["AVC/CAVLC/general/AVCCI-1/CI_MW_D.264", "AVC/CAVLC/general/AVCCI-1/CI_MW_D_rec.qcif"],
-            ["AVC/CAVLC/general/AVCCI-2/SVA_CL1_E.264", "AVC/CAVLC/general/AVCCI-2/SVA_CL1_E_rec.yuv"],
-            ["AVC/CAVLC/general/AVCCI-3/CI1_FT_B.264", "AVC/CAVLC/general/AVCCI-3/CI1_FT_B.yuv"],
-            #["AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv", "AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.yuv"],
-            ["AVC/CAVLC/general/AVCAUD-1/AUD_MW_E.264", "AVC/CAVLC/general/AVCAUD-1/AUD_MW_E_rec.qcif"],
-            ["AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D.264", "AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D_rec.qcif"],
-            ["AVC/CAVLC/general/AVCNRF-1/NRF_MW_E.264", "AVC/CAVLC/general/AVCNRF-1/NRF_MW_E_rec.qcif"],
-            ["AVC/CAVLC/general/AVCMPS-1/MPS_MW_A.264", "AVC/CAVLC/general/AVCMPS-1/MPS_MW_A_rec.qcif"],
-            ["AVC/CAVLC/IPCM/AVCPCM-1/CVPCMNL1_SVA_C.264", "AVC/CAVLC/IPCM/AVCPCM-1/CVPCMNL1_SVA_C_rec.yuv"],
-            ["AVC/CAVLC/IPCM/AVCPCM-2/CVPCMNL2_SVA_C.264", "AVC/CAVLC/IPCM/AVCPCM-2/CVPCMNL2_SVA_C_rec.yuv"],
-            ["AVC/CAVLC/Long_Sequence/AVCLS-1/LS_SVA_D.264", "AVC/CAVLC/Long_Sequence/AVCLS-1/LS_SVA_D_rec.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-1/MR1_BT_A.h264", "AVC/CAVLC/MMCO/AVCMR-1/MR1_BT_A.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-2/MR2_TANDBERG_E.264", "AVC/CAVLC/MMCO/AVCMR-2/MR2_TANDBERG_E.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-3/MR3_TANDBERG_B.264", "AVC/CAVLC/MMCO/AVCMR-3/MR3_TANDBERG_B.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-4/MR4_TANDBERG_C.264", "AVC/CAVLC/MMCO/AVCMR-4/MR4_TANDBERG_C.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-5/MR5_TANDBERG_C.264", "AVC/CAVLC/MMCO/AVCMR-5/MR5_TANDBERG_C.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-6/MR1_MW_A.264", "AVC/CAVLC/MMCO/AVCMR-6/MR1_MW_A_rec.qcif"],
-            ["AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A.264", "AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A_rec.qcif"],
-            ["AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.yuv"]
+            "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv",
+            "AVC/CAVLC/general/AVCNL-2/SVA_NL1_B.264",
+            "AVC/CAVLC/general/AVCNL-3/NL2_Sony_H.jsv",
+            "AVC/CAVLC/general/AVCNL-4/SVA_NL2_E.264",
+            "AVC/CAVLC/general/AVCBA-1/BA1_Sony_D.jsv",
+            "AVC/CAVLC/general/AVCBA-2/SVA_BA1_B.264",
+            "AVC/CAVLC/general/AVCBA-3/BA2_Sony_F.jsv",
+            "AVC/CAVLC/general/AVCBA-4/SVA_BA2_D.264",
+            "AVC/CAVLC/general/AVCBA-5/BA_MW_D.264",
+            "AVC/CAVLC/general/AVCBA-6/BANM_MW_D.264",
+            "AVC/CAVLC/general/AVCBA-7/BA1_FT_C.264",
+            "AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.264",
+            "AVC/CAVLC/general/AVCMQ-2/NLMQ2_JVC_C.264",
+            "AVC/CAVLC/general/AVCMQ-3/BAMQ1_JVC_C.264",
+            "AVC/CAVLC/general/AVCMQ-4/BAMQ2_JVC_C.264",
+            "AVC/CAVLC/general/AVCSL-1/SVA_Base_B.264",
+            "AVC/CAVLC/general/AVCSL-2/SVA_FM1_E.264",
+            "AVC/CAVLC/general/AVCSQ-1/BASQP1_Sony_C.jsv",
+            "AVC/CAVLC/general/AVCCI-1/CI_MW_D.264",
+            "AVC/CAVLC/general/AVCCI-2/SVA_CL1_E.264",
+            "AVC/CAVLC/general/AVCCI-3/CI1_FT_B.264",
+            #"AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv",
+            "AVC/CAVLC/general/AVCAUD-1/AUD_MW_E.264",
+            "AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D.264",
+            "AVC/CAVLC/general/AVCNRF-1/NRF_MW_E.264",
+            "AVC/CAVLC/general/AVCMPS-1/MPS_MW_A.264",
+            "AVC/CAVLC/IPCM/AVCPCM-1/CVPCMNL1_SVA_C.264",
+            "AVC/CAVLC/IPCM/AVCPCM-2/CVPCMNL2_SVA_C.264",
+            "AVC/CAVLC/Long_Sequence/AVCLS-1/LS_SVA_D.264",
+            "AVC/CAVLC/MMCO/AVCMR-1/MR1_BT_A.h264",
+            "AVC/CAVLC/MMCO/AVCMR-2/MR2_TANDBERG_E.264",
+            "AVC/CAVLC/MMCO/AVCMR-3/MR3_TANDBERG_B.264",
+            "AVC/CAVLC/MMCO/AVCMR-4/MR4_TANDBERG_C.264",
+            "AVC/CAVLC/MMCO/AVCMR-5/MR5_TANDBERG_C.264",
+            "AVC/CAVLC/MMCO/AVCMR-6/MR1_MW_A.264",
+            "AVC/CAVLC/MMCO/AVCMR-7/MR2_MW_A.264",
+            "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264",
+            "AVC/CAVLC/MMCO/AVCMR-12/HCBP2_HHI_A.264"
         ],
 
         # HEVC
@@ -295,13 +295,13 @@ def computeFileList():
 
     fileList_reduce = {
         "mpeg" : [
-            "MPEG4/SIMPLE/P-VOP/hit001",
-            ["MPEG4/foreman_qcif_30.bit", "MPEG4/foreman_qcif_30.yuv"]
+            "MPEG4/SIMPLE/P-VOP/hit001.m4v",
+            "MPEG4/foreman_qcif_30.bit"
         ],
 
         "avc" : [
-            ["AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv", "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.yuv"],
-            ["AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264", "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.yuv"]
+            "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv",
+            "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264"
         ]
 
     }
@@ -362,18 +362,15 @@ def main():
        clArguments.filesKey = DEFAULT_FILE_LIST
     
     for file in fileList[clArguments.filesKey]:
-        if type(file).__name__ == "list":
-            inputFile = file[0]
-            outputFile = file[1]
-        else:
-            inputFile = file+".m4v"
-            outputFile = file+".yuv"
+        inputFile = file
+        outputFile = '.'.join(file.split('.')[:-1]) + ".yuv"
         
         if not os.path.exists(clArguments.sequences +"/"+ inputFile):
             print "Warning : input file", clArguments.sequences+"/"+inputFile, "does not exists"
             warningsCount += 1
             continue
-        if not os.path.exists(clArguments.sequences +"/"+ outputFile):
+
+        if not os.path.exists(clArguments.sequences +"/"+ outputFile) and not clArguments.skipYuv:
             print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
             warningsCount += 1
             continue
