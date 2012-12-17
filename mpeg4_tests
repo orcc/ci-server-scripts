@@ -304,6 +304,11 @@ def computeFileList():
             "AVC/CAVLC/MMCO/AVCMR-11/HCBP1_HHI_A.264"
         ]
 
+        "hevc" : [
+            "HEVC/i_main/BasketballPass_416x240_50_qp22.bin",
+            "HEVC/i_main/Traffic_2560x1600_30_crop_qp22.bin"
+        ]
+
     }
     
 
