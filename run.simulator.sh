@@ -1,6 +1,8 @@
 #!/bin/bash
 source `dirname $0`/defines.sh
 
+echo "***START*** $0 `date -R`"
+
 [ ! -d "$2" ] && echo "Second argument must be a directory with Orcc projects as subfolders" && exit 1
 [ -z "$3" ] && echo "Third argument must be the project where is located your top network" && exit 1
 [ -z "$4" ] && echo "Fourth argument must be the qualified name of the top network" && exit 1
@@ -44,3 +46,4 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						$NETWORK \
 						-vmargs -Xms40m -Xmx768m
 
+echo "***END*** $0 `date -R`"

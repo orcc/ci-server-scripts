@@ -1,6 +1,8 @@
 #!/bin/bash
 source `dirname $0`/defines.sh
 
+echo "***START*** $0 `date -R`"
+
 echo "Start building Orcc plugins ($BUILDTYPE)"
 echo ""
 echo "***********************************************************"
@@ -120,3 +122,4 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-repository $ECLIPSEREPOSITORY \
 						-installIU net.sf.orcc.feature.group
 
+echo "***END*** $0 `date -R`"
