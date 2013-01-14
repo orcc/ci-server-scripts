@@ -54,4 +54,6 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						$NETWORK \
 						-vmargs -Xms40m -Xmx768m
 
+[ "$?" != "0" ] && exit 1
+
 echo "***END*** $0 `date -R`"

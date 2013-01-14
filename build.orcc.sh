@@ -122,4 +122,6 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-repository $ECLIPSEREPOSITORY \
 						-installIU net.sf.orcc.feature.group
 
+[ "$?" != "0" ] && exit 1
+
 echo "***END*** $0 `date -R`"

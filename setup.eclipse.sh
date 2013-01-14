@@ -39,4 +39,6 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 						-followReferences \
 						-installIU $BUILDDEPS
 
+[ "$?" != "0" ] && exit 1
+
 echo "***END*** $0 `date -R`"
