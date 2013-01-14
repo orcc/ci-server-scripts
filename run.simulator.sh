@@ -31,6 +31,7 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-application net.sf.orcc.cal.cli \
 						-data $RUNWORKSPACE \
 						$PROJECT \
+						$NETWORK \
 						-vmargs -Xms40m -Xmx768m
 
 [ "$?" != "0" ] && exit 1
