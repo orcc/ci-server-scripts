@@ -45,7 +45,7 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-p $PROJECT \
 						$REFOPTION \
 						$NETWORK \
-						-vmargs -Xms40m -Xmx768m
+						-vmargs -Xms40m -Xmx1024m
 
 [ "$?" != "0" ] && exit 1
 
