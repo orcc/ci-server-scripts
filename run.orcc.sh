@@ -1,8 +1,6 @@
 #!/bin/bash
 source `dirname $0`/defines.sh
 
-echo "***START*** $0 `date -R`"
-
 [ ! -d "$2" ] && echo "Second argument must be a directory with Orcc projects as subfolders" && exit 1
 [ -z "$3" ] && echo "Third argument must be the backend you want to use" && exit 1
 [ -z "$4" ] && echo "Fourth argument must be the project where is located your top network" && exit 1
@@ -15,6 +13,8 @@ PROJECT=$4
 NETWORK=$5
 OUTPUT=$6
 FLAGS=$7
+
+echo "***START*** $0 `date -R`"
 
 [ ! -d "$OUTPUT" ] && mkdir -p $OUTPUT
 
