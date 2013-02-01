@@ -5,9 +5,9 @@ echo "***START*** $0 `date -R`"
 
 echo "Start building Orcc plugins ($BUILDTYPE)"
 echo ""
-echo "***********************************************************"
-echo "*             Generate Cal Xtext arcitecture              *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*             Generate Cal Xtext arcitecture                   *"
+echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
 java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc/cal/GenerateCal.mwe2
@@ -15,9 +15,9 @@ java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "* Generate Java sources from Xtend [net.sf.orcc.backends] *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "* Generate Java sources from Xtend [net.sf.orcc.backends]      *"
+echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.backends
 rm -fr xtend-gen/*
@@ -26,9 +26,9 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "*  Generate Java sources from Xtend [net.sf.orcc.models]  *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*  Generate Java sources from Xtend [net.sf.orcc.models]       *"
+echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.models
 rm -fr xtend-gen/*
@@ -37,9 +37,31 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "*    Generate Java sources from Xtend [net.sf.orcc.ui]    *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*    Generate Java sources from Xtend [net.sf.orcc.core]       *"
+echo "****************************************************************"
+echo ""
+cd $PLUGINSDIR/net.sf.orcc.core
+rm -fr xtend-gen/*
+java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
+
+[ "$?" != "0" ] && exit 1
+
+echo ""
+echo "****************************************************************"
+echo "*    Generate Java sources from Xtend [net.sf.orcc.simulators] *"
+echo "****************************************************************"
+echo ""
+cd $PLUGINSDIR/net.sf.orcc.simulators
+rm -fr xtend-gen/*
+java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
+
+[ "$?" != "0" ] && exit 1
+
+echo ""
+echo "****************************************************************"
+echo "*    Generate Java sources from Xtend [net.sf.orcc.ui]         *"
+echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.ui
 rm -fr xtend-gen/*
@@ -48,9 +70,9 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "*   Generate Java sources from Xtend [org.xronos.orcc]    *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*   Generate Java sources from Xtend [org.xronos.orcc]         *"
+echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/org.xronos.orcc
 rm -fr xtend-gen/*
@@ -59,9 +81,9 @@ java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xte
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "*                    Launch PDE Build                     *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*                    Launch PDE Build                          *"
+echo "****************************************************************"
 echo ""
 
 # Define PDE build specific variables
@@ -100,9 +122,9 @@ $ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
 [ "$?" != "0" ] && exit 1
 
 echo ""
-echo "***********************************************************"
-echo "*       Installing Orcc plugins on eclipse runtime        *"
-echo "***********************************************************"
+echo "****************************************************************"
+echo "*       Installing Orcc plugins on eclipse runtime             *"
+echo "****************************************************************"
 echo ""
 echo "Uninstall old Orcc feature"
 
