@@ -54,7 +54,7 @@ echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.simulators
 rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
+java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen ../net.sf.orcc.core/xtend-gen:src
 
 [ "$?" != "0" ] && exit 1
 
