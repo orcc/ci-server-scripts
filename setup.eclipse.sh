@@ -3,7 +3,8 @@ source `dirname $0`/defines.sh
 
 echo "***START*** $0 `date -R`"
 
-ECLIPSEURL="http://eclipse.ialto.org/eclipse/downloads/drops4/R-4.2.1-201209141800/eclipse-platform-4.2.1-linux-gtk-x86_64.tar.gz"
+ECLIPSEURL="http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2.2-201302041200/eclipse-platform-4.2.2-linux-gtk-x86_64.tar.gz"
+
 BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.gef.feature.group"
 
 mkdir -p $ORCCWORK
