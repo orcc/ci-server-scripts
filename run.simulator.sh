@@ -13,7 +13,7 @@ NETWORK=$4
 INPUT=$5
 
 # Split 2 test to perform a "short circuit evaluation"
-[ "$FIFOSIZE" -ge 2 ] 2>/dev/null && SETFIFO="-f $FIFOSIZE"
+[ "$FIFOSIZE" -ge 2 ] 2>/dev/null && SETFIFO="-s $FIFOSIZE" && echo "Fifo size set to $FIFOSIZE"
 
 echo "***START*** $0 `date -R`"
 
