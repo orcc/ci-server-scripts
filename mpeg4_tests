@@ -575,14 +575,17 @@ def main():
         finalCommandLine = list(execPath)
         
         finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile])
+
+        traceMsg = "Try to decode " + inputFile
         
         if not clArguments.skipYuv:
             finalCommandLine.extend(["-o", clArguments.sequences +"/"+ outputFile])
+            traceMsg += " and check consistency with " + outputFile + ":"
 
         if clArguments.verbose:
             print " ".join(finalCommandLine)
 
-        print "Try to decode", inputFile, "and check consistency with", outputFile, " :"
+        print traceMsg
         commandResult = subprocess.call(finalCommandLine)
         
         if commandResult != 0:
