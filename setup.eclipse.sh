@@ -23,6 +23,9 @@ ECLIPSEARCHIVE=`echo eclipse-platform-*.tar.gz`
 echo "Uncompressing"
 tar -xzaf $ECLIPSEARCHIVE
 
+echo "Update java max heap size"
+sed -i -e "s/-Xmx384m/-Xmx512m/g" eclipse/eclipse.ini
+
 echo "Copying eclipse/* into $ECLIPSERUN and $ECLIPSEBUILD"
 cp -r eclipse/* $ECLIPSERUN
 cp -r eclipse/* $ECLIPSEBUILD
