@@ -10,10 +10,7 @@ source `dirname $0`/defines.sh
 APPDIR=$2
 BACKEND=$3
 PROJECT=$4
-# Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
-if [ "$BACKEND" != "jade" ] && [ "$BACKEND" != "java" ]; then
-	NETWORK=$5
-fi
+NETWORK=$5
 OUTPUT=$6
 FLAGS=$7
 
@@ -33,13 +30,19 @@ $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 
 [ "$?" != "0" ] && exit 1
 
+
+# Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
+if [ "$BACKEND" != "jade" ] && [ "$BACKEND" != "java" ]; then
+	FENETWORK=$NETWORK
+fi
+
 echo ""
 echo "Generate Orcc IR for $PROJECT and projects it depends on"
 $ECLIPSERUN/eclipse 	-nosplash -consoleLog \
 						-application net.sf.orcc.cal.cli \
 						-data $RUNWORKSPACE \
 						$PROJECT \
-						$NETWORK \
+						$FENETWORK \
 						-vmargs -Xms40m -Xmx768m
 
 [ "$?" != "0" ] && exit 1
