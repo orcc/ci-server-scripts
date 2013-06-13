@@ -11,7 +11,7 @@ APPDIR=$2
 BACKEND=$3
 PROJECT=$4
 # Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
-if [ "$BACKEND" != "jade" && "$BACKEND" != "java" ] then
+if [ "$BACKEND" != "jade" ] && [ "$BACKEND" != "java" ]; then
 	NETWORK=$5
 fi
 OUTPUT=$6
