@@ -10,7 +10,10 @@ source `dirname $0`/defines.sh
 APPDIR=$2
 BACKEND=$3
 PROJECT=$4
-NETWORK=$5
+# Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
+if [ "$BACKEND" != "jade" && "$BACKEND" != "java" ] then
+	NETWORK=$5
+fi
 OUTPUT=$6
 FLAGS=$7
 
