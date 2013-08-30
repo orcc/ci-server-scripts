@@ -5,7 +5,9 @@
 
 export ORCCWORK="$1"
 
-ECLIPSEVERSION=juno
+ECLIPSEVERSION=kepler
+# Used to download the base platform version of eclipse
+export ECLIPSEURL="http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.3-201306052000/eclipse-platform-4.3-linux-gtk-x86_64.tar.gz"
 # Used to download dependencies (both runtime and build eclipse)
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
 
