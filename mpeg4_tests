@@ -690,7 +690,7 @@ def computeFileList():
             "HEVC/jctvc/avconv/SLIST_A_Sony_4.bin",
             "HEVC/jctvc/avconv/SLIST_B_Sony_8.bin",
             "HEVC/jctvc/avconv/SLIST_C_Sony_3.bin",
-            #"HEVC/jctvc/avconv/SLIST_D_Sony_9.bin",
+            "HEVC/jctvc/avconv/SLIST_D_Sony_9.bin",
             "HEVC/jctvc/avconv/STRUCT_A_Samsung_5.bin",
             #"HEVC/jctvc/avconv/STRUCT_B_Samsung_4.bit",
             "HEVC/jctvc/avconv/TILES_A_Cisco_2.bin",
