@@ -23,27 +23,27 @@ rm -fr $RUNWORKSPACE/.metadata $RUNWORKSPACE/.JETEmitters
 rm -fr $RUNWORKSPACE/**/bin
 
 echo "Register Orcc projects in eclipse workspace"
-$ECLIPSERUN/eclipse 	-nosplash -consoleLog \
-						-application net.sf.orcc.cal.workspaceSetup \
-						-data $RUNWORKSPACE \
-						$APPDIR
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.cal.workspaceSetup \
+                        -data $RUNWORKSPACE \
+                        $APPDIR
 
 [ "$?" != "0" ] && exit 1
 
 
 # Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
 if [ "$BACKEND" != "jade" ] && [ "$BACKEND" != "java" ]; then
-	FENETWORK=$NETWORK
+    FENETWORK=$NETWORK
 fi
 
 echo ""
 echo "Generate Orcc IR for $PROJECT and projects it depends on"
-$ECLIPSERUN/eclipse 	-nosplash -consoleLog \
-						-application net.sf.orcc.cal.cli \
-						-data $RUNWORKSPACE \
-						$PROJECT \
-						$FENETWORK \
-						-vmargs -Xms40m -Xmx768m
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.cal.cli \
+                        -data $RUNWORKSPACE \
+                        $PROJECT \
+                        $FENETWORK \
+                        -vmargs -Xms40m -Xmx768m
 
 [ "$?" != "0" ] && exit 1
 
@@ -51,14 +51,14 @@ rm -fr $OUTPUT/*
 
 echo ""
 echo "Build application with $BACKEND backend"
-$ECLIPSERUN/eclipse 	-nosplash -consoleLog \
-						-application net.sf.orcc.backends.$BACKEND \
-						-data $RUNWORKSPACE \
-						-p $PROJECT \
-						-o $OUTPUT \
-						$FLAGS \
-						$NETWORK \
-						-vmargs -Xms40m -Xmx768m
+$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+                        -application net.sf.orcc.backends.$BACKEND \
+                        -data $RUNWORKSPACE \
+                        -p $PROJECT \
+                        -o $OUTPUT \
+                        $FLAGS \
+                        $NETWORK \
+                        -vmargs -Xms40m -Xmx768m
 
 [ "$?" != "0" ] && exit 1
 

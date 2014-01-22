@@ -29,7 +29,7 @@ export MWECP
 XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
 for i in `ls $PLUGINSDIR`
 do
-	[ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
-	[ -d "$PLUGINSDIR/$i/src-gen" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src-gen
+    [ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
+    [ -d "$PLUGINSDIR/$i/src-gen" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src-gen
 done
 export XTENDCP

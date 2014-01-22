@@ -95,29 +95,29 @@ LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
 
 if [ "$BUILDTYPE" == "tests" ]
 then
-	PDEBUILDTYPE=I
+    PDEBUILDTYPE=I
 elif [ "$BUILDTYPE" == "nightly" ]
 then
-	PDEBUILDTYPE=N
+    PDEBUILDTYPE=N
 else 
-	PDEBUILDTYPE=R
+    PDEBUILDTYPE=R
 fi
 
 mkdir -p $LOCALREPO
 mkdir -p $BUILDDIR
 
-$ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
-						-application org.eclipse.ant.core.antRunner \
-						-buildfile $BUILDFILE \
- 						-Dbuilder=$CONFIGDIR \
- 						-DbaseLocation=$ECLIPSEBUILD \
- 						-DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
- 						-DbuildType=$PDEBUILDTYPE \
- 						-DtopLevelElementId=net.sf.orcc \
- 						-DbuildDirectory=$BUILDDIR \
- 						-Dbase=$BUILDDIR \
- 						-Dp2.mirror.slicing.latestVersionOnly=$KEEPONLYLATESTVERSIONS \
- 						-Dp2.build.repo=file:$LOCALREPO
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
+                        -application org.eclipse.ant.core.antRunner \
+                        -buildfile $BUILDFILE \
+                        -Dbuilder=$CONFIGDIR \
+                        -DbaseLocation=$ECLIPSEBUILD \
+                        -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
+                        -DbuildType=$PDEBUILDTYPE \
+                        -DtopLevelElementId=net.sf.orcc \
+                        -DbuildDirectory=$BUILDDIR \
+                        -Dbase=$BUILDDIR \
+                        -Dp2.mirror.slicing.latestVersionOnly=$KEEPONLYLATESTVERSIONS \
+                        -Dp2.build.repo=file:$LOCALREPO
 
 [ "$?" != "0" ] && exit 1
 
@@ -128,21 +128,21 @@ echo "****************************************************************"
 echo ""
 echo "Uninstall old Orcc feature"
 
-$ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
-						-application org.eclipse.equinox.p2.director \
-						-destination $ECLIPSERUN \
-						-uninstallIU net.sf.orcc.feature.group \
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
+                        -application org.eclipse.equinox.p2.director \
+                        -destination $ECLIPSERUN \
+                        -uninstallIU net.sf.orcc.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
 
 echo "Install new Orcc feature"
-$ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
-						-application org.eclipse.equinox.p2.director \
-						-destination $ECLIPSERUN \
-						-artifactRepository file:$LOCALREPO \
-						-metadataRepository file:$LOCALREPO \
-						-repository $ECLIPSEREPOSITORY \
-						-installIU net.sf.orcc.feature.group
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
+                        -application org.eclipse.equinox.p2.director \
+                        -destination $ECLIPSERUN \
+                        -artifactRepository file:$LOCALREPO \
+                        -metadataRepository file:$LOCALREPO \
+                        -repository $ECLIPSEREPOSITORY \
+                        -installIU net.sf.orcc.feature.group
 
 [ "$?" != "0" ] && exit 1
 

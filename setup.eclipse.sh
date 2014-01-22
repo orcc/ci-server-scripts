@@ -34,12 +34,12 @@ rm $ECLIPSEARCHIVE
 
 echo "Installing plugins required for build step into eclipse.build"
 cd $ORCCWORK
-$ECLIPSEBUILD/eclipse 	-nosplash -consoleLog \
-						-application org.eclipse.equinox.p2.director \
-						-destination $ECLIPSEBUILD \
-						-repository $ECLIPSEREPOSITORY \
-						-followReferences \
-						-installIU $BUILDDEPS
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
+                        -application org.eclipse.equinox.p2.director \
+                        -destination $ECLIPSEBUILD \
+                        -repository $ECLIPSEREPOSITORY \
+                        -followReferences \
+                        -installIU $BUILDDEPS
 
 [ "$?" != "0" ] && exit 1
 
