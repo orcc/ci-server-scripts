@@ -1,11 +1,28 @@
 #!/bin/bash
-source `dirname $0`/defines.sh
 
-[ ! -d "$2" ] && echo "Second argument must be a directory with Orcc projects as subfolders" && exit 1
-[ -z "$3" ] && echo "Third argument must be the backend you want to use" && exit 1
-[ -z "$4" ] && echo "Fourth argument must be the project where is located your top network" && exit 1
-[ -z "$5" ] && echo "Fifth argument must be the qualified name of the top network" && exit 1
-[ -z "$6" ] && echo "Sixth argument must be the directory you want to build sources" && exit 1
+NBARGS=6
+function print_usage() {
+    echo
+    echo "Usage: $0 <working_directory> <projects_dir> <backend> <project> <top_network> <output_dir> [<additional_flags>]"
+    echo "    <working_directory>           Path to folder used to perform build & tests"
+    echo "    <projects_dir>                Folder containing CAL projects"
+    echo "    <backend>                     Identifier of the backend tu use (c, llvm, jade, tta, etc.)"
+    echo "    <project>                     The project containing application to build"
+    echo "    <top_network>                 Qualified name of the top network to build"
+    echo "    <output_dir>                  Folder where application will be built"
+    echo "    <additional_flags>            [Optional] Flags added to backend execution command line"
+}
+
+if [ $# -lt $NBARGS ]; then
+    print_usage
+    exit $E_BADARGS
+fi
+
+[ ! -d "$2" ] && echo "Missing CAL projects folder" && print_usage && exit $E_BADARGS
+[ -z "$3" ] && echo "Missing backend name" && print_usage && exit $E_BADARGS
+[ -z "$4" ] && echo "Missing project name" && print_usage && exit $E_BADARGS
+[ -z "$5" ] && echo "Missing top network qualified name" && print_usage && exit $E_BADARGS
+[ -z "$6" ] && echo "Missing output folder" && print_usage && exit $E_BADARGS
 
 APPDIR=$2
 BACKEND=$3
@@ -13,6 +30,8 @@ PROJECT=$4
 NETWORK=$5
 OUTPUT=$6
 FLAGS=$7
+
+source `dirname $0`/defines.sh
 
 echo "***START*** $0 `date -R`"
 

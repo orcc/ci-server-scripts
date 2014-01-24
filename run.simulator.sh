@@ -1,16 +1,34 @@
 #!/bin/bash
-source `dirname $0`/defines.sh
 
-[ ! -s "$2" ] && echo "Second argument must be a directory with Orcc projects as subfolders" && exit 1
-[ -z "$3" ] && echo "Third argument must be the project where is located your top network" && exit 1
-[ -z "$4" ] && echo "Fourth argument must be the qualified name of the top network" && exit 1
-[ ! -s "$5" ] && echo "Fifth argument must be the input stimulus of simulation" && exit 1
+NBARGS=5
+function print_usage() {
+    echo
+    echo "Usage: $0 <working_directory> <projects_dir> <project> <top_network> <input_sequence> [<reference_file>]"
+    echo "    <working_directory>           Path to folder used to perform build & tests"
+    echo "    <projects_dir>                Folder containing CAL projects"
+    echo "    <project>                     The project containing application to build"
+    echo "    <top_network>                 Qualified name of the top network to build"
+    echo "    <input_sequence>              Input file to pass to application"
+    echo "    <reference_file>              [Optional] Reference file to use for errors checking"
+}
+
+if [ $# -lt $NBARGS ]; then
+    print_usage
+    exit $E_BADARGS
+fi
+
+[ ! -s "$2" ] && echo "Missing CAL projects folder" && print_usage && exit $E_BADARGS
+[ -z "$3" ] && echo "Missing project name" && print_usage && exit $E_BADARGS
+[ -z "$4" ] && echo "Missing top network qualified name" && print_usage && exit $E_BADARGS
+[ ! -s "$5" ] && echo "Missing input sequence" && print_usage && exit $E_BADARGS
 [ -f "$6" ] && REFOPTION="-r $6"
 
 APPDIR=$2
 PROJECT=$3
 NETWORK=$4
 INPUT=$5
+
+source `dirname $0`/defines.sh
 
 # Split 2 test to perform a "short circuit evaluation"
 [ "$FIFOSIZE" -ge 2 ] 2>/dev/null && SETFIFO="-s $FIFOSIZE" && echo "Fifo size set to $FIFOSIZE"
