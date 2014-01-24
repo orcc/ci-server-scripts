@@ -1,7 +1,7 @@
 #!/bin/bash
 
-[ ! -d "$1" ] && echo "First argument must be the working directory" && exit 1
-[ -z "$BUILDTYPE" ] && export BUILDTYPE="tests"
+[ ! -d "$1" ] && echo "Please pass the working directory as first argument" && exit $E_BADARGS
+[ -z "$BUILDTYPE" ] && export BUILDTYPE="tests" && echo "Variable BUILDTYPE has not been set. Initialized to \"tests\""
 
 export ORCCWORK="$1"
 
@@ -27,7 +27,7 @@ export MWECP
 
 # Classpath for Xtend generation
 XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
-for i in `ls $PLUGINSDIR`
+for i in `ls $PLUGINSDIR 2>/dev/null`
 do
     [ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
     [ -d "$PLUGINSDIR/$i/src-gen" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src-gen
