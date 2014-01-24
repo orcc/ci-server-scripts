@@ -3,7 +3,7 @@ source `dirname $0`/defines.sh
 
 echo "***START*** $0 `date -R`"
 
-BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.gef.feature.group"
+BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.graphiti.sdk.feature.feature.group"
 
 mkdir -p $ORCCWORK
 
