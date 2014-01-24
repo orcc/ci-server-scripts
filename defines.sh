@@ -18,8 +18,8 @@ export BUILDDIR=$ORCCWORK/build.dir.$BUILDTYPE
 export PLUGINSDIR=$BUILDDIR/plugins
 export FEATURESDIR=$BUILDDIR/features
 
-ln -f -s `pwd dirname $0`/pde-config $ORCCWORK
-ln -f -s `pwd dirname $0`/*.jar $ORCCWORK
+ln -f -s $(dirname $0)/pde-config $ORCCWORK
+ln -f -s $(dirname $0)/*.jar $ORCCWORK
 
 # Setup eclipse classpath
 ECLIPSECP=`echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g"`
