@@ -18,8 +18,18 @@ export BUILDDIR=$ORCCWORK/build.dir.$BUILDTYPE
 export PLUGINSDIR=$BUILDDIR/plugins
 export FEATURESDIR=$BUILDDIR/features
 
-ln -f -s $(dirname $0)/pde-config $ORCCWORK
-ln -f -s $(dirname $0)/*.jar $ORCCWORK
+# Get the path of the current script. This script is necessary to resolve symlinks to this script
+# see http://stackoverflow.com/a/246128/1887976
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+# Create symlinks to antlr jar library and PDE headless build config directory
+ln -f -s $DIR/pde-config $ORCCWORK
+ln -f -s $DIR/*.jar $ORCCWORK
 
 # Setup eclipse classpath
 ECLIPSECP=`echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g"`
