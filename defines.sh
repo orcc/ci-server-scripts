@@ -18,14 +18,18 @@ export BUILDDIR=$ORCCWORK/build.dir.$BUILDTYPE
 export PLUGINSDIR=$BUILDDIR/plugins
 export FEATURESDIR=$BUILDDIR/features
 
+ln -f -s `pwd dirname $0`/pde-config $ORCCWORK
+ln -f -s `pwd dirname $0`/*.jar $ORCCWORK
+
+# Setup eclipse classpath
 ECLIPSECP=`echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g"`
 
-# Classpath for MWE2 generation
+# Setup Xtext MWE2 classpath
 MWECP=$ECLIPSECP:`echo $ORCCWORK/antlr-generator-*.jar | sed -e "s/ /:/g"`
 MWECP=$MWECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
 export MWECP
 
-# Classpath for Xtend generation
+# Setup Xtend classpath
 XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
 for i in `ls $PLUGINSDIR 2>/dev/null`
 do
