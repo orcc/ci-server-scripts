@@ -47,7 +47,7 @@ def computeFileList():
             "MPEG4/SIMPLE/I-VOP/jvc000.m4v",
             "MPEG4/SIMPLE/I-VOP/san000.m4v",
             "MPEG4/SIMPLE/I-VOP/san001.m4v",
-            
+
             "MPEG4/SIMPLE/P-VOP/hit001.m4v",
             "MPEG4/SIMPLE/P-VOP/hit002.m4v",
             "MPEG4/SIMPLE/P-VOP/hit003.m4v",
@@ -61,7 +61,7 @@ def computeFileList():
             "MPEG4/SIMPLE/P-VOP/hit011.m4v",
             "MPEG4/SIMPLE/P-VOP/hit013.m4v",
             "MPEG4/SIMPLE/P-VOP/hit014.m4v",
-            
+
             "MPEG4/SIMPLE/P-VOP/jvc001.m4v",
             "MPEG4/SIMPLE/P-VOP/jvc002.m4v",
             "MPEG4/SIMPLE/P-VOP/jvc003.m4v",
@@ -81,7 +81,7 @@ def computeFileList():
             "MPEG4/SIMPLE/P-VOP/jvc019.m4v",
             "MPEG4/SIMPLE/P-VOP/jvc020.m4v",
             "MPEG4/SIMPLE/P-VOP/jvc021.m4v",
-            
+
             "MPEG4/SIMPLE/P-VOP/san002.m4v",
             "MPEG4/SIMPLE/P-VOP/san003.m4v",
             "MPEG4/SIMPLE/P-VOP/san004.m4v",
@@ -92,7 +92,7 @@ def computeFileList():
             "MPEG4/SIMPLE/P-VOP/san010.m4v",
             "MPEG4/SIMPLE/P-VOP/san011.m4v",
             "MPEG4/SIMPLE/P-VOP/san012.m4v",
-            
+
             #"MPEG4/SIMPLE/Overall/hit016.m4v",
             #"MPEG4/SIMPLE/Overall/hit017.m4v",
             #"MPEG4/SIMPLE/Overall/hit018.m4v",
@@ -102,7 +102,7 @@ def computeFileList():
             #"MPEG4/SIMPLE/Overall/hit022.m4v",
             #"MPEG4/SIMPLE/Overall/hit023.m4v",
             #"MPEG4/SIMPLE/Overall/hit024.m4v",
-            
+
             #"MPEG4/CORE/I-VOP/mat001.m4v",
             #"MPEG4/CORE/I-VOP/mat004.m4v",
             #"MPEG4/CORE/I-VOP/mat005.m4v",
@@ -115,7 +115,7 @@ def computeFileList():
             #"MPEG4/CORE/I-VOP/mat014.m4v",
             #"MPEG4/CORE/I-VOP/mat015.m4v",
             #"MPEG4/CORE/I-VOP/mat016.m4v",
-            
+
             #"MPEG4/SIMPLE/vcon-scs1.bits",
             #"MPEG4/SIMPLE/vcon-scs2.bits",
             #"MPEG4/SIMPLE/vcon-scs3.bits",
@@ -127,7 +127,7 @@ def computeFileList():
             #"MPEG4/SIMPLE/vcon-scs9.bits",
             #"MPEG4/SIMPLE/vcon-scs10.cmp",
             #"MPEG4/SIMPLE/vcon-scs11.cmp",
-            
+
             #"MPEG4/foreman_cif_xvid_384kbps_I_P",
             #"MPEG4/foreman_cif_xvid_384kbps_I_P_B",
             #"MPEG4/foreman_cif_xvid_700kbps_I_P_B",
@@ -135,7 +135,7 @@ def computeFileList():
             "MPEG4/foreman_qcif_30.bit",
 
             "MPEG4/old_town_cross_420_720p_MPEG4_SP_6Mbps.bit",
-            
+
             #"MPEG4/SIMPLE/P-VOP/jvc013",
             #"MPEG4/SIMPLE/P-VOP/hit012",
             #"MPEG4/SIMPLE/P-VOP/san008",
@@ -149,7 +149,7 @@ def computeFileList():
             #"MPEG4/SIMPLE/P-VOP/san019",
             #"MPEG4/SIMPLE/P-VOP/san020"
         ],
-    
+
         # MPEG-4 Part10 / MPEG-4 AVC / H264
         "avc" : [
             "AVC/CAVLC/general/AVCNL-1/NL1_Sony_D.jsv",
@@ -744,19 +744,20 @@ def computeFileList():
         "hevcConf" : [
         ]
     }
-    
+
 
 def main():
     clArguments = parser.parse_args()
-    
+
     #print clArguments
     #sys.exit(0)
-    
+
     errorsCount = 0
     warningsCount = 0
-    
+
     execPath = []
-    
+
+    # Build the command line for Jade execution
     if clArguments.useJade :
         if clArguments.topXdf == None or not os.path.isfile(clArguments.topXdf):
             sys.exit("Please use -xdf argument to set the path of a top network")
@@ -768,13 +769,14 @@ def main():
             else:
                 execPath.append("Jade")
             execPath.extend(["-xdf", clArguments.topXdf, "-L", clArguments.vtl])
-        
+
         if clArguments.loopNumber != None:
             print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
-        
+
         if not clArguments.enableDisplay:
             execPath.append("-nodisplay")
 
+    # Build the command line for standalone decoder
     elif clArguments.useClassic:
         if clArguments.executable == None:
             sys.exit("Please use -e argument to set the path of a decoder")
@@ -782,16 +784,19 @@ def main():
             sys.exit(clArguments.executable + " must be an executable file !")
         else:
             execPath.append(clArguments.executable)
-                    
+
+        # Set the max loops number
         if clArguments.loopNumber != None:
             execPath.extend(["-l", str(clArguments.loopNumber)])
-        
+
+        # Disable display
         if not clArguments.enableDisplay:
             execPath.append("-n")
-    
+
+    # Check validity of "sequences" directory
     if not os.path.isdir(clArguments.sequences) or (not os.path.isdir(clArguments.sequences + "/MPEG4") and not os.path.isdir(clArguments.sequences + "/AVC")):
         sys.exit("The sequence path must be a valid directory and contains 'MPEG4' or 'AVC' subdirectory")
-    
+
     if clArguments.quickTest:
         fileList = fileList_reduce
     else:
@@ -799,13 +804,17 @@ def main():
 
     if not fileList.has_key(clArguments.filesKey) :
        clArguments.filesKey = DEFAULT_FILE_LIST
-    
+
     for file in fileList[clArguments.filesKey]:
         inputFile = file
         outputFile = '.'.join(file.split('.')[:-1]) + ".yuv"
-        
+
         if not os.path.exists(clArguments.sequences +"/"+ inputFile):
             print "Warning : input file", clArguments.sequences+"/"+inputFile, "does not exists"
+            warningsCount += 1
+            continue
+        elif not os.access(clArguments.sequences +"/"+ inputFile, os.R_OK):
+            print "Warning : input file", clArguments.sequences+"/"+inputFile, "is not readable"
             warningsCount += 1
             continue
 
@@ -813,13 +822,17 @@ def main():
             print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
             warningsCount += 1
             continue
-        
+        elif not os.access(clArguments.sequences +"/"+ outputFile, os.R_OK):
+            print "Warning : output file", clArguments.sequences+"/"+outputFile, "is not readable"
+            warningsCount += 1
+            continue
+
         finalCommandLine = list(execPath)
-        
+
         finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile])
 
         traceMsg = "Try to decode " + inputFile
-        
+
         if not clArguments.skipYuv:
             finalCommandLine.extend(["-o", clArguments.sequences +"/"+ outputFile])
             traceMsg += " and check consistency with " + outputFile + ":"
@@ -829,12 +842,11 @@ def main():
 
         print traceMsg
         commandResult = subprocess.call(finalCommandLine)
-        
+
         if commandResult != 0:
-            print "Error with the files", inputFile, "/", outputFile
-            print "Command returned code", commandResult
+            sys.stderr.write("Error, command returned code " + commandResult)
             errorsCount += 1
-    
+
     if errorsCount != 0:
         ws, es = "", ""
         if errorsCount > 1 : es = "s"
@@ -848,37 +860,37 @@ def main():
     else :
         print "The test suite finished with no error !"
         sys.exit()
-    
+
 
 def setupCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
     global parser
-    
+
     parser = argparse.ArgumentParser(description='Execute parser to test video decoding', version=VERSION)
 
     options = parser.add_argument_group(title="Parameters")
-    
+
     mode = options.add_mutually_exclusive_group(required=True)
     mode.add_argument("-jade", action="store_true", default=False, dest="useJade")
     mode.add_argument("-classic", action="store_true", default=False, dest="useClassic")
-    
+
     jade = parser.add_argument_group("Parameters for -jade mode", "Test a decoder in LLVM with Jade toolchain")
     jade.add_argument("-xdf", action="store", dest="topXdf",
                             help="Path to the Top_*.xdf network of the decoder")
     jade.add_argument("-vtl", action="store", dest="vtl",
                             help="Path to the VTL directory of the decoder")
-    
+
     classic = parser.add_argument_group("Parameters for -classic mode", "Test a classic C decoder")
     classic.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
                         help="Number of times input is read for every file")
-    
+
     options.add_argument("-e", "--executable", action="store", dest="executable",
                         help="In -classic mode, path to a decoder. In -jade mode, path to Jade executable.")
     options.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
                         help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder).")
     options.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
                         help="Pass this argument to disable display when testing decoders.")
-    options.add_argument("-f", "--filestypes", choices=["mpeg","avc","hevc","hevcIntra", "hevcConf"], default=DEFAULT_FILE_LIST, dest="filesKey", 
+    options.add_argument("-f", "--filestypes", choices=["mpeg","avc","hevc","hevcIntra", "hevcConf"], default=DEFAULT_FILE_LIST, dest="filesKey",
                         help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"')")
     options.add_argument("-q", "--quick", action="store_true", dest="quickTest", default=False,
                         help="Test the decoder on a small subset of sequences.")
@@ -886,7 +898,7 @@ def setupCommandLine():
                         help="Skip the consistency checking using the YUV file.")
     options.add_argument("--verbose", action="store_true", dest="verbose", default=False,
                         help="Verbose mode.")
-    
+
 
 if __name__ == "__main__":
     setupCommandLine()
