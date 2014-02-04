@@ -818,14 +818,15 @@ def main():
             warningsCount += 1
             continue
 
-        if not os.path.exists(clArguments.sequences +"/"+ outputFile) and not clArguments.skipYuv:
-            print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
-            warningsCount += 1
-            continue
-        elif not os.access(clArguments.sequences +"/"+ outputFile, os.R_OK):
-            print "Warning : output file", clArguments.sequences+"/"+outputFile, "is not readable"
-            warningsCount += 1
-            continue
+        if not clArguments.skipYuv:
+            if not os.path.exists(clArguments.sequences +"/"+ outputFile):
+                print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
+                warningsCount += 1
+                continue
+            elif not os.access(clArguments.sequences +"/"+ outputFile, os.R_OK):
+                print "Warning : output file", clArguments.sequences+"/"+outputFile, "is not readable"
+                warningsCount += 1
+                continue
 
         finalCommandLine = list(execPath)
 
