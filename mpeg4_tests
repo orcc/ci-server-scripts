@@ -845,7 +845,7 @@ def main():
         commandResult = subprocess.call(finalCommandLine)
 
         if commandResult != 0:
-            sys.stderr.write("Error, command returned code " + commandResult)
+            sys.stderr.write("Error, command returned code " + str(commandResult))
             errorsCount += 1
 
     if errorsCount != 0:
