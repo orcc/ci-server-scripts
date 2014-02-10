@@ -794,8 +794,8 @@ def main():
             execPath.append("-n")
 
     # Check validity of "sequences" directory
-    if not os.path.isdir(clArguments.sequences) or (not os.path.isdir(clArguments.sequences + "/MPEG4") and not os.path.isdir(clArguments.sequences + "/AVC")):
-        sys.exit("The sequence path must be a valid directory and contains 'MPEG4' or 'AVC' subdirectory")
+    if not os.path.isdir(clArguments.sequences):
+        sys.exit("The sequence path must be a valid directory, containing sequences")
 
     if clArguments.quickTest:
         fileList = fileList_reduce
