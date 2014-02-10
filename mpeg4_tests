@@ -806,36 +806,40 @@ def main():
        clArguments.filesKey = DEFAULT_FILE_LIST
 
     for file in fileList[clArguments.filesKey]:
+        file = file.replace("/", os.sep)
         inputFile = file
         outputFile = '.'.join(file.split('.')[:-1]) + ".yuv"
 
-        if not os.path.exists(clArguments.sequences +"/"+ inputFile):
-            print "Warning : input file", clArguments.sequences+"/"+inputFile, "does not exists"
+        inputPath = clArguments.sequences + os.sep + inputFile
+        outputPath = clArguments.sequences + os.sep + outputFile
+
+        if not os.path.exists(inputPath):
+            print "Warning : input file", inputPath, "does not exists"
             warningsCount += 1
             continue
-        elif not os.access(clArguments.sequences +"/"+ inputFile, os.R_OK):
-            print "Warning : input file", clArguments.sequences+"/"+inputFile, "is not readable"
+        elif not os.access(inputPath, os.R_OK):
+            print "Warning : input file", inputPath, "is not readable"
             warningsCount += 1
             continue
 
         if not clArguments.skipYuv:
-            if not os.path.exists(clArguments.sequences +"/"+ outputFile):
-                print "Warning : output file", clArguments.sequences+"/"+outputFile, "does not exists"
+            if not os.path.exists(outputPath):
+                print "Warning : output file", outputPath, "does not exists"
                 warningsCount += 1
                 continue
-            elif not os.access(clArguments.sequences +"/"+ outputFile, os.R_OK):
-                print "Warning : output file", clArguments.sequences+"/"+outputFile, "is not readable"
+            elif not os.access(outputPath, os.R_OK):
+                print "Warning : output file", outputPath, "is not readable"
                 warningsCount += 1
                 continue
 
         finalCommandLine = list(execPath)
 
-        finalCommandLine.extend(["-i", clArguments.sequences +"/"+ inputFile])
+        finalCommandLine.extend(["-i", inputPath])
 
         traceMsg = "Try to decode " + inputFile
 
         if not clArguments.skipYuv:
-            finalCommandLine.extend(["-o", clArguments.sequences +"/"+ outputFile])
+            finalCommandLine.extend(["-o", outputPath])
             traceMsg += " and check consistency with " + outputFile + ":"
 
         if clArguments.verbose:
