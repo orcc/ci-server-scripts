@@ -156,45 +156,30 @@ def buildBasicCommand():
     return commandToRun
 
 
-def setupCommandLine():
+def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
     global parser
 
-    parser = argparse.ArgumentParser(description='Execute parser to test video decoding', version=VERSION)
+    parser = argparse.ArgumentParser(description='Test a suite of video sequences', version=VERSION)
 
-    options = parser.add_argument_group(title="Parameters")
+    expected = parser.add_argument_group(title="Mandatory arguments")
+    expected.add_argument("-e", "--executable", action="store", dest="executable", required=True,
+                        help="")
 
-    mode = options.add_mutually_exclusive_group(required=True)
-    mode.add_argument("-jade", action="store_true", default=False, dest="useJade")
-    mode.add_argument("-classic", action="store_true", default=False, dest="useClassic")
+    expected.add_argument("-d", "--directory", action="store", dest="directory", required=True,
+                        help="Path to directory containing sequences (ie: containing folder like HEVC/AVC/etc.)")
 
-    jade = parser.add_argument_group("Parameters for -jade mode", "Test a decoder in LLVM with Jade toolchain")
-    jade.add_argument("-xdf", action="store", dest="topXdf",
-                            help="Path to the Top_*.xdf network of the decoder")
-    jade.add_argument("-vtl", action="store", dest="vtl",
-                            help="Path to the VTL directory of the decoder")
+    expected.add_argument("-i", "--inputList", action="store", dest="inputList", required=True,
+                        help="Path to the file containing list of sequences to decode")
 
-    classic = parser.add_argument_group("Parameters for -classic mode", "Test a classic C decoder")
-    classic.add_argument("-l", "--loops", type=int, action="store", dest="loopNumber",
-                        help="Number of times input is read for every file")
-
-    options.add_argument("-e", "--executable", action="store", dest="executable",
-                        help="In -classic mode, path to a decoder. In -jade mode, path to Jade executable.")
-    options.add_argument("-s", "--sequences", action="store", dest="sequences", required=True,
-                        help="Path to directory containing sequences (ie : containing MPEG4/AVC/etc. folder).")
-    options.add_argument("-n", "--nodisplay", action="store_false", dest="enableDisplay", default=True,
-                        help="Pass this argument to disable display when testing decoders.")
-    options.add_argument("-f", "--filestypes", choices=["mpeg","avc","hevc","hevcIntra", "hevcConf"], default=DEFAULT_FILE_LIST, dest="filesKey",
-                        help="Set the type of videos to test (default='"+DEFAULT_FILE_LIST+"')")
-    options.add_argument("-q", "--quick", action="store_true", dest="quickTest", default=False,
-                        help="Test the decoder on a small subset of sequences.")
-    options.add_argument("--skip-yuv", action="store_true", dest="skipYuv", default=False,
-                        help="Skip the consistency checking using the YUV file.")
-    options.add_argument("--verbose", action="store_true", dest="verbose", default=False,
-                        help="Verbose mode.")
+    optional = parser.add_argument_group(title="Other options")
+    optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
+                        help="Search for YUV files corresponding to sequence, and check the consistency of each frame")
+    optional.add_argument("--no-nb-frames", action="store_true", dest="verbose", default=False,
+                        help="Set tu true if you don't want to pass the number of frames to decode")
+    optional.add_argument("--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
 
 
 if __name__ == "__main__":
-    setupCommandLine()
-    computeFileList()
+    configureCommandLine()
     main()
