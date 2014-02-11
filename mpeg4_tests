@@ -842,6 +842,9 @@ def main():
             finalCommandLine.extend(["-o", outputPath])
             traceMsg += " and check consistency with " + outputFile + ":"
 
+        if clArguments.flags is not None:
+            finalCommandLine.extend(clArguments.flags.split())
+
         if clArguments.verbose:
             print " ".join(finalCommandLine)
 
@@ -903,6 +906,8 @@ def setupCommandLine():
                         help="Skip the consistency checking using the YUV file.")
     options.add_argument("--verbose", action="store_true", dest="verbose", default=False,
                         help="Verbose mode.")
+    options.add_argument("--args", type=str, action="store", dest="flags",
+                        help="Give additionnal arguments to the decoder.")
 
 
 if __name__ == "__main__":
