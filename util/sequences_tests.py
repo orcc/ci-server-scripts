@@ -28,11 +28,15 @@ WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
 '''
 
-import argparse
-import subprocess
+from __future__ import print_function
 import os, sys
+import argparse, subprocess, csv
 
 VERSION = "0.3"
+
+PATH='path'
+FRAMES='nbFrames'
+SIZE='size'
 
 def main():
     clArguments = parser.parse_args()
@@ -40,59 +44,45 @@ def main():
     errorsCount = 0
     warningsCount = 0
 
-    # Check validity of "sequences" directory
-    if not os.path.isdir(clArguments.sequences):
-        sys.exit("The sequence path must be a valid directory, containing sequences")
+    fileList = parseSequencesList()
 
-    if clArguments.quickTest:
-        fileList = fileList_reduce
-    else:
-        fileList = fileList_all
+    for sequence in fileList:
 
-    if not fileList.has_key(clArguments.filesKey) :
-       clArguments.filesKey = DEFAULT_FILE_LIST
-
-    for file in fileList[clArguments.filesKey]:
-        file = file.replace("/", os.sep)
-        inputFile = file
-        outputFile = '.'.join(file.split('.')[:-1]) + ".yuv"
-
-        inputPath = clArguments.sequences + os.sep + inputFile
-        outputPath = clArguments.sequences + os.sep + outputFile
-
-        if not os.path.exists(inputPath):
-            print "Warning : input file", inputPath, "does not exists"
+        if not os.path.exists(sequence[PATH]):
+            warning("input file", sequence[PATH], "does not exists")
             warningsCount += 1
             continue
-        elif not os.access(inputPath, os.R_OK):
-            print "Warning : input file", inputPath, "is not readable"
+        elif not os.access(sequence[PATH], os.R_OK):
+            warning("input file", sequence[PATH], "is not readable")
             warningsCount += 1
             continue
-
-        if not clArguments.skipYuv:
-            if not os.path.exists(outputPath):
-                print "Warning : output file", outputPath, "does not exists"
-                warningsCount += 1
-                continue
-            elif not os.access(outputPath, os.R_OK):
-                print "Warning : output file", outputPath, "is not readable"
-                warningsCount += 1
-                continue
 
         finalCommandLine = buildBasicCommand()
+        finalCommandLine.extend(["-i", sequence[PATH]])
 
-        finalCommandLine.extend(["-i", inputPath])
+        if clArguments.checkYuv:
+            yuvPath = getYUVFile(sequence[PATH])
+            if not os.path.exists(yuvPath):
+                warning("YUV file", yuvPath, "does not exists")
+                warningsCount += 1
+                continue
+            elif not os.access(yuvPath, os.R_OK):
+                warning("YUV file", yuvPath, "is not readable")
+                warningsCount += 1
+                continue
+            finalCommandLine.extend(["-o", yuvPath])
 
-        traceMsg = "Try to decode " + inputFile
+        if not clArguments.noNbFrames:
+            finalCommandLine.extend(["-f", sequence[FRAMES]])
 
-        if not clArguments.skipYuv:
-            finalCommandLine.extend(["-o", outputPath])
+        traceMsg = "Try to decode " + sequence[PATH]
+        if clArguments.checkYuv:
             traceMsg += " and check consistency with " + outputFile + ":"
 
         if clArguments.verbose:
-            print " ".join(finalCommandLine)
+            print("Command: ", ' '.join(finalCommandLine))
 
-        print traceMsg
+        print(traceMsg)
         commandResult = subprocess.call(finalCommandLine)
 
         if commandResult != 0:
@@ -107,54 +97,37 @@ def main():
     elif warningsCount != 0:
         s = ""
         if warningsCount > 1 : s = "s"
-        print "The test suite finished with no error but", warningsCount, "warning"+s+"."
+        warning("The test suite finished with no error but", warningsCount, "warning"+s+".")
         sys.exit()
     else :
-        print "The test suite finished with no error !"
+        print("The test suite finished with no error !")
         sys.exit()
 
 def buildBasicCommand():
     args = parser.parse_args()
-    commandToRun = []
-
-    # Build the command line for Jade execution
-    if args.useJade :
-        if args.topXdf == None or not os.path.isfile(args.topXdf):
-            sys.exit("Please use -xdf argument to set the path of a top network")
-        elif args.vtl == None or not os.path.isdir(args.vtl):
-            sys.exit("Please use -vtl argument to set the path of a VTL folder")
-        else:
-            if args.executable != None:
-                commandToRun.append(args.executable)
-            else:
-                commandToRun.append("Jade")
-            commandToRun.extend(["-xdf", args.topXdf, "-L", args.vtl])
-
-        if args.loopNumber != None:
-            print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
-
-        if not args.enableDisplay:
-            commandToRun.append("-nodisplay")
-
-    # Build the command line for standalone decoder
-    elif args.useClassic:
-        if args.executable == None:
-            sys.exit("Please use -e argument to set the path of a decoder")
-        elif not os.path.isfile(args.executable) or not os.access(args.executable, os.X_OK):
-            sys.exit(args.executable + " must be an executable file !")
-        else:
-            commandToRun.append(args.executable)
-
-        # Set the max loops number
-        if args.loopNumber != None:
-            commandToRun.extend(["-l", str(args.loopNumber)])
-
-        # Disable display
-        if not args.enableDisplay:
-            commandToRun.append("-n")
-
+    commandToRun = [args.executable]
     return commandToRun
 
+# Parse the inputList given in argument, and extract information about videos
+def parseSequencesList():
+    args = parser.parse_args()
+
+    result = []
+    with open(args.inputList, 'rb') as csvfile:
+        sequences = csv.reader(csvfile, skipinitialspace=True, delimiter=',')
+        for sequence in sequences:
+            # We create a dictionary
+            content = {}
+            content[PATH] = args.directory.replace("/", os.sep) + os.sep + sequence[0].replace("/", os.sep)
+            content[FRAMES] = sequence[1]
+            content[SIZE] = sequence[2]
+            result.append(content)
+
+    return result
+
+# Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
+def getYUVFile(sequencePath):
+    return '.'.join(sequencePath.split('.')[:-1]) + ".yuv"
 
 def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
@@ -175,10 +148,20 @@ def configureCommandLine():
     optional = parser.add_argument_group(title="Other options")
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
                         help="Search for YUV files corresponding to sequence, and check the consistency of each frame")
-    optional.add_argument("--no-nb-frames", action="store_true", dest="verbose", default=False,
+    optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
                         help="Set tu true if you don't want to pass the number of frames to decode")
     optional.add_argument("--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
 
+    # Perform some control on arguments passed by user
+    args = parser.parse_args()
+    if not os.path.isdir(args.directory):
+        sys.exit("--directory option must contain the path to a valid directory")
+
+    if not os.path.exists(args.inputList):
+        sys.exit("Error: file " + args.inputList + " not found !")
+
+def warning(*objs):
+    print("WARNING: ", *objs, end='\n', file=sys.stderr)
 
 if __name__ == "__main__":
     configureCommandLine()
