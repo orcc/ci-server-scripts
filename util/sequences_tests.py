@@ -30,57 +30,15 @@ SUCH DAMAGE.
 
 import argparse
 import subprocess
-import os
-import sys
+import os, sys
 
 VERSION = "0.3"
 
 def main():
     clArguments = parser.parse_args()
 
-    #print clArguments
-    #sys.exit(0)
-
     errorsCount = 0
     warningsCount = 0
-
-    execPath = []
-
-    # Build the command line for Jade execution
-    if clArguments.useJade :
-        if clArguments.topXdf == None or not os.path.isfile(clArguments.topXdf):
-            sys.exit("Please use -xdf argument to set the path of a top network")
-        elif clArguments.vtl == None or not os.path.isdir(clArguments.vtl):
-            sys.exit("Please use -vtl argument to set the path of a VTL folder")
-        else:
-            if clArguments.executable != None:
-                execPath.append(clArguments.executable)
-            else:
-                execPath.append("Jade")
-            execPath.extend(["-xdf", clArguments.topXdf, "-L", clArguments.vtl])
-
-        if clArguments.loopNumber != None:
-            print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
-
-        if not clArguments.enableDisplay:
-            execPath.append("-nodisplay")
-
-    # Build the command line for standalone decoder
-    elif clArguments.useClassic:
-        if clArguments.executable == None:
-            sys.exit("Please use -e argument to set the path of a decoder")
-        elif not os.path.isfile(clArguments.executable) or not os.access(clArguments.executable, os.X_OK):
-            sys.exit(clArguments.executable + " must be an executable file !")
-        else:
-            execPath.append(clArguments.executable)
-
-        # Set the max loops number
-        if clArguments.loopNumber != None:
-            execPath.extend(["-l", str(clArguments.loopNumber)])
-
-        # Disable display
-        if not clArguments.enableDisplay:
-            execPath.append("-n")
 
     # Check validity of "sequences" directory
     if not os.path.isdir(clArguments.sequences):
@@ -121,7 +79,7 @@ def main():
                 warningsCount += 1
                 continue
 
-        finalCommandLine = list(execPath)
+        finalCommandLine = buildBasicCommand()
 
         finalCommandLine.extend(["-i", inputPath])
 
@@ -154,6 +112,48 @@ def main():
     else :
         print "The test suite finished with no error !"
         sys.exit()
+
+def buildBasicCommand():
+    args = parser.parse_args()
+    commandToRun = []
+
+    # Build the command line for Jade execution
+    if args.useJade :
+        if args.topXdf == None or not os.path.isfile(args.topXdf):
+            sys.exit("Please use -xdf argument to set the path of a top network")
+        elif args.vtl == None or not os.path.isdir(args.vtl):
+            sys.exit("Please use -vtl argument to set the path of a VTL folder")
+        else:
+            if args.executable != None:
+                commandToRun.append(args.executable)
+            else:
+                commandToRun.append("Jade")
+            commandToRun.extend(["-xdf", args.topXdf, "-L", args.vtl])
+
+        if args.loopNumber != None:
+            print "Warning : By default, Jade read only one time the input file. The -l value you passed will be ignored."
+
+        if not args.enableDisplay:
+            commandToRun.append("-nodisplay")
+
+    # Build the command line for standalone decoder
+    elif args.useClassic:
+        if args.executable == None:
+            sys.exit("Please use -e argument to set the path of a decoder")
+        elif not os.path.isfile(args.executable) or not os.access(args.executable, os.X_OK):
+            sys.exit(args.executable + " must be an executable file !")
+        else:
+            commandToRun.append(args.executable)
+
+        # Set the max loops number
+        if args.loopNumber != None:
+            commandToRun.extend(["-l", str(args.loopNumber)])
+
+        # Disable display
+        if not args.enableDisplay:
+            commandToRun.append("-n")
+
+    return commandToRun
 
 
 def setupCommandLine():
