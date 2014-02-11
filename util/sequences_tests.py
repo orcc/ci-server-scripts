@@ -39,14 +39,14 @@ FRAMES='nbFrames'
 SIZE='size'
 
 def main():
-    clArguments = parser.parse_args()
+    args = parser.parse_args()
 
     errorsCount = 0
     warningsCount = 0
 
     fileList = parseSequencesList()
 
-    finalCommandLine = buildBasicCommand()
+    finalCommandLine = buildCommand()
 
     for sequence in fileList:
 
@@ -61,7 +61,7 @@ def main():
 
         finalCommandLine.extend(["-i", sequence[PATH]])
 
-        if clArguments.checkYuv:
+        if args.checkYuv:
             yuvPath = getYUVFile(sequence[PATH])
             if not os.path.exists(yuvPath):
                 warning("YUV file", yuvPath, "does not exists")
@@ -73,14 +73,14 @@ def main():
                 continue
             finalCommandLine.extend(["-o", yuvPath])
 
-        if not clArguments.noNbFrames:
+        if not args.noNbFrames:
             finalCommandLine.extend(["-f", sequence[FRAMES]])
 
         traceMsg = "Try to decode " + sequence[PATH]
-        if clArguments.checkYuv:
+        if args.checkYuv:
             traceMsg += " / check with YUV " + outputFile + ":"
 
-        if clArguments.verbose:
+        if args.verbose:
             print("Command: ", ' '.join(finalCommandLine))
 
         print(traceMsg)
@@ -103,7 +103,7 @@ def main():
     else :
         print("The test suite finished with no error !")
 
-def buildBasicCommand():
+def buildCommand():
     args = parser.parse_args()
     commandToRun = [args.executable]
 
