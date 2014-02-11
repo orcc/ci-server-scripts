@@ -46,6 +46,8 @@ def main():
 
     fileList = parseSequencesList()
 
+    finalCommandLine = buildBasicCommand()
+
     for sequence in fileList:
 
         if not os.path.exists(sequence[PATH]):
@@ -57,7 +59,6 @@ def main():
             warningsCount += 1
             continue
 
-        finalCommandLine = buildBasicCommand()
         finalCommandLine.extend(["-i", sequence[PATH]])
 
         if clArguments.checkYuv:
@@ -77,7 +78,7 @@ def main():
 
         traceMsg = "Try to decode " + sequence[PATH]
         if clArguments.checkYuv:
-            traceMsg += " and check consistency with " + outputFile + ":"
+            traceMsg += " / check with YUV " + outputFile + ":"
 
         if clArguments.verbose:
             print("Command: ", ' '.join(finalCommandLine))
@@ -88,6 +89,7 @@ def main():
         if commandResult != 0:
             sys.stderr.write("Error, command returned code " + str(commandResult))
             errorsCount += 1
+    # endfor
 
     if errorsCount != 0:
         ws, es = "", ""
@@ -106,6 +108,10 @@ def main():
 def buildBasicCommand():
     args = parser.parse_args()
     commandToRun = [args.executable]
+
+    if args.options:
+        commandToRun.append(args.options)
+
     return commandToRun
 
 # Parse the inputList given in argument, and extract information about videos
@@ -146,6 +152,8 @@ def configureCommandLine():
                         help="Path to the file containing list of sequences to decode")
 
     optional = parser.add_argument_group(title="Other options")
+    optional.add_argument("--options", action="store", dest="options",
+                        help="Additional options to append to the executable command line")
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
                         help="Search for YUV files corresponding to sequence, and check the consistency of each frame")
     optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
