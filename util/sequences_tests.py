@@ -100,10 +100,8 @@ def main():
         s = ""
         if warningsCount > 1 : s = "s"
         warning("The test suite finished with no error but", warningsCount, "warning"+s+".")
-        sys.exit()
     else :
         print("The test suite finished with no error !")
-        sys.exit()
 
 def buildBasicCommand():
     args = parser.parse_args()
