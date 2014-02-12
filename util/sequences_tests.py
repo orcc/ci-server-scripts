@@ -39,7 +39,7 @@ FRAMES='nbFrames'
 SIZE='size'
 
 def main():
-    args = parser.parse_args()
+    global args
 
     errorsCount = 0
     warningsCount = 0
@@ -111,18 +111,19 @@ def main():
         print("The test suite finished with no error !")
 
 def buildCommand():
-    args = parser.parse_args()
+    global args
+    global additional_args
     commandToRun = [args.executable]
 
-    if args.addArgs:
+    if additional_args:
         # User used -args to add command line arguments
-        commandToRun.append(args.addArgs)
+        commandToRun.append(' '.join(additional_args))
 
     return commandToRun
 
 # Parse the inputList given in argument, and extract information about videos
 def parseSequencesList():
-    args = parser.parse_args()
+    global args
 
     patternString = None
     if args.regexp:
@@ -175,7 +176,8 @@ def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
     global parser
 
-    parser = argparse.ArgumentParser(description='Test a list of video sequences', add_help=False)
+    parser = argparse.ArgumentParser(add_help=False,
+        description='Test a list of video sequences. All unrecognized arguments given to this script will be used when on EXECUTABLE command line')
 
     mandatory = parser.add_argument_group(title="Mandatory arguments")
     mandatory.add_argument("-e", "--executable", action="store", dest="executable", required=True,
@@ -192,9 +194,6 @@ def configureCommandLine():
 
     optional.add_argument("-d", "--directory", action="store", dest="directory",
                         help="Path to directory containing sequences. If INPUTLIST contains relative paths, you must set this variable to the root directory they are relative to.")
-    optional.add_argument("--args", action="store", dest="addArgs",
-                        help="Additional arguments to append to the command line when running EXECUTABLE. "
-                        +"Please use '--args=\"-opt1 -opt\"' to avoid parsing errors")
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
                         help="Search for a reference YUV file corresponding to each sequence, and check its consistency while decoding")
     optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
@@ -204,13 +203,17 @@ def configureCommandLine():
     optional.add_argument('-v', "--version", action="version", version= "%(prog)s " + VERSION, help="Print the current version of this script")
     optional.add_argument('-h', "--help", action="help", help="Display this message")
 
+    # parse_known_args() will return a tuple (<known_args> as Namespace, <unknown_args> as List)
+    parsed_args = parser.parse_known_args()
+
     # Perform some control on arguments passed by user
-    args = parser.parse_args()
-    if not os.path.isdir(args.directory):
+    if not os.path.isdir(parsed_args[0].directory):
         sys.exit("--directory option must contain the path to a valid directory")
 
-    if not os.path.exists(args.inputList):
+    if not os.path.exists(parsed_args[0].inputList):
         sys.exit("Error: file " + args.inputList + " not found !")
+
+    return parsed_args
 
 def warning(*objs):
     print("WARNING:", *objs, end='\n', file=sys.stderr)
@@ -223,7 +226,12 @@ def handler(type, frame):
     else:
         sys.exit("Unknown signal catched: " + str(type))
 if __name__ == "__main__":
+
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGABRT, handler)
-    configureCommandLine()
+
+    parsed_args = configureCommandLine()
+    args = parsed_args[0]
+    additional_args = parsed_args[1]
+
     main()
