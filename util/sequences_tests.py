@@ -88,7 +88,7 @@ def main():
             traceMsg += " / check with YUV " + yuvFile
 
         if args.verbose:
-            print("Command: ", ' '.join(finalCommandLine))
+            traceMsg += " with command \n" + ' '.join(finalCommandLine)
 
         print(traceMsg)
         commandResult = subprocess.call(finalCommandLine)
@@ -114,8 +114,9 @@ def buildCommand():
     args = parser.parse_args()
     commandToRun = [args.executable]
 
-    if args.options:
-        commandToRun.append(args.options)
+    if args.addArgs:
+        # User used -args to add command line arguments
+        commandToRun.append(args.addArgs)
 
     return commandToRun
 
@@ -174,30 +175,34 @@ def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
     global parser
 
-    parser = argparse.ArgumentParser(description='Test a suite of video sequences', version=VERSION)
+    parser = argparse.ArgumentParser(description='Test a list of video sequences', add_help=False)
 
-    expected = parser.add_argument_group(title="Mandatory arguments")
-    expected.add_argument("-e", "--executable", action="store", dest="executable", required=True,
-                        help="")
-
-    expected.add_argument("-d", "--directory", action="store", dest="directory", required=True,
-                        help="Path to directory containing sequences (ie: containing folder like HEVC/AVC/etc.)")
-
-    expected.add_argument("-i", "--inputList", action="store", dest="inputList", required=True,
+    mandatory = parser.add_argument_group(title="Mandatory arguments")
+    mandatory.add_argument("-e", "--executable", action="store", dest="executable", required=True,
+                        help="Main executable to run")
+    mandatory.add_argument("-i", "--inputList", action="store", dest="inputList", required=True,
                         help="Path to the file containing list of sequences to decode")
 
     optional = parser.add_argument_group(title="Other options")
-    optional.add_argument("-f", "--filter", action="store", dest="filter",
-                        help="Filter fileList entries with a wildcard")
-    optional.add_argument("--options", action="store", dest="options",
-                        help="Additional options to append to the executable command line")
-    optional.add_argument("-re", "--regexp", action="store", dest="regexp",
-                        help="Same as filter, but use classic regexp instead")
+    filtering = optional.add_mutually_exclusive_group(required=False)
+    filtering.add_argument("-f", "--filter", action="store", dest="filter",
+                        help="Filter INPUTLIST entries with a wildcard (ex: '*qp28*'")
+    filtering.add_argument("-re", "--regexp", action="store", dest="regexp",
+                        help="Same as --filter, but use classic regexp instead")
+
+    optional.add_argument("-d", "--directory", action="store", dest="directory",
+                        help="Path to directory containing sequences. If INPUTLIST contains relative paths, you must set this variable to the root directory they are relative to.")
+    optional.add_argument("--args", action="store", dest="addArgs",
+                        help="Additional arguments to append to the command line when running EXECUTABLE. "
+                        +"Please use '--args=\"-opt1 -opt\"' to avoid parsing errors")
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
-                        help="Search for YUV files corresponding to sequence, and check the consistency of each frame")
+                        help="Search for a reference YUV file corresponding to each sequence, and check its consistency while decoding")
     optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
-                        help="Set tu true if you don't want to pass the number of frames to decode")
+                        help="Set to true if you don't want to limit the number of frames to decode")
     optional.add_argument("--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
+
+    optional.add_argument('-v', "--version", action="version", version= "%(prog)s " + VERSION, help="Print the current version of this script")
+    optional.add_argument('-h', "--help", action="help", help="Display this message")
 
     # Perform some control on arguments passed by user
     args = parser.parse_args()
@@ -208,7 +213,7 @@ def configureCommandLine():
         sys.exit("Error: file " + args.inputList + " not found !")
 
 def warning(*objs):
-    print("WARNING: ", *objs, end='\n', file=sys.stderr)
+    print("WARNING:", *objs, end='\n', file=sys.stderr)
 
 def handler(type, frame):
     if type == signal.SIGINT:
