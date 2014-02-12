@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 '''
 Copyright (c) 2014, IETR/INSA of Rennes
 All rights reserved.
