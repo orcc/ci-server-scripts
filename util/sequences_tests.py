@@ -118,15 +118,18 @@ def parseSequencesList():
 
     result = []
     with open(args.inputList, 'rb') as csvfile:
-        sequences = csv.reader(csvfile, skipinitialspace=True, delimiter=',')
-        for sequence in sequences:
+        # Reader ignores lines starting with '#', and compute automatically values in a
+        # dictionary indexed by (PATH, FRAMES, SIZE)
+        entries = csv.DictReader(
+            (row for row in csvfile if not row.startswith('#')),
+            fieldnames=(PATH, FRAMES, SIZE),
+            skipinitialspace=True, delimiter=',')
+        for sequenceEntry in entries:
             # We create a dictionary
-            content = {}
-            content[PATH] = args.directory.replace("/", os.sep) + os.sep + sequence[0].replace("/", os.sep)
-            content[FRAMES] = sequence[1]
-            content[SIZE] = sequence[2]
-            result.append(content)
+            result.append(sequenceEntry)
 
+    if args.verbose:
+        print(len(entries), "sequences found in", args.inputList)
     return result
 
 # Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
