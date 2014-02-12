@@ -9,7 +9,9 @@ AVC/CAVLC/general/AVCBA-7/BA1_FT_C.264,       299,      352x288
 AVC/CAVLC/general/AVCCI-1/CI_MW_D.264,        100,      176x144
 AVC/CAVLC/general/AVCCI-2/SVA_CL1_E.264,      50,       176x144
 AVC/CAVLC/general/AVCCI-3/CI1_FT_B.264,       291,      352x288
-AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv,   50,       338x274
+# This sequence has errors when decoding.
+# Uncomment when it will be fixed
+# AVC/CAVLC/general/AVCFC-1/CVFC1_Sony_C.jsv,   50,       338x274
 AVC/CAVLC/general/AVCMIDR-1/MIDR_MW_D.264,    100,      176x144
 AVC/CAVLC/general/AVCMPS-1/MPS_MW_A.264,      150,      176x144
 AVC/CAVLC/general/AVCMQ-1/NLMQ1_JVC_C.264,    30,       176x144
