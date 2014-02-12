@@ -73,8 +73,14 @@ def main():
                 continue
             finalCommandLine.extend(["-o", yuvPath])
 
+        # Stop decoding when all frames have been processed
         if not args.noNbFrames:
-            finalCommandLine.extend(["-f", sequence[FRAMES]])
+            if sequence[FRAMES]:
+                finalCommandLine.extend(["-f", sequence[FRAMES]])
+            else:
+                finalCommandLine.extend(["-l", '1'])
+                warning("Input list doesn't containes the number of frame for "+sequence[PATH]+"\n"+
+                    "As fallback, '-l 1' has been added to the command line.")
 
         traceMsg = "Try to decode " + sequence[PATH]
         if args.checkYuv:
