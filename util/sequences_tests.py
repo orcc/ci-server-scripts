@@ -215,7 +215,7 @@ def configureCommandLine():
 
     if not os.path.exists(parsed_args[0].executable):
         sys.exit("Error: executable file " + parsed_args[0].executable + " not found!")
-    elif not os.access(inputFile, os.X_OK):
+    elif not os.access(parsed_args[0].executable, os.X_OK):
         sys.exit("Error: file " + parsed_args[0].executable + " is not executable ! Please check its mode.")
 
     return parsed_args
