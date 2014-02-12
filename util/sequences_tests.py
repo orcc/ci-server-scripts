@@ -29,7 +29,7 @@ SUCH DAMAGE.
 '''
 
 from __future__ import print_function
-import os, sys
+import os, sys, re
 import argparse, subprocess, csv
 
 VERSION = "0.3"
@@ -116,6 +116,22 @@ def buildCommand():
 def parseSequencesList():
     args = parser.parse_args()
 
+    patternString = None
+    if args.regexp:
+        patternString = args.regexp
+    elif args.filter:
+        patternString = args.filter.replace('.', '\.')
+        patternString = patternString.replace('?', '.')
+        patternString = patternString.replace('*', '(.+)')
+
+    if patternString:
+        pattern = re.compile(patternString)
+    else:
+        pattern = None
+
+    cptEntries = 0
+    cptFiltered = 0
+
     result = []
     with open(args.inputList, 'rb') as csvfile:
         # Reader ignores lines starting with '#', and compute automatically values in a
@@ -125,11 +141,20 @@ def parseSequencesList():
             fieldnames=(PATH, FRAMES, SIZE),
             skipinitialspace=True, delimiter=',')
         for sequenceEntry in entries:
-            # We create a dictionary
-            result.append(sequenceEntry)
+            cptEntries += 1
+            if pattern:
+                if pattern.match(sequenceEntry[PATH]):
+                    result.append(sequenceEntry)
+                    cptFiltered += 1
+                else:
+                    continue
+            else:
+                result.append(sequenceEntry)
 
     if args.verbose:
-        print(len(entries), "sequences found in", args.inputList)
+        print(cptEntries, "sequences found in", args.inputList)
+        if pattern:
+            print(len(result), "selected by '"+pattern.pattern+"'")
     return result
 
 # Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
@@ -153,8 +178,12 @@ def configureCommandLine():
                         help="Path to the file containing list of sequences to decode")
 
     optional = parser.add_argument_group(title="Other options")
+    optional.add_argument("-f", "--filter", action="store", dest="filter",
+                        help="Filter fileList entries with a wildcard")
     optional.add_argument("--options", action="store", dest="options",
                         help="Additional options to append to the executable command line")
+    optional.add_argument("-re", "--regexp", action="store", dest="regexp",
+                        help="Same as filter, but use classic regexp instead")
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
                         help="Search for YUV files corresponding to sequence, and check the consistency of each frame")
     optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
