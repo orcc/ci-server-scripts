@@ -30,7 +30,7 @@ SUCH DAMAGE.
 
 import os, sys, re
 import argparse
-import subprocess
+import subprocess, signal
 
 # Configure the command line options
 def setupCommandLine():
@@ -52,7 +52,7 @@ def main():
     elif not os.access(args.input, os.R_OK):
         sys.exit("Error: unable to read " + args.input)
 
-    # We will use mplayer
+    # We will use avconv
     command = ['avconv']
     # Set the input file
     command.extend(['-i', args.input])
@@ -87,6 +87,17 @@ def main():
     print args.separator.join(results)
     sys.exit(0)
 
+def handler(type, frame):
+    if type == signal.SIGINT:
+        sys.exit("The script has been interrupted !")
+    elif type == signal.SIGABRT:
+        sys.exit("The script has been aborted !")
+    else:
+        sys.exit("Unknown signal catched: " + str(type))
+
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGABRT, handler)
+
     setupCommandLine()
     main()
