@@ -211,7 +211,12 @@ def configureCommandLine():
         sys.exit("--directory option must contain the path to a valid directory")
 
     if not os.path.exists(parsed_args[0].inputList):
-        sys.exit("Error: file " + args.inputList + " not found !")
+        sys.exit("Error: file " + parsed_args[0].inputList + " not found!")
+
+    if not os.path.exists(parsed_args[0].executable):
+        sys.exit("Error: executable file " + parsed_args[0].executable + " not found!")
+    elif not os.access(inputFile, os.X_OK):
+        sys.exit("Error: file " + parsed_args[0].executable + " is not executable ! Please check its mode.")
 
     return parsed_args
 
