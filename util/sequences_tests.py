@@ -50,28 +50,29 @@ def main():
 
     for sequence in fileList:
 
-        if not os.path.exists(sequence[PATH]):
-            warning("input file", sequence[PATH], "does not exists")
+        inputFile = sequence[PATH]
+        if not os.path.exists(inputFile):
+            warning("input file", inputFile, "does not exists")
             warningsCount += 1
             continue
-        elif not os.access(sequence[PATH], os.R_OK):
-            warning("input file", sequence[PATH], "is not readable")
+        elif not os.access(inputFile, os.R_OK):
+            warning("input file", inputFile, "is not readable")
             warningsCount += 1
             continue
 
-        finalCommandLine.extend(["-i", sequence[PATH]])
+        finalCommandLine.extend(["-i", inputFile])
 
         if args.checkYuv:
-            yuvPath = getYUVFile(sequence[PATH])
-            if not os.path.exists(yuvPath):
-                warning("YUV file", yuvPath, "does not exists")
+            yuvFile = getYUVFile(inputFile)
+            if not os.path.exists(yuvFile):
+                warning("YUV file", yuvFile, "does not exists")
                 warningsCount += 1
                 continue
-            elif not os.access(yuvPath, os.R_OK):
-                warning("YUV file", yuvPath, "is not readable")
+            elif not os.access(yuvFile, os.R_OK):
+                warning("YUV file", yuvFile, "is not readable")
                 warningsCount += 1
                 continue
-            finalCommandLine.extend(["-o", yuvPath])
+            finalCommandLine.extend(["-o", yuvFile])
 
         # Stop decoding when all frames have been processed
         if not args.noNbFrames:
@@ -79,12 +80,12 @@ def main():
                 finalCommandLine.extend(["-f", sequence[FRAMES]])
             else:
                 finalCommandLine.extend(["-l", '1'])
-                warning("Input list doesn't containes the number of frame for "+sequence[PATH]+"\n"+
+                warning("Input list doesn't containes the number of frame for "+inputFile+"\n"+
                     "As fallback, '-l 1' has been added to the command line.")
 
-        traceMsg = "Try to decode " + sequence[PATH]
+        traceMsg = "Try to decode " + inputFile
         if args.checkYuv:
-            traceMsg += " / check with YUV " + outputFile + ":"
+            traceMsg += " / check with YUV " + yuvFile
 
         if args.verbose:
             print("Command: ", ' '.join(finalCommandLine))
@@ -148,14 +149,16 @@ def parseSequencesList():
             skipinitialspace=True, delimiter=',')
         for sequenceEntry in entries:
             cptEntries += 1
-            if pattern:
-                if pattern.match(sequenceEntry[PATH]):
-                    result.append(sequenceEntry)
-                    cptFiltered += 1
-                else:
-                    continue
-            else:
-                result.append(sequenceEntry)
+            if pattern and not pattern.match(sequenceEntry[PATH]):
+                continue
+
+            cptFiltered += 1
+            if args.directory:
+                sequenceEntry[PATH] = args.directory + os.sep + sequenceEntry[PATH]
+
+            sequenceEntry[PATH] = sequenceEntry[PATH].replace('/', os.sep)
+            result.append(sequenceEntry)
+        #endfor
 
     if args.verbose:
         print(cptEntries, "sequences found in", args.inputList)
