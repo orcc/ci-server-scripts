@@ -29,7 +29,7 @@ SUCH DAMAGE.
 '''
 
 from __future__ import print_function
-import os, sys, re
+import os, sys, re, signal
 import argparse, subprocess, csv
 
 VERSION = "0.3"
@@ -201,6 +201,15 @@ def configureCommandLine():
 def warning(*objs):
     print("WARNING: ", *objs, end='\n', file=sys.stderr)
 
+def handler(type, frame):
+    if type == signal.SIGINT:
+        sys.exit("The test suite has been interrupted !")
+    elif type == signal.SIGABRT:
+        sys.exit("The test suite has been aborted !")
+    else:
+        sys.exit("Unknown signal catched: " + str(type))
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGABRT, handler)
     configureCommandLine()
     main()
