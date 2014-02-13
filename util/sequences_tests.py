@@ -50,6 +50,8 @@ def main():
 
     for sequence in fileList:
 
+        # Make a copy of the base command line, to avoid
+        # multiple -i and -o options in the final command line
         commandLine = list(baseCommand)
 
         inputFile = sequence[PATH]
@@ -84,8 +86,6 @@ def main():
                 commandLine.extend(["-l", '1'])
                 warning("Input list doesn't containes the number of frame for "+inputFile+"\n"+
                     "As fallback, '-l 1' has been added to the command line.")
-
-
 
         traceMsg = "Try to decode " + inputFile
         if args.checkYuv:
