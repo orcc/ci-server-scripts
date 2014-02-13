@@ -46,9 +46,11 @@ def main():
 
     fileList = parseSequencesList()
 
-    finalCommandLine = buildCommand()
+    baseCommand = buildCommand()
 
     for sequence in fileList:
+
+        commandLine = list(baseCommand)
 
         inputFile = sequence[PATH]
         if not os.path.exists(inputFile):
@@ -60,7 +62,7 @@ def main():
             warningsCount += 1
             continue
 
-        finalCommandLine.extend(["-i", inputFile])
+        commandLine.extend(["-i", inputFile])
 
         if args.checkYuv:
             yuvFile = getYUVFile(inputFile)
@@ -72,29 +74,31 @@ def main():
                 warning("YUV file", yuvFile, "is not readable")
                 warningsCount += 1
                 continue
-            finalCommandLine.extend(["-o", yuvFile])
+            commandLine.extend(["-o", yuvFile])
 
         # Stop decoding when all frames have been processed
         if not args.noNbFrames:
             if sequence[FRAMES]:
-                finalCommandLine.extend(["-f", sequence[FRAMES]])
+                commandLine.extend(["-f", sequence[FRAMES]])
             else:
-                finalCommandLine.extend(["-l", '1'])
+                commandLine.extend(["-l", '1'])
                 warning("Input list doesn't containes the number of frame for "+inputFile+"\n"+
                     "As fallback, '-l 1' has been added to the command line.")
+
+
 
         traceMsg = "Try to decode " + inputFile
         if args.checkYuv:
             traceMsg += " / check with YUV " + yuvFile
 
         if args.verbose:
-            traceMsg += " with command \n" + ' '.join(finalCommandLine)
+            traceMsg += " with command \n" + ' '.join(commandLine)
 
         print(traceMsg)
-        commandResult = subprocess.call(finalCommandLine)
+        commandResult = subprocess.call(commandLine)
 
         if commandResult != 0:
-            sys.stderr.write("Error, command returned code " + str(commandResult))
+            sys.stderr.write("Error, command returned code " + str(commandResult) + '\n')
             errorsCount += 1
     # endfor
 
@@ -117,7 +121,7 @@ def buildCommand():
 
     if additional_args:
         # User used -args to add command line arguments
-        commandToRun.append(' '.join(additional_args))
+        commandToRun.extend(additional_args)
 
     return commandToRun
 
@@ -188,7 +192,7 @@ def configureCommandLine():
     optional = parser.add_argument_group(title="Other options")
     filtering = optional.add_mutually_exclusive_group(required=False)
     filtering.add_argument("-f", "--filter", action="store", dest="filter",
-                        help="Filter INPUTLIST entries with a wildcard (ex: '*qp28*'")
+                        help="Filter INPUTLIST entries with a wildcard (ex: '*qp28*')")
     filtering.add_argument("-re", "--regexp", action="store", dest="regexp",
                         help="Same as --filter, but use classic regexp instead")
 
