@@ -78,14 +78,7 @@ def main():
                 continue
             commandLine.extend(["-o", yuvFile])
 
-        # Stop decoding when all frames have been processed
-        if not args.noNbFrames:
-            if sequence[FRAMES]:
-                commandLine.extend(["-f", sequence[FRAMES]])
-            else:
-                commandLine.extend(["-l", '1'])
-                warning("Input list doesn't containes the number of frame for "+inputFile+"\n"+
-                    "As fallback, '-l 1' has been added to the command line.")
+        setNbFramesToDecode(sequence, commandLine)
 
         traceMsg = "Try to decode " + inputFile
         if args.checkYuv:
@@ -172,6 +165,18 @@ def parseSequencesList():
             print(len(result), "selected by '"+pattern.pattern+"'")
     return result
 
+def setNbFramesToDecode(sequence, command):
+    global args
+    # Stop decoding when all frames have been processed
+    if not args.noNbFrames:
+        if sequence[FRAMES]:
+            nbFrames = int(sequence[FRAMES]) * args.nbLoop
+            command.extend(["-f", str(nbFrames)])
+        else:
+            command.extend(["-l", str(args.nbLoop)])
+            warning("Input list doesn't contains the number of frames for "+inputFile+"\n"+
+                "As fallback, '-l "+str(args.nbLoop)+"' has been added to the command line.")
+
 # Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
 def getYUVFile(sequencePath):
     return '.'.join(sequencePath.split('.')[:-1]) + ".yuv"
@@ -201,7 +206,9 @@ def configureCommandLine():
     optional.add_argument("--check-yuv", action="store_true", dest="checkYuv", default=False,
                         help="Search for a reference YUV file corresponding to each sequence, and check its consistency while decoding")
     optional.add_argument("--no-nb-frames", action="store_true", dest="noNbFrames", default=False,
-                        help="Set to true if you don't want to limit the number of frames to decode")
+                        help="Set to true if you don't want to limit the number of frames to decode. Resulting command line will not contains '-f' option.")
+    optional.add_argument("--loops", action="store", default=1, dest="nbLoop", type=int,
+                        help="Number of times the input file will be read. Default is 1. Value passed will be used as multiplier on number of frames to decode ('-f' option).")
     optional.add_argument("--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
 
     optional.add_argument('-v', "--version", action="version", version= "%(prog)s " + VERSION, help="Print the current version of this script")
