@@ -107,17 +107,6 @@ def main():
     else :
         print("The test suite finished with no error !")
 
-def buildCommand():
-    global args
-    global additional_args
-    commandToRun = [args.executable]
-
-    if additional_args:
-        # User used -args to add command line arguments
-        commandToRun.extend(additional_args)
-
-    return commandToRun
-
 # Parse the inputList given in argument, and extract information about videos
 def parseSequencesList():
     global args
@@ -165,6 +154,21 @@ def parseSequencesList():
             print(len(result), "selected by '"+pattern.pattern+"'")
     return result
 
+def buildCommand():
+    global args
+    global additional_args
+    commandToRun = [args.executable]
+
+    if additional_args:
+        # User used -args to add command line arguments
+        commandToRun.extend(additional_args)
+
+    return commandToRun
+
+# Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
+def getYUVFile(sequencePath):
+    return '.'.join(sequencePath.split('.')[:-1]) + ".yuv"
+
 def setNbFramesToDecode(sequence, command):
     global args
     # Stop decoding when all frames have been processed
@@ -176,10 +180,6 @@ def setNbFramesToDecode(sequence, command):
             command.extend(["-l", str(args.nbLoop)])
             warning("Input list doesn't contains the number of frames for "+inputFile+"\n"+
                 "As fallback, '-l "+str(args.nbLoop)+"' has been added to the command line.")
-
-# Replace the suffix of a path by the 'yuv' extension. Returns the resulting YUV path
-def getYUVFile(sequencePath):
-    return '.'.join(sequencePath.split('.')[:-1]) + ".yuv"
 
 def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
