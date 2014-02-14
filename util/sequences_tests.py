@@ -211,7 +211,7 @@ def configureCommandLine():
                         help="Number of times the input file will be read. Default is 1. Value passed will be used as multiplier on number of frames to decode ('-f' option).")
     optional.add_argument("--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
 
-    optional.add_argument('-v', "--version", action="version", version= "%(prog)s " + VERSION, help="Print the current version of this script")
+    optional.add_argument("--version", action="version", version= "%(prog)s " + VERSION, help="Print the current version of this script")
     optional.add_argument('-h', "--help", action="help", help="Display this message")
 
     # parse_known_args() will return a tuple (<known_args> as Namespace, <unknown_args> as List)
