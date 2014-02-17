@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/python
 '''
 Copyright (c) 2014, IETR/INSA of Rennes
 All rights reserved.
@@ -124,7 +124,7 @@ def parseSequencesList():
     cptFiltered = 0
 
     result = []
-    with open(args.inputList, 'rb') as csvfile:
+    with open(args.inputList, 'r') as csvfile:
         # Reader ignores lines starting with '#', and compute automatically values in a
         # dictionary indexed by (PATH, FRAMES, SIZE)
         entries = csv.DictReader(
@@ -221,21 +221,21 @@ def configureCommandLine():
     optional.add_argument('-h', "--help", action="help", help="Display this message")
 
     # parse_known_args() will return a tuple (<known_args> as Namespace, <unknown_args> as List)
-    parsed_args = parser.parse_known_args()
+    args, additional_args = parser.parse_known_args()
 
     # Perform some control on arguments passed by user
-    if not os.path.isdir(parsed_args[0].directory):
+    if not os.path.isdir(args.directory):
         sys.exit("--directory option must contain the path to a valid directory")
 
-    if not os.path.exists(parsed_args[0].inputList):
-        sys.exit("Error: file " + parsed_args[0].inputList + " not found!")
+    if not os.path.exists(args.inputList):
+        sys.exit("Error: file " + args.inputList + " not found!")
 
-    if not os.path.exists(parsed_args[0].executable):
-        sys.exit("Error: executable file " + parsed_args[0].executable + " not found!")
-    elif not os.access(parsed_args[0].executable, os.X_OK):
-        sys.exit("Error: file " + parsed_args[0].executable + " is not executable ! Please check its mode.")
+    if not os.path.exists(args.executable):
+        sys.exit("Error: executable file " + args.executable + " not found!")
+    elif not os.access(args.executable, os.X_OK):
+        sys.exit("Error: file " + args.executable + " is not executable ! Please check its mode.")
 
-    return parsed_args
+    return (args, additional_args)
 
 def warning(*objs):
     print("WARNING:", *objs, end='\n', file=sys.stderr)
@@ -247,13 +247,11 @@ def handler(type, frame):
         sys.exit("The test suite has been aborted !")
     else:
         sys.exit("Unknown signal catched: " + str(type))
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    # Configure signal handling
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGABRT, handler)
 
-    parsed_args = configureCommandLine()
-    args = parsed_args[0]
-    additional_args = parsed_args[1]
-
+    args, additional_args = configureCommandLine()
     main()
