@@ -88,11 +88,7 @@ def main():
             traceMsg += " with command \n" + ' '.join(commandLine)
 
         print(traceMsg)
-        commandResult = subprocess.call(commandLine)
-
-        if commandResult != 0:
-            sys.stderr.write("Error, command returned code " + str(commandResult) + '\n')
-            errorsCount += 1
+        runSubProcess(commandLine, errorsCount)
     # endfor
 
     if errorsCount != 0:
@@ -180,6 +176,16 @@ def setNbFramesToDecode(sequence, command):
             command.extend(["-l", str(args.nbLoop)])
             warning("Input list doesn't contains the number of frames for "+inputFile+"\n"+
                 "As fallback, '-l "+str(args.nbLoop)+"' has been added to the command line.")
+
+def runSubProcess(commandLine, errorsCount):
+    p = subprocess.Popen(commandLine)
+    p.wait()
+    commandResult = p.poll()
+    if commandResult != 0:
+        sys.stderr.write("Error, command returned code " + str(commandResult) + '\n')
+        errorsCount += 1
+    else:
+        print("Command returned " + str(commandResult))
 
 def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
