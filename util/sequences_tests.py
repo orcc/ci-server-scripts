@@ -29,7 +29,7 @@ SUCH DAMAGE.
 '''
 
 from __future__ import print_function
-import os, sys, re, signal
+import os, sys, re, signal, time
 import argparse, subprocess, csv
 
 VERSION = "0.3"
@@ -178,6 +178,7 @@ def setNbFramesToDecode(sequence, command):
                 "As fallback, '-l "+str(args.nbLoop)+"' has been added to the command line.")
 
 def runSubProcess(commandLine, errorsCount):
+    global p
     p = subprocess.Popen(commandLine)
     p.wait()
     commandResult = p.poll()
@@ -241,6 +242,23 @@ def warning(*objs):
     print("WARNING:", *objs, end='\n', file=sys.stderr)
 
 def handler(type, frame):
+    global p
+
+    time.sleep(0.5)
+    if p and not p.poll():
+        # Try to finish the running process
+        p.terminate()
+        time.sleep(0.5)
+        if p.poll():
+            print("Process " + str(p.pid) + " have been terminated...")
+        else:
+            p.kill()
+            time.sleep(0.5)
+            if p.poll():
+                print("Process " + str(p.pid) + " have been killed...")
+            else:
+                print("Process is still running. You have to kill it by yourself. PID:", str(p.pid))
+
     if type == signal.SIGINT:
         sys.exit("The test suite has been interrupted !")
     elif type == signal.SIGABRT:
@@ -248,10 +266,12 @@ def handler(type, frame):
     else:
         sys.exit("Unknown signal catched: " + str(type))
 
+
 if __name__ == "__main__":
     # Configure signal handling
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGABRT, handler)
 
+    p = None
     args, additional_args = configureCommandLine()
     main()
