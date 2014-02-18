@@ -88,7 +88,12 @@ def main():
             traceMsg += " with command \n" + ' '.join(commandLine)
 
         print(traceMsg)
-        runSubProcess(commandLine, errorsCount)
+        returnCode = runSubProcess(commandLine)
+        if returnCode != 0:
+            sys.stderr.write("Error, command returned code " + str(returnCode) + '\n')
+            errorsCount += 1
+        else:
+            print("Process finished correctly")
     # endfor
 
     if errorsCount != 0:
@@ -99,9 +104,9 @@ def main():
     elif warningsCount != 0:
         s = ""
         if warningsCount > 1 : s = "s"
-        warning("The test suite finished with no error but", warningsCount, "warning"+s+".")
+        warning("The test suite finished without error but", warningsCount, "warning"+s+".")
     else :
-        print("The test suite finished with no error !")
+        print("The test suite finished without error !")
 
 # Parse the inputList given in argument, and extract information about videos
 def parseSequencesList():
@@ -177,16 +182,12 @@ def setNbFramesToDecode(sequence, command):
             warning("Input list doesn't contains the number of frames for "+inputFile+"\n"+
                 "As fallback, '-l "+str(args.nbLoop)+"' has been added to the command line.")
 
-def runSubProcess(commandLine, errorsCount):
+# Run commandLine in a sub-process. Returns true if the command ends with a returnCode == 0
+def runSubProcess(commandLine):
     global p
     p = subprocess.Popen(commandLine)
     p.wait()
-    commandResult = p.poll()
-    if commandResult != 0:
-        sys.stderr.write("Error, command returned code " + str(commandResult) + '\n')
-        errorsCount += 1
-    else:
-        print("Command returned " + str(commandResult))
+    return p.poll()
 
 def configureCommandLine():
     # Help on arparse usage module : http://docs.python.org/library/argparse.html#module-argparse
