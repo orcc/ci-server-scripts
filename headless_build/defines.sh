@@ -37,7 +37,7 @@ ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
 
 # Setup Xtext MWE2 classpath
 MWECP=$ECLIPSECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
-MWECP=$(echo $CURRENTSCRIPTSDIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
+MWECP=$(echo $DIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
 export MWECP
 
 # Setup Xtend classpath
