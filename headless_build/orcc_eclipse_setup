@@ -13,6 +13,8 @@ rm -fr $ECLIPSEBUILD
 mkdir $ECLIPSERUN
 mkdir $ECLIPSEBUILD
 
+cd $ORCCWORK
+
 echo "Downloading Eclipse"
 wget --progress=dot:mega $ECLIPSEURL
 

@@ -4,7 +4,7 @@
 set -e
 export E_BADARGS=64
 
-[ ! -d "$1" ] && mkdir $1
+[ ! -d "$1" ] && echo "Missing working directory folder" && exit $E_BADARGS
 [ -z "$BUILDTYPE" ] && export BUILDTYPE="tests" && echo "Variable BUILDTYPE has not been set. Initialized to \"tests\""
 
 export ORCCWORK="$1"
@@ -31,16 +31,13 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-# Create symlinks to antlr jar library and PDE headless build config directory
-ln -f -s $DIR/pde-config $ORCCWORK
-ln -f -s $DIR/*.jar $ORCCWORK
 
 # Setup eclipse classpath
 ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
 
 # Setup Xtext MWE2 classpath
-MWECP=$ECLIPSECP:$(echo $ORCCWORK/antlr-generator-*.jar | sed -e "s/ /:/g")
-MWECP=$MWECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
+MWECP=$ECLIPSECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
+MWECP=$(echo $CURRENTSCRIPTSDIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
 export MWECP
 
 # Setup Xtend classpath
