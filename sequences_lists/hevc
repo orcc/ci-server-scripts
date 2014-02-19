@@ -159,7 +159,7 @@ HEVC/jctvc/avconv/MERGE_B_TI_3.bit,                                      8,   41
 HEVC/jctvc/avconv/MERGE_C_TI_3.bit,                                      8,   416x240
 HEVC/jctvc/avconv/MERGE_D_TI_3.bit,                                      8,   416x240
 HEVC/jctvc/avconv/MERGE_E_TI_3.bit,                                      8,   416x240
-EVC/jctvc/avconv/MERGE_F_MTK_4.bit,                                     41,  416x240
+HEVC/jctvc/avconv/MERGE_F_MTK_4.bit,                                     41,  416x240
 HEVC/jctvc/avconv/MERGE_G_HHI_4.bit,                                     2,   832x480
 HEVC/jctvc/avconv/MVCLIP_A_qualcomm_3.bit,                               5,   416x240
 #HEVC/jctvc/avconv/MVDL1ZERO_A_docomo_3.bit,                              500, 832x480
