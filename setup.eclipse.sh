@@ -1,7 +1,7 @@
 #!/bin/bash
-source `dirname $0`/defines.sh
+source $(dirname $0)/defines.sh
 
-echo "***START*** $0 `date -R`"
+echo "***START*** $0 $(date -R)"
 
 BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.xtext.sdk.feature.group,org.eclipse.graphiti.sdk.feature.feature.group"
 
@@ -16,7 +16,7 @@ mkdir $ECLIPSEBUILD
 echo "Downloading Eclipse"
 wget --progress=dot:mega $ECLIPSEURL
 
-ECLIPSEARCHIVE=`echo eclipse-platform-*.tar.gz`
+ECLIPSEARCHIVE=$(echo eclipse-platform-*.tar.gz)
 
 echo "Uncompressing"
 tar -xzaf $ECLIPSEARCHIVE
@@ -41,6 +41,4 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -followReferences \
                         -installIU $BUILDDEPS
 
-[ "$?" != "0" ] && exit 1
-
-echo "***END*** $0 `date -R`"
+echo "***END*** $0 $(date -R)"

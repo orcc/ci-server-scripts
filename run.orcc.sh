@@ -13,6 +13,8 @@ function print_usage() {
     echo "    <additional_flags>            [Optional] Flags added to backend execution command line"
 }
 
+source $(dirname $0)/defines.sh
+
 if [ $# -lt $NBARGS ]; then
     print_usage
     exit $E_BADARGS
@@ -31,9 +33,7 @@ NETWORK=$5
 OUTPUT=$6
 FLAGS=$7
 
-source `dirname $0`/defines.sh
-
-echo "***START*** $0 `date -R`"
+echo "***START*** $0 $(date -R)"
 
 [ ! -d "$OUTPUT" ] && mkdir -p $OUTPUT
 
@@ -46,9 +46,6 @@ $ECLIPSERUN/eclipse     -nosplash -consoleLog \
                         -application net.sf.orcc.cal.workspaceSetup \
                         -data $RUNWORKSPACE \
                         $APPDIR
-
-[ "$?" != "0" ] && exit 1
-
 
 # Frontend will generate IR only for used files. But all IR must be generated for jade and java backend
 if [ "$BACKEND" != "jade" ] && [ "$BACKEND" != "java" ]; then
@@ -64,8 +61,6 @@ $ECLIPSERUN/eclipse     -nosplash -consoleLog \
                         $FENETWORK \
                         -vmargs -Xms40m -Xmx768m
 
-[ "$?" != "0" ] && exit 1
-
 rm -fr $OUTPUT/*
 
 echo ""
@@ -79,6 +74,4 @@ $ECLIPSERUN/eclipse     -nosplash -consoleLog \
                         $NETWORK \
                         -vmargs -Xms40m -Xmx768m
 
-[ "$?" != "0" ] && exit 1
-
-echo "***END*** $0 `date -R`"
+echo "***END*** $0 $(date -R)"

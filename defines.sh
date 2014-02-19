@@ -1,6 +1,10 @@
 #!/bin/bash
 
-[ ! -d "$1" ] && echo "Please pass the working directory as first argument" && exit $E_BADARGS
+# exits when a command returned non 0 value
+set -e
+export E_BADARGS=64
+
+[ ! -d "$1" ] && mkdir $1
 [ -z "$BUILDTYPE" ] && export BUILDTYPE="tests" && echo "Variable BUILDTYPE has not been set. Initialized to \"tests\""
 
 export ORCCWORK="$1"
@@ -32,16 +36,16 @@ ln -f -s $DIR/pde-config $ORCCWORK
 ln -f -s $DIR/*.jar $ORCCWORK
 
 # Setup eclipse classpath
-ECLIPSECP=`echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g"`
+ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
 
 # Setup Xtext MWE2 classpath
-MWECP=$ECLIPSECP:`echo $ORCCWORK/antlr-generator-*.jar | sed -e "s/ /:/g"`
+MWECP=$ECLIPSECP:$(echo $ORCCWORK/antlr-generator-*.jar | sed -e "s/ /:/g")
 MWECP=$MWECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
 export MWECP
 
 # Setup Xtend classpath
 XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
-for i in `ls $PLUGINSDIR 2>/dev/null`
+for i in $(ls $PLUGINSDIR 2>/dev/null)
 do
     [ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
     [ -d "$PLUGINSDIR/$i/src-gen" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src-gen

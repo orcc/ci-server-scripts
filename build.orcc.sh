@@ -3,11 +3,13 @@
 NBARGS=3
 function print_usage() {
     echo
-    echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir>"
+    echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir> [<plugin_dir>, <plugin_dir>, ...]"
     echo "    <working_directory>           Path to folder used to perform build & tests"
     echo "    <feature_dir>                 Path to eclipse feature folder"
     echo "    <plugin_dir>                  Path(s) to folder(s) containing eclipse plugins directories"
 }
+
+source $(dirname $0)/defines.sh
 
 if [ $# -lt $NBARGS ]; then
     print_usage
@@ -17,11 +19,9 @@ fi
 [ ! -d "$2" ] && echo "Missing features directory" && print_usage && exit $E_BADARGS
 [ ! -d "$3" ] && echo "Missing plugins directory" && print_usage && exit $E_BADARGS
 
-source `dirname $0`/defines.sh
-
 SOURCEFEATUREDIR=$2
 
-echo "***START*** `date -R` Build type: $BUILDTYPE"
+echo "***START*** $(date -R) Build type: $BUILDTYPE"
 rm -fr $BUILDDIR
 mkdir -p $PLUGINSDIR
 mkdir -p $FEATURESDIR/net.sf.orcc
@@ -118,8 +118,8 @@ echo "****************************************************************"
 echo ""
 
 # Define PDE build specific variables
-LAUNCHERJAR=`echo $ECLIPSEBUILD/plugins/org.eclipse.equinox.launcher_*.jar`
-BUILDFILE=`echo $ECLIPSEBUILD/plugins/org.eclipse.pde.build_*`/scripts/build.xml
+LAUNCHERJAR=$(echo $ECLIPSEBUILD/plugins/org.eclipse.equinox.launcher_*.jar)
+BUILDFILE=$(echo $ECLIPSEBUILD/plugins/org.eclipse.pde.build_*)/scripts/build.xml
 CONFIGDIR=$ORCCWORK/pde-config
 KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
 LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
@@ -177,4 +177,4 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
 
 [ "$?" != "0" ] && exit 1
 
-echo "***END*** $0 `date -R`"
+echo "***END*** $0 $(date -R)"
