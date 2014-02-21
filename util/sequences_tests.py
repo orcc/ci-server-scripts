@@ -226,7 +226,7 @@ def configureCommandLine():
     args, additional_args = parser.parse_known_args()
 
     # Perform some control on arguments passed by user
-    if not os.path.isdir(args.directory):
+    if args.directory and not os.path.isdir(args.directory):
         sys.exit("--directory option must contain the path to a valid directory")
 
     if not os.path.exists(args.inputList):
