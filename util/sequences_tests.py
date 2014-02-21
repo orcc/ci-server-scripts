@@ -232,12 +232,28 @@ def configureCommandLine():
     if not os.path.exists(args.inputList):
         sys.exit("Error: file " + args.inputList + " not found!")
 
-    if not os.path.exists(args.executable):
+    if not which(args.executable):
         sys.exit("Error: executable file " + args.executable + " not found!")
-    elif not os.access(args.executable, os.X_OK):
-        sys.exit("Error: file " + args.executable + " is not executable ! Please check its mode.")
 
     return (args, additional_args)
+
+def which(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
 
 def warning(*objs):
     print("WARNING:", *objs, end='\n', file=sys.stderr)
