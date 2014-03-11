@@ -117,8 +117,8 @@ HEVC/jctvc/avconv/CAINIT_C_SHARP_3.bit,                                  50,  83
 HEVC/jctvc/avconv/CAINIT_D_SHARP_3.bit,                                  50,  832x480
 HEVC/jctvc/avconv/CAINIT_E_SHARP_3.bit,                                  50,  832x480
 HEVC/jctvc/avconv/CAINIT_F_SHARP_3.bit,                                  50,  832x480
-#HEVC/jctvc/avconv/CAINIT_G_SHARP_3.bit,                                  50,  832x480
-#HEVC/jctvc/avconv/CAINIT_H_SHARP_3.bit,                                  50,  832x480
+HEVC/jctvc/avconv/CAINIT_G_SHARP_3.bit,                                  50,  832x480
+HEVC/jctvc/avconv/CAINIT_H_SHARP_3.bit,                                  50,  832x480
 #HEVC/jctvc/avconv/CIP_A_Panasonic_3.bit,                                 2,   416x240
 HEVC/jctvc/avconv/cip_B_NEC_2.bit,                                       5,   416x240
 #HEVC/jctvc/avconv/CIP_C_Panasonic_2.bit,                                 2,   416x240
