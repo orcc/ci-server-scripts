@@ -133,8 +133,8 @@ HEVC/jctvc/avconv/cip_B_NEC_2.bit,                                       5,   41
 #HEVC/jctvc/avconv/DELTAQP_A_BRCM_4.bit,                                  96,  1920x1088
 #HEVC/jctvc/avconv/DELTAQP_B_SONY_3.bit,                                  30,  832x480
 #HEVC/jctvc/avconv/DELTAQP_C_SONY_3.bit,                                  30,  832x480
-#HEVC/jctvc/avconv/DSLICE_A_HHI_5.bin,                                    50,  1920x1080
-#HEVC/jctvc/avconv/DSLICE_B_HHI_5.bin,                                    50,  1920x1080
+HEVC/jctvc/avconv/DSLICE_A_HHI_5.bin,                                    50,  1920x1080
+HEVC/jctvc/avconv/DSLICE_B_HHI_5.bin,                                    50,  1920x1080
 #HEVC/jctvc/avconv/DSLICE_C_HHI_5.bin,                                    50,  1920x1080
 #HEVC/jctvc/avconv/ENTP_A_LG_2.bin,                                       50,  832x480
 HEVC/jctvc/avconv/ENTP_B_LG_2.bin,                                       50,  832x480
