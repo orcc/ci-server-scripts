@@ -226,7 +226,7 @@ HEVC/jctvc/avconv/TSCL_B_VIDYO_4.bit                                    73,  416
 HEVC/jctvc/avconv/TSKIP_A_MS_3.bit                                      17,  1280x720
 #HEVC/jctvc/avconv/TSUNEQBD_A_MAIN10_Technicolor_2.bit                  --,  --x--
 #HEVC/jctvc/avconv/TUSIZE_A_Samsung_1.bin                                5,   2560x1600
-HEVC/jctvc/avconv/VPSID_A_VIDYO_1.bit                                   --,  --x--
+HEVC/jctvc/avconv/VPSID_A_VIDYO_1.bit                                   35,  416x240
 #HEVC/jctvc/avconv/WP_A_MAIN10_Toshiba_3.bit                           256, 416x240
 HEVC/jctvc/avconv/WP_A_Toshiba_3.bit                                   256, 416x240
 HEVC/jctvc/avconv/WP_B_Toshiba_3.bit                                   256, 416x240
