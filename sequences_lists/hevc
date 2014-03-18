@@ -127,13 +127,9 @@ HEVC/i_main/Traffic_2560x1600_30_crop_qp37.bin,                          150, 25
 #HEVC/jctvc/avconv/DBLK_A_SONY_3.zip
 #HEVC/jctvc/avconv/DBLK_B_SONY_3.zip
 #HEVC/jctvc/avconv/DBLK_C_SONY_3.zip
-#HEVC/jctvc/avconv/DBLK_D_VIXS_1.zip
 #HEVC/jctvc/avconv/DBLK_D_VIXS_2.zip
-#HEVC/jctvc/avconv/DBLK_E_VIXS_1.zip
 #HEVC/jctvc/avconv/DBLK_E_VIXS_2.zip
-#HEVC/jctvc/avconv/DBLK_F_VIXS_1.zip
 #HEVC/jctvc/avconv/DBLK_F_VIXS_2.zip
-#HEVC/jctvc/avconv/DBLK_G_VIXS_1.zip
 #HEVC/jctvc/avconv/DBLK_G_VIXS_2.zip
 #HEVC/jctvc/avconv/DELTAQP_A_BRCM_4.zip
 #HEVC/jctvc/avconv/DELTAQP_B_SONY_3.zip
@@ -224,7 +220,6 @@ HEVC/i_main/Traffic_2560x1600_30_crop_qp37.bin,                          150, 25
 #HEVC/jctvc/avconv/STRUCT_B_Samsung_4.zip
 #HEVC/jctvc/avconv/TILES_A_Cisco_2.zip
 #HEVC/jctvc/avconv/TILES_B_Cisco_1.zip
-#HEVC/jctvc/avconv/TMVP_A_MS_2.zip
 #HEVC/jctvc/avconv/TMVP_A_MS_3.zip
 #HEVC/jctvc/avconv/TSCL_A_VIDYO_5.zip
 #HEVC/jctvc/avconv/TSCL_B_VIDYO_4.zip
