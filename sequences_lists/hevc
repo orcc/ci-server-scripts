@@ -137,7 +137,7 @@ HEVC/jctvc/avconv/DBLK_G_VIXS_2.bit,                                      8,  12
 HEVC/jctvc/avconv/DSLICE_A_HHI_5.bin,                                    50,  1920x1080
 HEVC/jctvc/avconv/DSLICE_B_HHI_5.bin,                                    50,  1920x1080
 HEVC/jctvc/avconv/DSLICE_C_HHI_5.bin,                                    50,  1920x1080
-HEVC/jctvc/avconv/ENTP_A_QUALCOMM_1.bit,                                 25,  1920x1080
+HEVC/jctvc/avconv/ENTP_A_Qualcomm_1.bit,                                 25,  1920x1080
 HEVC/jctvc/avconv/ENTP_B_Qualcomm_1.bit,                                 25,  1920x1080
 #HEVC/jctvc/avconv/ENTP_C_Qualcomm_1.bit,                                25,  1920x1080
 #HEVC/jctvc/avconv/EXT_A_ericsson_4.bit,                                  3,  416x240
@@ -181,7 +181,7 @@ HEVC/jctvc/avconv/PMERGE_B_TI_3.bit,                                      8,  41
 HEVC/jctvc/avconv/PMERGE_C_TI_3.bit,                                      8,  416x240
 HEVC/jctvc/avconv/PMERGE_D_TI_3.bit,                                      8,  416x240
 HEVC/jctvc/avconv/PMERGE_E_TI_3.bit,                                      8,  416x240
-HEVC/jctvc/avconv/POC_A_Bossen_3.bit,                                     5,  416x240
+HEVC/jctvc/avconv/POC_A_Bossen_3.bin,                                     5,  416x240
 #HEVC/jctvc/avconv/PPS_A_qualcomm_7.bit,                                 81,  832x480
 HEVC/jctvc/avconv/PS_A_VIDYO_3.bit,                                      25,  416x240
 HEVC/jctvc/avconv/PS_B_VIDYO_3.bit,                                      25,  416x240
@@ -204,8 +204,8 @@ HEVC/jctvc/avconv/RQT_F_HHI_4.bit,                                        2,  83
 HEVC/jctvc/avconv/RQT_G_HHI_4.bit,                                        2,  832x480
 HEVC/jctvc/avconv/SAO_A_MediaTek_4.bit,                                  60,  416x240
 #HEVC/jctvc/avconv/SAO_B_MediaTek_5.bit,                                 60,  832x480
-HEVC/jctvc/avconv/SAO_C_SAMSUNG_4.bin,                                   60,  416x240
-HEVC/jctvc/avconv/SAO_D_SAMSUNG_4.bin,                                   60,  416x240
+HEVC/jctvc/avconv/SAO_C_Samsung_4.bin,                                   60,  416x240
+HEVC/jctvc/avconv/SAO_D_Samsung_4.bin,                                   60,  416x240
 HEVC/jctvc/avconv/SAO_E_Canon_4.bit,                                     16,  416x240
 HEVC/jctvc/avconv/SAO_F_Canon_3.bit,                                     16,  416x240
 HEVC/jctvc/avconv/SAO_G_Canon_3.bit,                                     16,  416x240
@@ -216,10 +216,10 @@ HEVC/jctvc/avconv/SLIST_B_Sony_8.bin,                                    65,  83
 HEVC/jctvc/avconv/SLIST_C_Sony_3.bin,                                    65,  832x480
 HEVC/jctvc/avconv/SLIST_D_Sony_9.bin,                                    65,  832x480
 #HEVC/jctvc/avconv/SLPPLP_A_VIDYO_1.bit,                                 --,  --x--
-HEVC/jctvc/avconv/STRUCT_A_Samsung_5.bit,                                60,  416x240
+HEVC/jctvc/avconv/STRUCT_A_Samsung_5.bin,                                60,  416x240
 #HEVC/jctvc/avconv/STRUCT_B_Samsung_4.bit,                               60,  832x480
-HEVC/jctvc/avconv/TILES_A_Cisco_2.bit,                                  100,  1920x1080
-HEVC/jctvc/avconv/TILES_B_Cisco_1.bit,                                  100,  1920x1080
+HEVC/jctvc/avconv/TILES_A_Cisco_2.bin,                                  100,  1920x1080
+HEVC/jctvc/avconv/TILES_B_Cisco_1.bin,                                  100,  1920x1080
 HEVC/jctvc/avconv/TMVP_A_MS_3.bit,                                       17,  416x240
 #HEVC/jctvc/avconv/TSCL_A_VIDYO_5.bit,                                   73,  416x240
 HEVC/jctvc/avconv/TSCL_B_VIDYO_4.bit,                                    73,  416x240
