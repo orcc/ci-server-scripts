@@ -50,18 +50,24 @@ echo "****************************************************************"
 echo ""
 already_compiled=""
 for plugin in $(ls $PLUGINSDIR); do
-    echo "*** Plugin:  $PLUGINSDIR/$plugin ***"
-    # Yes, I know, -cp parameter is set twice with the same value. Don't ask me
-    # why... Removing one of these parameters will break the Xtend generation step...
-    java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main \
-         -cp $XTENDCP \
-         -d $PLUGINSDIR/$plugin/xtend-gen \
-         $already_compiled$PLUGINSDIR/$plugin/src
+    # Execute Xtend compile only if plugin contains *.xtend files
+    if [ -n "$(find $PLUGINSDIR/$plugin -name "*.xtend" -print0)" ]; then
+        echo "==> Plugin: $PLUGINSDIR/$plugin"
+        # Yes, I know, -cp parameter is set twice with the same value. Don't ask me
+        # why... Removing one of these parameters will break the Xtend generation step...
+        java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main \
+             -cp $XTENDCP \
+             -d $PLUGINSDIR/$plugin/xtend-gen \
+             $already_compiled$PLUGINSDIR/$plugin/src
 
-    if [ -d $PLUGINSDIR/$plugin/xtend-gen ]; then
-        already_compiled=$PLUGINSDIR/$plugin/xtend-gen:$already_compiled
+        # Last plugins compiled needs to have the base class already compiled in
+        # the list of source folder. Note that works fine only because we are lucky:
+        # alphabetical order of Orcc plugins is coherent with dependency order in Xtend files.
+        if [ -d $PLUGINSDIR/$plugin/xtend-gen ]; then
+            already_compiled=$PLUGINSDIR/$plugin/xtend-gen:$already_compiled
+        fi
+        echo ""
     fi
-    echo ""
 done
 
 echo ""
