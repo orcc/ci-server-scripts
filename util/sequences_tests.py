@@ -194,7 +194,7 @@ def configureCommandLine():
     global parser
 
     parser = argparse.ArgumentParser(add_help=False,
-        description='Test a list of video sequences. All unrecognized arguments given to this script will be used when on EXECUTABLE command line')
+        description='Test a list of video sequences. All unrecognised arguments given to this script will be used on EXECUTABLE command line')
 
     mandatory = parser.add_argument_group(title="Mandatory arguments")
     mandatory.add_argument("-e", "--executable", action="store", dest="executable", required=True,
