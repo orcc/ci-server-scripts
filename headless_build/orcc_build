@@ -35,7 +35,6 @@ for arg; do
     cp -ur $arg/* $PLUGINSDIR
 done
 
-
 echo ""
 echo "****************************************************************"
 echo "*             Generate Cal Xtext arcitecture                   *"
@@ -44,60 +43,26 @@ echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
 java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc/cal/GenerateCal.mwe2
 
+echo ""
+echo "****************************************************************"
+echo "*             Generate Java sources from Xtend                 *"
+echo "****************************************************************"
+echo ""
+already_compiled=""
+for plugin in $(ls $PLUGINSDIR); do
+    echo "*** Plugin:  $PLUGINSDIR/$plugin ***"
+    # Yes, I know, -cp parameter is set twice with the same value. Don't ask me
+    # why... Removing one of these parameters will break the Xtend generation step...
+    java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main \
+         -cp $XTENDCP \
+         -d $PLUGINSDIR/$plugin/xtend-gen \
+         $already_compiled$PLUGINSDIR/$plugin/src
 
-echo ""
-echo "****************************************************************"
-echo "* Generate Java sources from Xtend [net.sf.orcc.backends]      *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/net.sf.orcc.backends
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
-
-echo ""
-echo "****************************************************************"
-echo "*  Generate Java sources from Xtend [net.sf.orcc.models]       *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/net.sf.orcc.models
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
-
-echo ""
-echo "****************************************************************"
-echo "*    Generate Java sources from Xtend [net.sf.orcc.core]       *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/net.sf.orcc.core
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
-
-echo ""
-echo "****************************************************************"
-echo "*    Generate Java sources from Xtend [net.sf.orcc.simulators] *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/net.sf.orcc.simulators
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen ../net.sf.orcc.core/xtend-gen:src
-
-echo ""
-echo "****************************************************************"
-echo "*    Generate Java sources from Xtend [net.sf.orcc.ui]         *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/net.sf.orcc.ui
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen src
-
-echo ""
-echo "****************************************************************"
-echo "*   Generate Java sources from Xtend [org.xronos.orcc]         *"
-echo "****************************************************************"
-echo ""
-cd $PLUGINSDIR/org.xronos.orcc
-rm -fr xtend-gen/*
-java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main -cp $XTENDCP -d xtend-gen ../net.sf.orcc.backends/xtend-gen:src
+    if [ -d $PLUGINSDIR/$plugin/xtend-gen ]; then
+        already_compiled=$PLUGINSDIR/$plugin/xtend-gen:$already_compiled
+    fi
+    echo ""
+done
 
 echo ""
 echo "****************************************************************"
