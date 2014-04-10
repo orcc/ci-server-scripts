@@ -37,9 +37,12 @@ echo "***START*** $0 $(date -R)"
 
 [ ! -d "$OUTPUT" ] && mkdir -p $OUTPUT
 
+# This script does not manage separated workspace / cal applications folders
+# Hope this will be implemented in the future
 RUNWORKSPACE=$APPDIR
+
 rm -fr $RUNWORKSPACE/.metadata $RUNWORKSPACE/.JETEmitters
-rm -fr $RUNWORKSPACE/**/bin
+rm -fr $APPDIR/**/bin
 
 echo "Register Orcc projects in eclipse workspace"
 $ECLIPSERUN/eclipse     -nosplash -consoleLog \
