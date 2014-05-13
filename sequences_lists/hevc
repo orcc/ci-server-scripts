@@ -111,7 +111,7 @@ HEVC/jctvc/avconv/AMP_F_Hisilicon_3.bit,                                100,  19
 HEVC/jctvc/avconv/AMVP_A_MTK_4.bit,                                      30,  416x240
 HEVC/jctvc/avconv/AMVP_B_MTK_4.bit,                                      41,  416x240
 #HEVC/jctvc/avconv/AMVP_C_Samsung_4.bit,                                 60,  832x480
-HEVC/jctvc/avconv/BUMPING_A_ericsson_1.bit,                             --,  --x--
+HEVC/jctvc/avconv/BUMPING_A_ericsson_1.bit,                              65,  416x240
 HEVC/jctvc/avconv/CAINIT_A_SHARP_4.bit,                                  50,  832x480                           
 HEVC/jctvc/avconv/CAINIT_B_SHARP_4.bit,                                  50,  832x480
 HEVC/jctvc/avconv/CAINIT_C_SHARP_3.bit,                                  50,  832x480
