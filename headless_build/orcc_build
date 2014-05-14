@@ -37,7 +37,7 @@ done
 
 echo ""
 echo "****************************************************************"
-echo "*             Generate Cal Xtext arcitecture                   *"
+echo "*             Generate Cal Xtext architecture                   *"
 echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
@@ -108,8 +108,6 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -Dbase=$BUILDDIR \
                         -Dp2.mirror.slicing.latestVersionOnly=$KEEPONLYLATESTVERSIONS \
                         -Dp2.build.repo=file:$LOCALREPO
-
-[ "$?" != "0" ] && exit 1
 
 echo ""
 echo "****************************************************************"
