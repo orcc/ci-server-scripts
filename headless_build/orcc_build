@@ -80,7 +80,6 @@ echo ""
 LAUNCHERJAR=$(echo $ECLIPSEBUILD/plugins/org.eclipse.equinox.launcher_*.jar)
 BUILDFILE=$(echo $ECLIPSEBUILD/plugins/org.eclipse.pde.build_*)/scripts/build.xml
 KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
-LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
 
 if [ "$BUILDTYPE" == "tests" ]; then
     PDEBUILDTYPE=I
@@ -90,12 +89,14 @@ else
     PDEBUILDTYPE=R
 fi
 
+mkdir -p $BUILDDIR
+
 # This will be used as default name for the top level folder of
 # build features and plugins. Needs to rename it
 ARCHIVEPREFIX=orcc_latest
 
-mkdir -p $LOCALREPO
-mkdir -p $BUILDDIR
+ORCCID="net.sf.orcc"
+BUILDID="${BUILDTYPE}Build"
 
 # For information on following properties:
 # - open build.properties from <eclipse_dir>/plugins/org.eclipse.pde.build_*/templates/headless-build/build.properties
@@ -103,19 +104,56 @@ mkdir -p $BUILDDIR
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.antRunner \
                         -buildfile $BUILDFILE \
                         -DskipFetch=true \
-                        -DtopLevelElementId=net.sf.orcc \
+                        -DtopLevelElementId=$ORCCID \
                         -DtopLevelElementType=feature \
                         -DjavacSource=1.6 -DjavacTarget=1.6 \
                         -DbaseLocation=$ECLIPSEBUILD \
                         -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
                         -DbuildDirectory=$BUILDDIR \
                         -Dbase=$BUILDDIR \
-                        -DbuildId=${BUILDTYPE}Build \
+                        -DbuildId=$BUILDID \
                         -DbuildType=$PDEBUILDTYPE \
                         -DbuildLabel="${buildId}.${buildType}" \
                         -DarchivePrefix=$ARCHIVEPREFIX \
                         -DcollectingFolder=binary_output \
                         -DoutputUpdateJars=true
+
+echo ""
+echo "****************************************************************"
+echo "*                  Builds the p2 repository                    *"
+echo "****************************************************************"
+echo ""
+
+LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
+mkdir -p $LOCALREPO
+mv $BUILDDIR/$ORCCID-$BUILDID.zip $LOCALREPO
+
+# Load version number computed from the build
+VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCID}=" | cut -d'=' -f2`
+CURRENTBUILD="${ORCCID}_${VERSION}"
+
+pushd $LOCALREPO
+echo ""
+echo "-> Extract built zip file"
+# Unzip the built zip, the created folder is $ARCHIVEPREFIX
+unzip -o $ORCCID-$BUILDID.zip
+# Clean the useless zip
+rm $ORCCID-$BUILDID.zip
+
+echo ""
+echo "-> Rename $ARCHIVEPREFIX into $CURRENTBUILD"
+# Rename it to its final name
+mv $ARCHIVEPREFIX $CURRENTBUILD
+
+# Initialize a p2 repository in the extracted folder
+echo ""
+echo "-> Transform $CURRENTBUILD into a standard p2 repository"
+$P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
+  -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+  -artifactRepository file:$(pwd)/${CURRENTBUILD} \
+  -source $(pwd)/${CURRENTBUILD}
+
+popd
 
 echo ""
 echo "****************************************************************"
@@ -130,7 +168,6 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -uninstallIU net.sf.orcc.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \n\
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
-
 echo "Install new Orcc feature"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
