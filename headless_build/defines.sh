@@ -9,10 +9,10 @@ export E_BADARGS=64
 
 export ORCCWORK="$1"
 
-ECLIPSEVERSION=kepler
 # Used to download the base platform version of eclipse
 export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk-x86_64.tar.gz"
 # Used to download dependencies (both runtime and build eclipse)
+ECLIPSEVERSION=kepler
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
 
 export ECLIPSERUN=$ORCCWORK/eclipse.runtime
@@ -31,6 +31,9 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Set the path of the p2-admin binary, generated from orcc_eclipse_setup script
+export P2ADMIN=$DIR/../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/products/org.eclipse.equinox.p2.admin.rcp.product/linux/gtk/x86_64/p2-admin/p2-admin
 
 # Setup eclipse classpath
 ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
