@@ -37,7 +37,7 @@ done
 
 echo ""
 echo "****************************************************************"
-echo "*             Generate Cal Xtext architecture                   *"
+echo "*             Generates Cal Xtext architecture                 *"
 echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
@@ -45,7 +45,7 @@ java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc
 
 echo ""
 echo "****************************************************************"
-echo "*             Generate Java sources from Xtend                 *"
+echo "*             Generates Java sources from Xtend                *"
 echo "****************************************************************"
 echo ""
 already_compiled=""
@@ -72,7 +72,7 @@ done
 
 echo ""
 echo "****************************************************************"
-echo "*                    Launch PDE Build                          *"
+echo "*                    Launches PDE Build                        *"
 echo "****************************************************************"
 echo ""
 
@@ -111,7 +111,7 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
 
 echo ""
 echo "****************************************************************"
-echo "*       Installing Orcc plugins on eclipse runtime             *"
+echo "*       Installs Orcc plugins into eclipse runtime             *"
 echo "****************************************************************"
 echo ""
 echo "Uninstall old Orcc feature"
