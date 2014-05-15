@@ -3,7 +3,7 @@
 NBARGS=3
 function print_usage() {
     echo
-    echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir> [<plugin_dir>, <plugin_dir>, ...]"
+    echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir> [<plugin_dir> <plugin_dir> ...]"
     echo "    <working_directory>           Path to folder used to perform build & tests"
     echo "    <feature_dir>                 Path to eclipse feature folder"
     echo "    <plugin_dir>                  Path(s) to folder(s) containing eclipse plugins directories"
