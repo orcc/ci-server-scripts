@@ -21,12 +21,14 @@ fi
 
 SOURCEFEATUREDIR=$2
 
+ORCCID="net.sf.orcc"
+
 echo "***START*** $(date -R) Build type: $BUILDTYPE"
 rm -fr $BUILDDIR
 mkdir -p $PLUGINSDIR
-mkdir -p $FEATURESDIR/net.sf.orcc
+mkdir -p $FEATURESDIR/${ORCCID}
 
-cp -ur $SOURCEFEATUREDIR/* $FEATURESDIR/net.sf.orcc
+cp -ur $SOURCEFEATUREDIR/* $FEATURESDIR/${ORCCID}
 
 # Remove the 2 first arg from command line
 shift 2
@@ -102,7 +104,6 @@ mkdir -p $BUILDDIR
 # build features and plugins. Needs to rename it
 ARCHIVEPREFIX=orcc_latest
 
-ORCCID="net.sf.orcc"
 BUILDID="${BUILDTYPE}Build"
 
 # For information on following properties:
@@ -209,9 +210,10 @@ echo "Uninstall old Orcc feature"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
                         -destination $ECLIPSERUN \
-                        -uninstallIU net.sf.orcc.feature.group \
+                        -uninstallIU ${ORCCID}.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \n\
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
+
 echo "Install new Orcc feature"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
@@ -219,6 +221,6 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -artifactRepository file:$LOCALREPO \
                         -metadataRepository file:$LOCALREPO \
                         -repository $ECLIPSEREPOSITORY \
-                        -installIU net.sf.orcc.feature.group
+                        -installIU ${ORCCID}.feature.group
 
 echo "***END*** $0 $(date -R)"
