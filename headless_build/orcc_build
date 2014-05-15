@@ -215,23 +215,23 @@ echo ""
 echo "****************************************************************"
 echo "*       Installs Orcc plugins into eclipse runtime             *"
 echo "****************************************************************"
-echo ""
-echo "Uninstall old Orcc feature"
 
-$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
-                        -application org.eclipse.equinox.p2.director \
-                        -destination $ECLIPSERUN \
-                        -uninstallIU ${ORCCID}.feature.group \
+echo ""
+echo "-> Uninstall old Orcc feature"
+$P2ADMIN -application org.eclipse.equinox.p2.director \
+  -destination $ECLIPSERUN \
+  -uninstallIU ${ORCCID}.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \n\
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
 
-echo "Install new Orcc feature"
-$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
-                        -application org.eclipse.equinox.p2.director \
-                        -destination $ECLIPSERUN \
-                        -artifactRepository file:$LOCALREPO \
-                        -metadataRepository file:$LOCALREPO \
-                        -repository $ECLIPSEREPOSITORY \
-                        -installIU ${ORCCID}.feature.group
+echo ""
+echo "-> Install new Orcc feature"
+$P2ADMIN -application org.eclipse.equinox.p2.director \
+  -destination $ECLIPSERUN \
+  -artifactRepository file:$LOCALREPO \
+  -metadataRepository file:$LOCALREPO \
+  -repository $ECLIPSEREPOSITORY \
+  -installIU ${ORCCID}.feature.group
 
+echo ""
 echo "***END*** $0 $(date -R)"
