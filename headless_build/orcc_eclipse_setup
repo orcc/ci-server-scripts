@@ -13,7 +13,7 @@ rm -fr $ECLIPSEBUILD
 mkdir $ECLIPSERUN
 mkdir $ECLIPSEBUILD
 
-cd $ORCCWORK
+pushd $ORCCWORK
 
 echo "Downloading Eclipse"
 wget --progress=dot:mega $ECLIPSEURL
@@ -35,12 +35,17 @@ rm -rf eclipse
 rm $ECLIPSEARCHIVE
 
 echo "Installing plugins required for build step into eclipse.build"
-cd $ORCCWORK
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
                         -destination $ECLIPSEBUILD \
                         -repository $ECLIPSEREPOSITORY \
                         -followReferences \
                         -installIU $BUILDDEPS
+
+popd
+
+pushd $DIR/../p2-admin
+mvn package
+popd
 
 echo "***END*** $0 $(date -R)"

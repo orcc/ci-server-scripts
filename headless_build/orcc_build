@@ -21,12 +21,14 @@ fi
 
 SOURCEFEATUREDIR=$2
 
+ORCCID="net.sf.orcc"
+
 echo "***START*** $(date -R) Build type: $BUILDTYPE"
 rm -fr $BUILDDIR
 mkdir -p $PLUGINSDIR
-mkdir -p $FEATURESDIR/net.sf.orcc
+mkdir -p $FEATURESDIR/${ORCCID}
 
-cp -ur $SOURCEFEATUREDIR/* $FEATURESDIR/net.sf.orcc
+cp -ur $SOURCEFEATUREDIR/* $FEATURESDIR/${ORCCID}
 
 # Remove the 2 first arg from command line
 shift 2
@@ -37,7 +39,7 @@ done
 
 echo ""
 echo "****************************************************************"
-echo "*             Generate Cal Xtext architecture                   *"
+echo "*             Generates Cal Xtext architecture                 *"
 echo "****************************************************************"
 echo ""
 cd $PLUGINSDIR/net.sf.orcc.cal
@@ -45,7 +47,7 @@ java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc
 
 echo ""
 echo "****************************************************************"
-echo "*             Generate Java sources from Xtend                 *"
+echo "*             Generates Java sources from Xtend                *"
 echo "****************************************************************"
 echo ""
 already_compiled=""
@@ -72,46 +74,135 @@ done
 
 echo ""
 echo "****************************************************************"
-echo "*                    Launch PDE Build                          *"
+echo "*                    Launches PDE Build                        *"
 echo "****************************************************************"
 echo ""
 
 # Define PDE build specific variables
 LAUNCHERJAR=$(echo $ECLIPSEBUILD/plugins/org.eclipse.equinox.launcher_*.jar)
 BUILDFILE=$(echo $ECLIPSEBUILD/plugins/org.eclipse.pde.build_*)/scripts/build.xml
-CONFIGDIR=$(dirname $0)/pdeconfig
 KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
-LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
 
-if [ "$BUILDTYPE" == "tests" ]
-then
+if [ "$BUILDTYPE" == "tests" ]; then
     PDEBUILDTYPE=I
-elif [ "$BUILDTYPE" == "nightly" ]
-then
+    REPONAME="Orcc Tests repository"
+    NDAYSTOKEEP=1
+elif [ "$BUILDTYPE" == "nightly" ]; then
     PDEBUILDTYPE=N
+    REPONAME="Orcc Nightly builds"
+    NDAYSTOKEEP=45
 else
+    # Release build (not active yet)
     PDEBUILDTYPE=R
+    REPONAME="Orcc - Open RVC-CAL Compiler Releases"
+    NDAYSTOKEEP=999999
 fi
 
-mkdir -p $LOCALREPO
 mkdir -p $BUILDDIR
 
-$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
-                        -application org.eclipse.ant.core.antRunner \
+# This will be used as default name for the top level folder of
+# build features and plugins. Needs to rename it
+ARCHIVEPREFIX=orcc_latest
+
+BUILDID="${BUILDTYPE}Build"
+
+# For information on following properties:
+# - open build.properties from <eclipse_dir>/plugins/org.eclipse.pde.build_*/templates/headless-build/build.properties
+# - http://help.eclipse.org/kepler/index.jsp?topic=%2Forg.eclipse.pde.doc.user%2Ftasks%2Fpde_feature_build.htm&cp=4_2_0_1
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.antRunner \
                         -buildfile $BUILDFILE \
-                        -Dbuilder=$CONFIGDIR \
+                        -DskipFetch=true \
+                        -DtopLevelElementId=$ORCCID \
+                        -DtopLevelElementType=feature \
+                        -DjavacSource=1.6 -DjavacTarget=1.6 \
                         -DbaseLocation=$ECLIPSEBUILD \
                         -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
-                        -DbuildType=$PDEBUILDTYPE \
-                        -DtopLevelElementId=net.sf.orcc \
                         -DbuildDirectory=$BUILDDIR \
                         -Dbase=$BUILDDIR \
-                        -Dp2.mirror.slicing.latestVersionOnly=$KEEPONLYLATESTVERSIONS \
-                        -Dp2.build.repo=file:$LOCALREPO
+                        -DbuildId=$BUILDID \
+                        -DbuildType=$PDEBUILDTYPE \
+                        -DbuildLabel="${buildId}.${buildType}" \
+                        -DarchivePrefix=$ARCHIVEPREFIX \
+                        -DcollectingFolder=binary_output \
+                        -DoutputUpdateJars=true
 
 echo ""
 echo "****************************************************************"
-echo "*       Installing Orcc plugins on eclipse runtime             *"
+echo "*                  Builds the p2 repository                    *"
+echo "****************************************************************"
+
+LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
+mkdir -p $LOCALREPO
+mv $BUILDDIR/$ORCCID-$BUILDID.zip $LOCALREPO
+
+# Load version number computed from the build
+VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCID}=" | cut -d'=' -f2`
+CURRENTBUILD="${ORCCID}_${VERSION}"
+
+pushd $LOCALREPO > /dev/null
+echo ""
+echo "-> Extract built zip file"
+# Unzip the built zip, the created folder is $ARCHIVEPREFIX
+unzip -o $ORCCID-$BUILDID.zip
+# Clean the useless zip
+rm $ORCCID-$BUILDID.zip
+
+echo ""
+echo "-> Rename $ARCHIVEPREFIX into $CURRENTBUILD"
+# Rename it to its final name
+mv $ARCHIVEPREFIX $CURRENTBUILD
+
+# Initialize a p2 repository in the extracted folder
+echo ""
+echo "-> Transform $CURRENTBUILD into a standard p2 repository"
+
+$P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
+  -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+  -artifactRepository file:$(pwd)/${CURRENTBUILD} \
+  -source $(pwd)/${CURRENTBUILD} \
+  -compress
+
+# Create a tempoary file defining the category we will publish
+pushd ${CURRENTBUILD} > /dev/null
+CATEGORY=$ORCCID.category.$BUILDTYPE
+TMPFILE=$(mktemp)
+cat > $TMPFILE <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <category-def name="$CATEGORY" label="${REPONAME}"/>
+   <feature url="$(ls features/${ORCCID}*)" id="${ORCCID}" version="${VERSION}">
+      <category name="$CATEGORY"/>
+   </feature>
+</site>
+EOF
+popd > /dev/null
+
+# Publish category for the current build
+echo ""
+echo "-> Register $CURRENTBUILD into category ${REPONAME}"
+$P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
+   -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+   -categoryDefinition file:$TMPFILE \
+   -categoryQualifier -compress
+
+# Delete oldest builds before creating the composite repo
+echo ""
+echo "-> Delete useless builds (builds oldest than ${NDAYSTOKEEP}*24 hours)"
+find -name "${ORCCID}_*" -mtime +${NDAYSTOKEEP} -delete -print
+
+echo ""
+echo "-> Create p2 composite repository (top level, references all sub-repositories)"
+$P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
+  -location file:$(pwd) \
+  -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") \
+  -repositoryName $REPONAME \
+  -compressed
+
+popd > /dev/null
+
+echo ""
+echo "****************************************************************"
+echo "*       Installs Orcc plugins into eclipse runtime             *"
 echo "****************************************************************"
 echo ""
 echo "Uninstall old Orcc feature"
@@ -119,7 +210,7 @@ echo "Uninstall old Orcc feature"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
                         -destination $ECLIPSERUN \
-                        -uninstallIU net.sf.orcc.feature.group \
+                        -uninstallIU ${ORCCID}.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \n\
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
 
@@ -130,6 +221,6 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -artifactRepository file:$LOCALREPO \
                         -metadataRepository file:$LOCALREPO \
                         -repository $ECLIPSEREPOSITORY \
-                        -installIU net.sf.orcc.feature.group
+                        -installIU ${ORCCID}.feature.group
 
 echo "***END*** $0 $(date -R)"
