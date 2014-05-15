@@ -206,7 +206,7 @@ echo "-> Create p2 composite repository (top level, references all sub-repositor
 $P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
   -location file:$(pwd) \
   -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") \
-  -repositoryName $REPONAME \
+  -repositoryName "$REPONAME" \
   -compressed
 
 popd > /dev/null
