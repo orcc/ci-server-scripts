@@ -158,7 +158,8 @@ echo "-> Transform $CURRENTBUILD into a standard p2 repository"
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
   -metadataRepository file:$(pwd)/${CURRENTBUILD} \
   -artifactRepository file:$(pwd)/${CURRENTBUILD} \
-  -source $(pwd)/${CURRENTBUILD}
+  -source $(pwd)/${CURRENTBUILD} \
+  -compress
 
 # Create a tempoary file defining the category we will publish
 pushd ${CURRENTBUILD} > /dev/null
@@ -181,7 +182,7 @@ echo "-> Register $CURRENTBUILD into category ${REPONAME}"
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
    -metadataRepository file:$(pwd)/${CURRENTBUILD} \
    -categoryDefinition file:$TMPFILE \
-   -categoryQualifier
+   -categoryQualifier -compress
 
 # Delete oldest builds before creating the composite repo
 echo ""
@@ -191,7 +192,10 @@ find -name "${ORCCID}_*" -mtime +${NDAYSTOKEEP} -delete -print
 echo ""
 echo "-> Create p2 composite repository (top level, references all sub-repositories)"
 $P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
-  -location file:$(pwd) -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") -repositoryName $REPONAME
+  -location file:$(pwd) \
+  -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") \
+  -repositoryName $REPONAME \
+  -compressed
 
 popd > /dev/null
 
