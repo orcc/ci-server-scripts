@@ -83,10 +83,17 @@ KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
 
 if [ "$BUILDTYPE" == "tests" ]; then
     PDEBUILDTYPE=I
+    REPONAME="Orcc Tests repository"
+    NDAYSTOKEEP=1
 elif [ "$BUILDTYPE" == "nightly" ]; then
     PDEBUILDTYPE=N
+    REPONAME="Orcc Nightly builds"
+    NDAYSTOKEEP=45
 else
+    # Release build (not active yet)
     PDEBUILDTYPE=R
+    REPONAME="Orcc - Open RVC-CAL Compiler Releases"
+    NDAYSTOKEEP=999999
 fi
 
 mkdir -p $BUILDDIR
@@ -122,7 +129,6 @@ echo ""
 echo "****************************************************************"
 echo "*                  Builds the p2 repository                    *"
 echo "****************************************************************"
-echo ""
 
 LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
 mkdir -p $LOCALREPO
@@ -132,7 +138,7 @@ mv $BUILDDIR/$ORCCID-$BUILDID.zip $LOCALREPO
 VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCID}=" | cut -d'=' -f2`
 CURRENTBUILD="${ORCCID}_${VERSION}"
 
-pushd $LOCALREPO
+pushd $LOCALREPO > /dev/null
 echo ""
 echo "-> Extract built zip file"
 # Unzip the built zip, the created folder is $ARCHIVEPREFIX
@@ -148,12 +154,46 @@ mv $ARCHIVEPREFIX $CURRENTBUILD
 # Initialize a p2 repository in the extracted folder
 echo ""
 echo "-> Transform $CURRENTBUILD into a standard p2 repository"
+
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
   -metadataRepository file:$(pwd)/${CURRENTBUILD} \
   -artifactRepository file:$(pwd)/${CURRENTBUILD} \
   -source $(pwd)/${CURRENTBUILD}
 
-popd
+# Create a tempoary file defining the category we will publish
+pushd ${CURRENTBUILD} > /dev/null
+CATEGORY=$ORCCID.category.$BUILDTYPE
+TMPFILE=$(mktemp)
+cat > $TMPFILE <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <category-def name="$CATEGORY" label="${REPONAME}"/>
+   <feature url="$(ls features/${ORCCID}*)" id="${ORCCID}" version="${VERSION}">
+      <category name="$CATEGORY"/>
+   </feature>
+</site>
+EOF
+popd > /dev/null
+
+# Publish category for the current build
+echo ""
+echo "-> Register $CURRENTBUILD into category ${REPONAME}"
+$P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
+   -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+   -categoryDefinition file:$TMPFILE \
+   -categoryQualifier
+
+# Delete oldest builds before creating the composite repo
+echo ""
+echo "-> Delete useless builds (builds oldest than ${NDAYSTOKEEP}*24 hours)"
+find -name "${ORCCID}_*" -mtime +${NDAYSTOKEEP} -delete -print
+
+echo ""
+echo "-> Create p2 composite repository (top level, references all sub-repositories)"
+$P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
+  -location file:$(pwd) -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") -repositoryName $REPONAME
+
+popd > /dev/null
 
 echo ""
 echo "****************************************************************"
