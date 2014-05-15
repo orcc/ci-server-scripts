@@ -162,6 +162,17 @@ $P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublish
   -source $(pwd)/${CURRENTBUILD} \
   -compress
 
+# Print p2.index files...
+p2Index=<<EOF
+version = 1
+metadata.repository.factory.order = compositeContent.xml,\!
+artifact.repository.factory.order = compositeArtifacts.xml,\!
+EOF
+# ... in the current repository
+echo $p2Index > $(pwd)/${CURRENTBUILD}/p2.index
+# ... in the top level composite repository
+echo $p2Index > ./p2.index
+
 # Create a tempoary file defining the category we will publish
 pushd ${CURRENTBUILD} > /dev/null
 CATEGORY=$ORCCID.category.$BUILDTYPE
