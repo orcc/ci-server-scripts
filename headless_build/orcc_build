@@ -79,7 +79,6 @@ echo "****************************************************************"
 echo ""
 
 # Define PDE build specific variables
-LAUNCHERJAR=$(echo $ECLIPSEBUILD/plugins/org.eclipse.equinox.launcher_*.jar)
 BUILDFILE=$(echo $ECLIPSEBUILD/plugins/org.eclipse.pde.build_*)/scripts/build.xml
 KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
 
