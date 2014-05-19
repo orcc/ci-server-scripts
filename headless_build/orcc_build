@@ -156,10 +156,10 @@ echo ""
 echo "-> Transform $CURRENTBUILD into a standard p2 repository"
 
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
-  -metadataRepository file:$(pwd)/${CURRENTBUILD} \
-  -artifactRepository file:$(pwd)/${CURRENTBUILD} \
-  -source $(pwd)/${CURRENTBUILD} \
-  -compress
+    -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+    -artifactRepository file:$(pwd)/${CURRENTBUILD} \
+    -source $(pwd)/${CURRENTBUILD} \
+    -compress
 
 # Print p2.index files...
 p2Index=<<EOF
@@ -179,10 +179,10 @@ TMPFILE=$(mktemp)
 cat > $TMPFILE <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <category-def name="$CATEGORY" label="${REPONAME}"/>
-   <feature url="$(ls features/${ORCCID}*)" id="${ORCCID}" version="${VERSION}">
-      <category name="$CATEGORY"/>
-   </feature>
+    <category-def name="$CATEGORY" label="${REPONAME}"/>
+    <feature url="$(ls features/${ORCCID}*)" id="${ORCCID}" version="${VERSION}">
+        <category name="$CATEGORY"/>
+    </feature>
 </site>
 EOF
 popd > /dev/null
@@ -191,30 +191,36 @@ popd > /dev/null
 echo ""
 echo "-> Register $CURRENTBUILD into category ${REPONAME}"
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
-   -metadataRepository file:$(pwd)/${CURRENTBUILD} \
-   -categoryDefinition file:$TMPFILE \
-   -categoryQualifier -compress
+    -metadataRepository file:$(pwd)/${CURRENTBUILD} \
+    -categoryDefinition file:$TMPFILE \
+    -categoryQualifier -compress
 
 # Delete oldest builds before creating the composite repo
 echo ""
-echo "-> Delete useless builds (builds oldest than ${NDAYSTOKEEP}*24 hours)"
+echo "-> Delete useless builds (builds older than ${NDAYSTOKEEP}*24 hours)"
 for oldDirectory in $(find -mindepth 2 -maxdepth 2 -mtime +${NDAYSTOKEEP-1} -type f -name "p2.index" -exec dirname {} \;); do
     echo "Delete ${oldDirectory}"
     rm -fr "${oldDirectory}"
 
     toRemove=${oldDirectory},$toRemove
 done
+# TODO: better check of corrupted composite repo. Always delete *.jar files ?
 
 echo ""
 echo "-> Create p2 composite repository (top level, references all sub-repositories)"
 $P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
-  -location file:$(pwd) \
-  -add ${CURRENTBUILD} \
-  -remove ${toRemove} \
-  -repositoryName "$REPONAME" \
-  -compressed
+    -location file:$(pwd) \
+    -add ${CURRENTBUILD} \
+    -remove ${toRemove} \
+    -repositoryName "$REPONAME" \
+    -compressed
 
 popd > /dev/null
+
+# We don't want to install just built releases into eclipse.runtime
+if [ "$BUILDTYPE" == "releases" ]; then
+    exit 0
+fi
 
 echo ""
 echo "****************************************************************"
