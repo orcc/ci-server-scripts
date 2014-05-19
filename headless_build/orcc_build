@@ -198,7 +198,7 @@ $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
 # Delete oldest builds before creating the composite repo
 echo ""
 echo "-> Delete useless builds (builds oldest than ${NDAYSTOKEEP}*24 hours)"
-find -name "${ORCCID}_*" -mtime +${NDAYSTOKEEP} -delete -print
+find -mindepth 2 -maxdepth 2 -mtime +${NDAYSTOKEEP-1} -type f -name "p2.index" -exec dirname {} \; | xargs rm -vfr
 
 echo ""
 echo "-> Create p2 composite repository (top level, references all sub-repositories)"
