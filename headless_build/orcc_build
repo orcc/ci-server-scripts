@@ -93,7 +93,7 @@ elif [ "$BUILDTYPE" == "nightly" ]; then
 else
     # Release build (not active yet)
     PDEBUILDTYPE=R
-    REPONAME="Orcc - Open RVC-CAL Compiler Releases"
+    REPONAME="Open RVC-CAL Compiler - Stable releases"
     NDAYSTOKEEP=999999
 fi
 
