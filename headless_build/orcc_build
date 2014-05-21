@@ -85,16 +85,16 @@ KEEPONLYLATESTVERSIONS=true # Set to false when a Release build will be defined
 if [ "$BUILDTYPE" == "tests" ]; then
     PDEBUILDTYPE=I
     REPONAME="Orcc Tests repository"
-    NDAYSTOKEEP=1
+    NBUILDSTOKEEP=3
 elif [ "$BUILDTYPE" == "nightly" ]; then
     PDEBUILDTYPE=N
     REPONAME="Orcc Nightly builds"
-    NDAYSTOKEEP=45
+    NBUILDSTOKEEP=45
 else
     # Release build (not active yet)
     PDEBUILDTYPE=R
     REPONAME="Open RVC-CAL Compiler - Stable releases"
-    NDAYSTOKEEP=999999
+    NBUILDSTOKEEP=999999
 fi
 
 mkdir -p $BUILDDIR
@@ -197,21 +197,20 @@ $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
 
 # Delete oldest builds before creating the composite repo
 echo ""
-echo "-> Delete useless builds (builds older than ${NDAYSTOKEEP}*24 hours)"
-for oldDirectory in $(find -mindepth 2 -maxdepth 2 -mtime +${NDAYSTOKEEP-1} -type f -name "p2.index" -exec dirname {} \;); do
+echo "-> Delete useless builds (all but the ${NBUILDSTOKEEP} last)"
+for oldDirectory in $(find -mindepth 1 -maxdepth 1 -type d -name "${ORCCID}_*" | sort | head -n -${NBUILDSTOKEEP}); do
     echo "Delete ${oldDirectory}"
     rm -fr "${oldDirectory}"
-
-    toRemove=${oldDirectory},$toRemove
 done
-# TODO: better check of corrupted composite repo. Always delete *.jar files ?
+
+# Delete repository indexes, will be fully re-generated in the next command
+rm -fr compositeArtifacts.* compositeContent.*
 
 echo ""
 echo "-> Create p2 composite repository (top level, references all sub-repositories)"
 $P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
     -location file:$(pwd) \
-    -add ${CURRENTBUILD} \
-    -remove ${toRemove} \
+    -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") \
     -repositoryName "$REPONAME" \
     -compressed
 
