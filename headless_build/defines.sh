@@ -37,9 +37,11 @@ export P2ADMIN=$DIR/../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/
 
 # Setup eclipse classpath
 ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
+# Add the missing junit4 plugin, to allow compiling xtend in tests plugin
+ECLIPSECP=$ECLIPSECP:$(echo $ECLIPSEBUILD/plugins/org.junit_4*/junit.jar)
 
 # Setup Xtext MWE2 classpath
-MWECP=$ECLIPSECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src
+MWECP=$ECLIPSECP:$PLUGINSDIR/net.sf.orcc.cal/src:$PLUGINSDIR/net.sf.orcc.cal.ui/src:$PLUGINSDIR/net.sf.orcc.cal.tests/src
 MWECP=$(echo $DIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
 export MWECP
 
