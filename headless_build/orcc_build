@@ -55,10 +55,8 @@ for plugin in $(ls $PLUGINSDIR); do
     # Execute Xtend compile only if plugin contains *.xtend files
     if [ -n "$(find $PLUGINSDIR/$plugin -name "*.xtend" -print0)" ]; then
         echo "==> Plugin: $PLUGINSDIR/$plugin"
-        # Yes, I know, -cp parameter is set twice with the same value. Don't ask me
-        # why... Removing one of these parameters will break the Xtend generation step...
         java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main \
-             -cp $XTENDCP \
+             -useCurrentClassLoader \
              -d $PLUGINSDIR/$plugin/xtend-gen \
              $already_compiled$PLUGINSDIR/$plugin/src
 
