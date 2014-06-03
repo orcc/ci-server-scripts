@@ -44,7 +44,7 @@ MWECP=$(echo $DIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
 export MWECP
 
 # Setup Xtend classpath
-XTENDCP=$ECLIPSECP:$PLUGINSDIR/org.jgrapht
+XTENDCP=$ECLIPSECP
 for i in $(ls $PLUGINSDIR 2>/dev/null)
 do
     [ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
