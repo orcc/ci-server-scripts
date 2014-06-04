@@ -5,7 +5,7 @@ function print_usage() {
     echo
     echo "Usage: $0 <working_directory> <feature_dir> <plugin_dir> [<plugin_dir> <plugin_dir> ...]"
     echo "    <working_directory>           Path to folder used to perform build & tests"
-    echo "    <feature_dir>                 Path to eclipse feature folder"
+    echo "    <features_dir>                Path to eclipse features folder"
     echo "    <plugin_dir>                  Path(s) to folder(s) containing eclipse plugins directories"
 }
 
@@ -19,16 +19,14 @@ fi
 [ ! -d "$2" ] && echo "Missing features directory" && print_usage && exit $E_BADARGS
 [ ! -d "$3" ] && echo "Missing plugins directory" && print_usage && exit $E_BADARGS
 
-SOURCEFEATUREDIR=$2
-
-ORCCID="net.sf.orcc"
+SOURCESFEATUREDIR=$2
 
 echo "***START*** $(date -R) Build type: $BUILDTYPE"
 rm -fr $BUILDDIR
 mkdir -p $PLUGINSDIR
-mkdir -p $FEATURESDIR/${ORCCID}
+mkdir -p $FEATURESDIR
 
-cp -ur $SOURCEFEATUREDIR/* $FEATURESDIR/${ORCCID}
+cp -ur $SOURCESFEATUREDIR/* $FEATURESDIR
 
 # Remove the 2 first arg from command line
 shift 2
@@ -101,7 +99,11 @@ mkdir -p $BUILDDIR
 # build features and plugins. Needs to rename it
 ARCHIVEPREFIX=orcc_latest
 
-BUILDID="${BUILDTYPE}Build"
+BUILDID="${BUILDTYPE}_build"
+
+ORCCMAINFEATUREID="net.sf.orcc"
+TESTSFEATUREID="net.sf.orcc.tests"
+ARTIFACTSFOLDER="final_artifacts"
 
 # For information on following properties:
 # - open build.properties from <eclipse_dir>/plugins/org.eclipse.pde.build_*/templates/headless-build/build.properties
@@ -109,7 +111,7 @@ BUILDID="${BUILDTYPE}Build"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.antRunner \
                         -buildfile $BUILDFILE \
                         -DskipFetch=true \
-                        -DtopLevelElementId=$ORCCID \
+                        -DtopLevelElementId=$ORCCMAINFEATUREID \
                         -DtopLevelElementType=feature \
                         -DjavacSource=1.6 -DjavacTarget=1.6 \
                         -DbaseLocation=$ECLIPSEBUILD \
@@ -118,7 +120,24 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.
                         -Dbase=$BUILDDIR \
                         -DbuildId=$BUILDID \
                         -DbuildType=$PDEBUILDTYPE \
-                        -DbuildLabel="${buildId}.${buildType}" \
+                        -DbuildLabel=$ARTIFACTSFOLDER \
+                        -DarchivePrefix=$ARCHIVEPREFIX \
+                        -DcollectingFolder=binary_output \
+                        -DoutputUpdateJars=true
+
+$ECLIPSEBUILD/eclipse   -nosplash -consoleLog -application org.eclipse.ant.core.antRunner \
+                        -buildfile $BUILDFILE \
+                        -DskipFetch=true \
+                        -DtopLevelElementId=$TESTSFEATUREID \
+                        -DtopLevelElementType=feature \
+                        -DjavacSource=1.6 -DjavacTarget=1.6 \
+                        -DbaseLocation=$ECLIPSEBUILD \
+                        -DpluginPath=$ECLIPSEBUILD:$BUILDDIR \
+                        -DbuildDirectory=$BUILDDIR \
+                        -Dbase=$BUILDDIR \
+                        -DbuildId=$BUILDID \
+                        -DbuildType=$PDEBUILDTYPE \
+                        -DbuildLabel=$ARTIFACTSFOLDER \
                         -DarchivePrefix=$ARCHIVEPREFIX \
                         -DcollectingFolder=binary_output \
                         -DoutputUpdateJars=true
@@ -130,19 +149,22 @@ echo "****************************************************************"
 
 LOCALREPO=$ORCCWORK/repository.$BUILDTYPE
 mkdir -p $LOCALREPO
-mv $BUILDDIR/$ORCCID-$BUILDID.zip $LOCALREPO
 
-# Load version number computed from the build
-VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCID}=" | cut -d'=' -f2`
-CURRENTBUILD="${ORCCID}_${VERSION}"
-
-pushd $LOCALREPO > /dev/null
 echo ""
 echo "-> Extract built zip file"
 # Unzip the built zip, the created folder is $ARCHIVEPREFIX
-unzip -o $ORCCID-$BUILDID.zip
-# Clean the useless zip
-rm $ORCCID-$BUILDID.zip
+unzip -o $BUILDDIR/$ARTIFACTSFOLDER/$ORCCMAINFEATUREID-$BUILDID.zip -d $LOCALREPO
+
+echo ""
+echo "-> Move unit tests zip archive to a place where it will be archivable"
+rm -f $ORCCWORK/*.zip
+mv $BUILDDIR/$ARTIFACTSFOLDER/$TESTSFEATUREID-$BUILDID.zip $ORCCWORK
+
+# Load version number computed from the build
+VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCMAINFEATUREID}=" | cut -d'=' -f2`
+CURRENTBUILD="${ORCCMAINFEATUREID}_${VERSION}"
+
+pushd $LOCALREPO > /dev/null
 
 echo ""
 echo "-> Rename $ARCHIVEPREFIX into $CURRENTBUILD"
@@ -172,13 +194,13 @@ echo $p2Index > ./p2.index
 
 # Create a tempoary file defining the category we will publish
 pushd ${CURRENTBUILD} > /dev/null
-CATEGORY=$ORCCID.category.$BUILDTYPE
+CATEGORY=$ORCCMAINFEATUREID.category.$BUILDTYPE
 TMPFILE=$(mktemp)
 cat > $TMPFILE <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
     <category-def name="$CATEGORY" label="${REPONAME}"/>
-    <feature url="$(ls features/${ORCCID}*)" id="${ORCCID}" version="${VERSION}">
+    <feature url="$(ls features/${ORCCMAINFEATUREID}*)" id="${ORCCMAINFEATUREID}" version="${VERSION}">
         <category name="$CATEGORY"/>
     </feature>
 </site>
@@ -196,7 +218,7 @@ $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
 # Delete oldest builds before creating the composite repo
 echo ""
 echo "-> Delete useless builds (all but the ${NBUILDSTOKEEP} last)"
-for oldDirectory in $(find -mindepth 1 -maxdepth 1 -type d -name "${ORCCID}_*" | sort | head -n -${NBUILDSTOKEEP}); do
+for oldDirectory in $(find -mindepth 1 -maxdepth 1 -type d -name "${ORCCMAINFEATUREID}_*" | sort | head -n -${NBUILDSTOKEEP}); do
     echo "Delete ${oldDirectory}"
     rm -fr "${oldDirectory}"
 done
@@ -208,7 +230,7 @@ echo ""
 echo "-> Create p2 composite repository (top level, references all sub-repositories)"
 $P2ADMIN -application org.eclipselabs.equinox.p2.composite.repository \
     -location file:$(pwd) \
-    -add $(echo ${ORCCID}_* | sed -e "s/ /,/g") \
+    -add $(echo ${ORCCMAINFEATUREID}_* | sed -e "s/ /,/g") \
     -repositoryName "$REPONAME" \
     -compressed
 
@@ -228,7 +250,7 @@ echo ""
 echo "-> Uninstall old Orcc feature"
 $P2ADMIN -application org.eclipse.equinox.p2.director \
   -destination $ECLIPSERUN \
-  -uninstallIU ${ORCCID}.feature.group \
+  -uninstallIU ${ORCCMAINFEATUREID}.feature.group \
 || echo -e "\n*** There is no existing Orcc feature to uninstall. This is probably the first time this script is \n\
 launched since last eclipse reinstall. Please ignore the previous error message. ***"
 
@@ -239,7 +261,7 @@ $P2ADMIN -application org.eclipse.equinox.p2.director \
   -artifactRepository file:$LOCALREPO \
   -metadataRepository file:$LOCALREPO \
   -repository $ECLIPSEREPOSITORY \
-  -installIU ${ORCCID}.feature.group
+  -installIU ${ORCCMAINFEATUREID}.feature.group
 
 echo ""
 echo "***END*** $0 $(date -R)"
