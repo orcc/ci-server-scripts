@@ -17,7 +17,7 @@ fi
 
 [ ! -d "$2" ] && echo "Missing plugins directory" && print_usage && exit $E_BADARGS
 
-PLUGINSDIR=$(readlink -f $2)
+JARPLUGINSDIR=$(readlink -f $2)
 
 mkdir -p junit-results
 resultsDir=$(readlink -f junit-results)
@@ -35,7 +35,7 @@ cat > $buildFile <<EOF
 					<include name="org.junit_4*/junit.jar" />
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${PLUGINSDIR}">
+				<fileset dir="${JARPLUGINSDIR}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
