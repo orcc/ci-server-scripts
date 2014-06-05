@@ -1,0 +1,39 @@
+#!/bin/bash
+source $(dirname $0)/defines.sh
+
+PLUGINSDIR=$2
+
+here=$(pwd)
+mkdir -p junit-results
+
+buildFile=$(mktemp)
+cat > $buildFile <<EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="unit-tests">
+	<target name="unit-tests">
+		<junit haltonfailure="no" printsummary="yes" showoutput="true">
+			<formatter type="xml" />
+			<classpath>
+				<pathelement path="\${java.class.path}/"/>
+				<fileset dir="${ECLIPSEBUILD}/plugins">
+					<include name="org.junit_4*/junit.jar" />
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${here}/${PLUGINSDIR}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest fork="true" todir="${here}/junit-results">
+				<fileset dir="/opt/local_jenkins/ci_working_dir/build.dir.tests/plugins/net.sf.orcc.cal.tests/src">
+					<include name="net/sf/orcc/tests/main/*.java" />
+				</fileset>
+				<fileset dir="/opt/local_jenkins/ci_working_dir/build.dir.tests/plugins/net.sf.orcc.cal.tests/xtend-gen">
+					<include name="net/sf/orcc/tests/main/*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>
+EOF
+
+ant -f $buildFile
