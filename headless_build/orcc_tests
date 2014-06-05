@@ -38,6 +38,9 @@ cat > $buildFile <<EOF
 				<fileset dir="${JARPLUGINSDIR}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${JGRAPHTPATH}">
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 			<batchtest fork="true" todir="${resultsDir}">
 				<fileset dir="$PLUGINSDIR/net.sf.orcc.cal.tests/src">

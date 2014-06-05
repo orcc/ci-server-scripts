@@ -35,6 +35,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Set the path of the p2-admin binary, generated from orcc_eclipse_setup script
 export P2ADMIN=$DIR/../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/products/org.eclipse.equinox.p2.admin.rcp.product/linux/gtk/x86_64/p2-admin/p2-admin
 
+export JGRAPHTPATH=$DIR/../lib/jgrapht-0.9.0
+
 # Setup eclipse classpath
 ECLIPSECP=$(echo $ECLIPSEBUILD/plugins/*.jar | sed -e "s/ /:/g")
 # Add the missing junit4 plugin, to allow compiling xtend in tests plugin
