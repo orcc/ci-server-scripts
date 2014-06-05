@@ -1,7 +1,7 @@
 #!/bin/bash
 source $(dirname $0)/defines.sh
 
-PLUGINSDIR=$2
+PLUGINSDIR=$(readlink -f $2)
 
 here=$(pwd)
 mkdir -p junit-results
@@ -19,15 +19,15 @@ cat > $buildFile <<EOF
 					<include name="org.junit_4*/junit.jar" />
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${here}/${PLUGINSDIR}">
+				<fileset dir="${PLUGINSDIR}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 			<batchtest fork="true" todir="${here}/junit-results">
-				<fileset dir="/opt/local_jenkins/ci_working_dir/build.dir.tests/plugins/net.sf.orcc.cal.tests/src">
+				<fileset dir="$PLUGINSDIR/net.sf.orcc.cal.tests/src">
 					<include name="net/sf/orcc/tests/main/*.java" />
 				</fileset>
-				<fileset dir="/opt/local_jenkins/ci_working_dir/build.dir.tests/plugins/net.sf.orcc.cal.tests/xtend-gen">
+				<fileset dir="$PLUGINSDIR/net.sf.orcc.cal.tests/xtend-gen">
 					<include name="net/sf/orcc/tests/main/*.java" />
 				</fileset>
 			</batchtest>
