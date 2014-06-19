@@ -44,8 +44,9 @@ echo "****************************************************************"
 echo "*             Generates Cal Xtext architecture                 *"
 echo "****************************************************************"
 echo ""
-cd $PLUGINSDIR/net.sf.orcc.cal
+pushd $PLUGINSDIR/net.sf.orcc.cal
 java -cp $MWECP org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher src/net/sf/orcc/cal/GenerateCal.mwe2
+popd
 
 echo ""
 echo "****************************************************************"
