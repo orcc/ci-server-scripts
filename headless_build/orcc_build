@@ -35,6 +35,10 @@ for arg; do
     cp -ur $arg/* $PLUGINSDIR
 done
 
+rm -fr $PLUGINSDIR/**/xtend-gen/*
+rm -fr $PLUGINSDIR/**/src-gen/*
+rm -fr $PLUGINSDIR/**/bin/*
+
 echo ""
 echo "****************************************************************"
 echo "*             Generates Cal Xtext architecture                 *"
