@@ -53,25 +53,26 @@ echo "****************************************************************"
 echo "*             Generates Java sources from Xtend                *"
 echo "****************************************************************"
 echo ""
-already_compiled=""
-for plugin in $(ls $PLUGINSDIR); do
-    # Execute Xtend compile only if plugin contains *.xtend files
-    if [ -n "$(find $PLUGINSDIR/$plugin -name "*.xtend" -print0)" ]; then
-        echo "==> Plugin: $PLUGINSDIR/$plugin"
-        java -cp $XTENDCP org.eclipse.xtend.core.compiler.batch.Main \
-             -useCurrentClassLoader \
-             -d $PLUGINSDIR/$plugin/xtend-gen \
-             $already_compiled$PLUGINSDIR/$plugin/src
 
-        # Last plugins compiled needs to have the base class already compiled in
-        # the list of source folder. Note that works fine only because we are lucky:
-        # alphabetical order of Orcc plugins is coherent with dependency order in Xtend files.
-        if [ -d $PLUGINSDIR/$plugin/xtend-gen ]; then
-            already_compiled=$PLUGINSDIR/$plugin/xtend-gen:$already_compiled
-        fi
-        printf "\n"
-    fi
+xtendoutputdir="xtend-output"
+pushd $PLUGINSDIR
+java -cp $ECLIPSECP:$SOURCEFOLDERS \
+    org.eclipse.xtend.core.compiler.batch.Main \
+    -useCurrentClassLoader \
+    -d ./${xtendoutputdir} \
+    "$SOURCEFOLDERS"
+
+for xtendfile in $(find -name "*.xtend"); do
+    # The path of the generated java file, under ${xtendoutputdir} folder
+    fromJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//%/g' | cut -d'%' -f2)
+    # The path where this java file should be moved before running java compilation
+    toJavaFile=$(echo $xtendfile | sed -e 's/.xtend/.java/g' | sed -e 's/\/src\//\/xtend-gen\//g')
+    mkdir -p $(dirname $toJavaFile)
+    mv ${xtendoutputdir}/$fromJavaFile $toJavaFile
 done
+
+rm -fr $xtendoutputdir
+popd
 
 echo ""
 echo "****************************************************************"

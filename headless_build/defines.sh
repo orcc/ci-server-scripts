@@ -48,10 +48,12 @@ MWECP=$(echo $DIR/antlr-generator-*.jar | sed -e "s/ /:/g"):$MWECP
 export MWECP
 
 # Setup Xtend classpath
-XTENDCP=$ECLIPSECP
 for i in $(ls $PLUGINSDIR 2>/dev/null)
 do
-    [ -d "$PLUGINSDIR/$i/src" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src
-    [ -d "$PLUGINSDIR/$i/src-gen" ] && XTENDCP=$XTENDCP:$PLUGINSDIR/$i/src-gen
+    [ -d "$PLUGINSDIR/$i/src" ] && SOURCEFOLDERS=$SOURCEFOLDERS:$PLUGINSDIR/$i/src
+    [ -d "$PLUGINSDIR/$i/src-gen" ] && SOURCEFOLDERS=$SOURCEFOLDERS:$PLUGINSDIR/$i/src-gen
 done
-export XTENDCP
+# Remove the first ':'
+SOURCEFOLDERS=$(echo $SOURCEFOLDERS | sed -e "s/^://g")
+
+export SOURCEFOLDERS
