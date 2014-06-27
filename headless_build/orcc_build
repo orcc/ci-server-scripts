@@ -166,11 +166,12 @@ echo "-> Move unit tests zip archive to a place where it will be archivable"
 rm -f $ORCCWORK/*.zip
 mv $BUILDDIR/$ARTIFACTSFOLDER/$TESTSFEATUREID-$BUILDID.zip $ORCCWORK
 
-# Load version number computed from the build
-VERSION=`cat $BUILDDIR/finalFeaturesVersions.properties | grep "${ORCCMAINFEATUREID}=" | cut -d'=' -f2`
-CURRENTBUILD="${ORCCMAINFEATUREID}_${VERSION}"
-
 pushd $LOCALREPO > /dev/null
+
+# Load version number computed from the build
+featureFile=$(echo $(basename $ARCHIVEPREFIX/features/${ORCCMAINFEATUREID}*))
+VERSION=$(echo ${featureFile%.*} | cut -d'_' -f2)
+CURRENTBUILD="${ORCCMAINFEATUREID}_${VERSION}"
 
 echo ""
 echo "-> Rename $ARCHIVEPREFIX into $CURRENTBUILD"
