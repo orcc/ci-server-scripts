@@ -141,7 +141,7 @@ HEVC/jctvc/avconv/ENTP_A_Qualcomm_1.bit,                                 25,  19
 HEVC/jctvc/avconv/ENTP_B_Qualcomm_1.bit,                                 25,  1920x1080
 HEVC/jctvc/avconv/ENTP_C_Qualcomm_1.bit,                                25,  1920x1080
 HEVC/jctvc/avconv/EXT_A_ericsson_4.bit,                                  3,  416x240
-#HEVC/jctvc/avconv/HRD_A_Fujitsu_2.bin,                                  96,  416x240
+HEVC/jctvc/avconv/HRD_A_Fujitsu_2.bin,                                  96,  416x240
 #HEVC/jctvc/avconv/ipcm_A_NEC_3.bit,                                      1,  416x240
 #HEVC/jctvc/avconv/ipcm_B_NEC_3.bit,                                      1,  416x240
 #HEVC/jctvc/avconv/ipcm_C_NEC_3.bit,                                      1,  416x240
