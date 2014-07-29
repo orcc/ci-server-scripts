@@ -148,7 +148,7 @@ HEVC/jctvc/avconv/HRD_A_Fujitsu_2.bin,                                  96,  416
 #HEVC/jctvc/avconv/ipcm_D_NEC_3.bit,                                      1,  416x240
 #HEVC/jctvc/avconv/ipcm_E_NEC_2.bit,                                      1,  416x240
 HEVC/jctvc/avconv/IPRED_A_docomo_2.bit,                                  20,  832x480
-#HEVC/jctvc/avconv/IPRED_B_Nokia_3.bit,                                   1,  1920x1080
+HEVC/jctvc/avconv/IPRED_B_Nokia_3.bit,                                   1,  1920x1080
 HEVC/jctvc/avconv/IPRED_C_Mitsubishi_3.bit,                               4,  832x480
 #HEVC/jctvc/avconv/LS_A_Orange_2.bit,                                     9,  416x240
 #HEVC/jctvc/avconv/LS_B_Orange_4.bit,                                    25,  832x480
@@ -240,9 +240,9 @@ HEVC/jctvc/avconv/WP_B_Toshiba_3.bit,                                   256,  41
 #HEVC/jctvc/avconv/WPP_D_ericsson_MAIN10_2.bit,                          48,  64x240
 #HEVC/jctvc/avconv/WPP_D_ericsson_MAIN_2.bit,                            48,  64x240
 #HEVC/jctvc/avconv/WPP_E_ericsson_MAIN10_2.bit,                          48,  128x240
-#HEVC/jctvc/avconv/WPP_E_ericsson_MAIN_2.bit,                            48,  128x240
+HEVC/jctvc/avconv/WPP_E_ericsson_MAIN_2.bit,                            48,  128x240
 #HEVC/jctvc/avconv/WPP_F_ericsson_MAIN10_2.bit,                          48,  128x240
-#HEVC/jctvc/avconv/WPP_F_ericsson_MAIN_2.bit,                            48,  128x240
+HEVC/jctvc/avconv/WPP_F_ericsson_MAIN_2.bit,                            48,  128x240
 
 #########################
 #  Low Delay sequences  #
