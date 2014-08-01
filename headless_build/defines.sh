@@ -9,8 +9,16 @@ export E_BADARGS=64
 
 export ORCCWORK="$1"
 
+ARCH=`uname -m`
+
+if [ "$ARCH" == "x86_64" ]; then
+	ECLIPSE_ARCH="-x86_64"
+else
+	ECLIPSE_ARCH=""
+fi
+
 # Used to download the base platform version of eclipse
-export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk-x86_64.tar.gz"
+export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk$ECLIPSE_ARCH.tar.gz"
 # Used to download dependencies (both runtime and build eclipse)
 ECLIPSEVERSION=kepler
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
