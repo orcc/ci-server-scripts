@@ -9,8 +9,16 @@ export E_BADARGS=64
 
 export ORCCWORK="$1"
 
+ARCH=`uname -m`
+
+if [ "$ARCH" == "x86_64" ]; then
+	ECLIPSE_ARCH="-x86_64"
+else
+	ECLIPSE_ARCH=""
+fi
+
 # Used to download the base platform version of eclipse
-export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk-x86_64.tar.gz"
+export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk$ECLIPSE_ARCH.tar.gz"
 # Used to download dependencies (both runtime and build eclipse)
 ECLIPSEVERSION=kepler
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
@@ -33,7 +41,13 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Set the path of the p2-admin binary, generated from orcc_eclipse_setup script
-export P2ADMIN=$DIR/../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/products/org.eclipse.equinox.p2.admin.rcp.product/linux/gtk/x86_64/p2-admin/p2-admin
+if [ "$ARCH" == "x86_64" ]; then
+	P2ADMIN_ARCH="x86_64"
+else
+	P2ADMIN_ARCH="x86"
+fi
+
+export P2ADMIN=$DIR/../p2-admin/org.eclipselabs.equinox.p2.admin.product/target/products/org.eclipse.equinox.p2.admin.rcp.product/linux/gtk/$P2ADMIN_ARCH/p2-admin/p2-admin
 
 export JGRAPHTPATH=$DIR/../lib/jgrapht-0.9.0
 
