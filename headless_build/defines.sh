@@ -18,9 +18,10 @@ else
 fi
 
 # Used to download the base platform version of eclipse
-export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.3.2-201402211700/eclipse-platform-4.3.2-linux-gtk$ECLIPSE_ARCH.tar.gz"
+export ECLIPSEURL="http://mirror.ibcp.fr/pub/eclipse/eclipse/downloads/drops4/R-4.4.1-201409250400/eclipse-platform-4.4.1-linux-gtk$ECLIPSE_ARCH.tar.gz"
+
 # Used to download dependencies (both runtime and build eclipse)
-ECLIPSEVERSION=kepler
+ECLIPSEVERSION=luna
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
 
 export ECLIPSERUN=$ORCCWORK/eclipse.runtime
