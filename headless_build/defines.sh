@@ -7,7 +7,7 @@ export E_BADARGS=64
 [ ! -d "$1" ] && echo "Missing working directory folder" && exit $E_BADARGS
 [ -z "$BUILDTYPE" ] && export BUILDTYPE="tests" && echo "Variable BUILDTYPE has not been set. Initialized to \"tests\""
 
-export ORCCWORK="$1"
+export ORCCWORK="$(readlink -f $1)"
 
 ARCH=`uname -m`
 
