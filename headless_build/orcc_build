@@ -169,12 +169,12 @@ mv $BUILDDIR/$ARTIFACTSFOLDER/$TESTSFEATUREID-$BUILDID.zip $ORCCWORK
 pushd $LOCALREPO > /dev/null
 
 # Load version number computed from the build
-featureFile=$(echo $(basename $ARCHIVEPREFIX/features/${ORCCMAINFEATUREID}*))
+featureFile=$(basename $ARCHIVEPREFIX/features/${ORCCMAINFEATUREID}*)
 VERSION=$(echo ${featureFile%.*} | cut -d'_' -f2)
 CURRENTBUILD="${ORCCMAINFEATUREID}_${VERSION}"
 
 echo ""
-echo "-> Rename $ARCHIVEPREFIX into $CURRENTBUILD"
+echo "-> Rename $ARCHIVEPREFIX/ into $CURRENTBUILD/"
 # Rename it to its final name
 mv $ARCHIVEPREFIX $CURRENTBUILD
 
@@ -216,7 +216,7 @@ popd > /dev/null
 
 # Publish category for the current build
 echo ""
-echo "-> Register $CURRENTBUILD into category ${REPONAME}"
+echo "-> Register $CURRENTBUILD into category \"${REPONAME}\""
 $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
     -metadataRepository file:$(pwd)/${CURRENTBUILD} \
     -categoryDefinition file:$TMPFILE \
@@ -224,7 +224,7 @@ $P2ADMIN -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
 
 # Delete oldest builds before creating the composite repo
 echo ""
-echo "-> Delete useless builds (all but the ${NBUILDSTOKEEP} last)"
+echo "-> Delete useless builds (all but the last ${NBUILDSTOKEEP})"
 for oldDirectory in $(find -mindepth 1 -maxdepth 1 -type d -name "${ORCCMAINFEATUREID}_*" | sort | head -n -${NBUILDSTOKEEP}); do
     echo "Delete ${oldDirectory}"
     rm -fr "${oldDirectory}"
