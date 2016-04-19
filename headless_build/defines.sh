@@ -21,8 +21,9 @@ fi
 export ECLIPSEURL="http://eclipse.mirror.garr.it/mirrors/eclipse/eclipse/downloads/drops4/R-4.5.2-201602121500/eclipse-platform-4.5.2-linux-gtk$ECLIPSE_ARCH.tar.gz"
 
 # Used to download dependencies (both runtime and build eclipse)
-ECLIPSEVERSION=luna
+ECLIPSEVERSION=mars
 export ECLIPSEREPOSITORY=http://download.eclipse.org/releases/$ECLIPSEVERSION
+export ECLIPSEREPOSITORY2=http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/
 
 export ECLIPSERUN=$ORCCWORK/eclipse.runtime
 export ECLIPSEBUILD=$ORCCWORK/eclipse.build
