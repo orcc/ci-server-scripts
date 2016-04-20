@@ -42,7 +42,7 @@ $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -followReferences \
                         -installIU $BUILDDEPS
 
-BUILDDEPS="org.eclipse.xtext.sdk.feature.group,org.eclipse.xtend.sdk.feature.group"
+BUILDDEPS="org.eclipse.xtext.sdk.feature.group"
 $ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
                         -destination $ECLIPSEBUILD \
