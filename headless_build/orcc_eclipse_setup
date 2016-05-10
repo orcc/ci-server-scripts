@@ -1,59 +1,57 @@
 #!/bin/bash
-source $(dirname $0)/defines.sh
+## Build the eclipse enviroment by command line
+
+NBARGS=2
+function print_usage() {
+    echo
+    echo "Usage: $0 <eclipse_directory> <repository_url>"
+    echo "    <eclipse_directory>           The directory where Eclipse will be installed"
+    echo "    <repository_url>              The repository URL (e.g. http://orcc.sourceforge.net/eclipse/ or file:/user/local/path)"
+}
+
+if [ $# -lt $NBARGS ]; then
+    print_usage
+    exit $E_BADARGS
+fi
+
+# The Eclipse download url (if you want to change the mirror just select one from https://eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/mars/R/eclipse-rcp-mars-R-linux-gtk-x86_64.tar.gz&format=xml )
+ECLIPSE_DOWNLOAD_URL="http://mirror.switch.ch/eclipse/technology/epp/downloads/release/mars/R/eclipse-rcp-mars-R-linux-gtk-x86_64.tar.gz"
+FEATURES="net.sf.orcc.feature.feature.group"
+
+# The eclipse directory (e.g. /home/scb/Development/test/eclipse )
+ECLIPSE_DIR=$1
+# The orcc eclipse plugins respository site (e.g. file:/home/scb/development/orcc/eclipse/plugins/net.sf.orcc.site/target/repository/)
+ORCC_REPO=$2
 
 echo "***START*** $0 $(date -R)"
 
+if [ -d "$ECLIPSE_DIR" ]; then
+  echo "Cleaning the eclipse directory"
+  rm -rf $ECLIPSE_DIR
+fi
 
-mkdir -p $ORCCWORK
-
-rm -fr $ECLIPSERUN
-rm -fr $ECLIPSEBUILD
-
-mkdir $ECLIPSERUN
-mkdir $ECLIPSEBUILD
-
-pushd $ORCCWORK
+echo "Creating an empty eclipse directory"
+mkdir $ECLIPSE_DIR
 
 echo "Downloading Eclipse"
-wget --progress=dot:mega $ECLIPSEURL
+wget --progress=dot:mega $ECLIPSE_DOWNLOAD_URL
 
-ECLIPSEARCHIVE=$(echo eclipse-platform-*.tar.gz)
+ECLIPSEARCHIVE=$(echo eclipse-rcp-*.tar.gz)
 
-echo "Uncompressing"
+echo "Uncompressing Eclipse archive"
 tar -xzaf $ECLIPSEARCHIVE
+# copy it in the right directory
+cp -r eclipse/* $ECLIPSE_DIR
 
-echo "Update java max heap size"
-sed -i -e "s/-Xmx384m/-Xmx512m/g" eclipse/eclipse.ini
-
-echo "Copying eclipse/* into $ECLIPSERUN and $ECLIPSEBUILD"
-cp -r eclipse/* $ECLIPSERUN
-cp -r eclipse/* $ECLIPSEBUILD
-
-echo "Deleting 'eclipse' directory and archive downloaded"
+echo "Deleting downloaded archives"
 rm -rf eclipse
 rm $ECLIPSEARCHIVE
 
-echo "Installing plugins required for build step into eclipse.build"
-BUILDDEPS="org.eclipse.pde.feature.group,org.eclipse.emf.sdk.feature.group,org.eclipse.graphiti.sdk.feature.feature.group"
-$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
+echo "Downloading and installing the orcc plugin"
+$ECLIPSE_DIR/eclipse   -nosplash -consoleLog \
                         -application org.eclipse.equinox.p2.director \
-                        -destination $ECLIPSEBUILD \
-                        -repository $ECLIPSEREPOSITORY \
+                        -repository $ORCC_REPO \
                         -followReferences \
-                        -installIU $BUILDDEPS
-
-BUILDDEPS="org.eclipse.xtext.sdk.feature.group"
-$ECLIPSEBUILD/eclipse   -nosplash -consoleLog \
-                        -application org.eclipse.equinox.p2.director \
-                        -destination $ECLIPSEBUILD \
-                        -repository $ECLIPSEREPOSITORY2 \
-                        -followReferences \
-                        -installIU $BUILDDEPS
-
-popd
-
-pushd $DIR/../p2-admin
-mvn package
-popd
+                        -installIU $FEATURES
 
 echo "***END*** $0 $(date -R)"
