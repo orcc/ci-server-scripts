@@ -1,65 +1,68 @@
 #!/bin/bash
 
-NBARGS=5
+NBARGS=6
 function print_usage() {
     echo
-    echo "Usage: $0 <working_directory> <projects_dir> <project> <top_network> <input_sequence> [<reference_file>]"
-    echo "    <working_directory>           Path to folder used to perform build & tests"
-    echo "    <projects_dir>                Folder containing CAL projects"
-    echo "    <project>                     The project containing application to build"
+    echo "Usage: $0 <eclipse_directory> <projects_dir> <project> <top_network> <input_sequence> [<reference_file>]"
+    echo "    <eclipse_dir>           		Path to the directory where Eclipse is installed"
+    echo "    <projects_dir>                Path to the directory containing CAL projects"
+    echo "    <project>                     Name of RVC-CAL project containing application to build"
     echo "    <top_network>                 Qualified name of the top network to build"
+    echo "    <fifo_size>                 	Fifo size"
     echo "    <input_sequence>              Input file to pass to application"
     echo "    <reference_file>              [Optional] Reference file to use for errors checking"
 }
-
-source $(dirname $0)/defines.sh
 
 if [ $# -lt $NBARGS ]; then
     print_usage
     exit $E_BADARGS
 fi
 
-[ ! -s "$2" ] && echo "Missing CAL projects folder" && print_usage && exit $E_BADARGS
+[ ! -d "$1" ] && echo "Missing eclipse directory" && print_usage && exit $E_BADARGS
+[ ! -d "$2" ] && echo "Missing CAL projects directory" && print_usage && exit $E_BADARGS
 [ -z "$3" ] && echo "Missing project name" && print_usage && exit $E_BADARGS
 [ -z "$4" ] && echo "Missing top network qualified name" && print_usage && exit $E_BADARGS
-[ ! -s "$5" ] && echo "Missing input sequence" && print_usage && exit $E_BADARGS
-[ -f "$6" ] && REFOPTION="-r $6"
+[ -z "$5" ] && echo "Missing fifo size" && print_usage && exit $E_BADARGS
+[ ! -s "$6" ] && echo "Missing input sequence" && print_usage && exit $E_BADARGS
+[ -f "$7" ] && REFOPTION="-r $7"
 
-APPDIR=$2
-PROJECT=$3
+ECLIPSE_DIR=$1
+PROJECTS_DIR=$2
+PROJECT_NAME=$3
 NETWORK=$4
-INPUT=$5
+FIFO_SIZE=$5
+INPUT=$6
 
-# Split 2 test to perform a "short circuit evaluation"
-[ "$FIFOSIZE" -ge 2 ] 2>/dev/null && SETFIFO="-s $FIFOSIZE" && echo "Fifo size set to $FIFOSIZE"
+SETFIFO="-s $FIFO_SIZE" 
+echo "Fifo size set to $FIFO_SIZE"
 
 echo "***START*** $0 $(date -R)"
 
-RUNWORKSPACE=$APPDIR
+RUNWORKSPACE=$PROJECTS_DIR
 rm -fr $RUNWORKSPACE/.metadata $RUNWORKSPACE/.JETEmitters
 rm -fr $RUNWORKSPACE/**/bin
 
 echo "Register Orcc projects in eclipse workspace"
-$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+$ECLIPSE_DIR/eclipse     -nosplash -consoleLog \
                         -application net.sf.orcc.cal.workspaceSetup \
                         -data $RUNWORKSPACE \
-                        $APPDIR
+                        $PROJECTS_DIR
 
-echo "Generate Orcc IR for $PROJECT and projects it depends on"
-$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+echo "Generate Orcc IR for $PROJECT_NAME and projects it depends on"
+$ECLIPSE_DIR/eclipse     -nosplash -consoleLog \
                         -application net.sf.orcc.cal.cli \
                         -data $RUNWORKSPACE \
-                        $PROJECT \
+                        $PROJECT_NAME \
                         $NETWORK \
                         -vmargs -Xms40m -Xmx768m
 
 echo "Run simulation"
-$ECLIPSERUN/eclipse     -nosplash -consoleLog \
+$ECLIPSE_DIR/eclipse     -nosplash -consoleLog \
                         -application net.sf.orcc.simulators.cli \
                         -data $RUNWORKSPACE \
                         -n \
                         -i $INPUT \
-                        -p $PROJECT \
+                        -p $PROJECT_NAME \
                         $SETFIFO \
                         $REFOPTION \
                         $NETWORK \
