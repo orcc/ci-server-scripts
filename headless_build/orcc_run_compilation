@@ -74,9 +74,9 @@ $ECLIPSE_DIR/eclipse    -nosplash -consoleLog \
 
 rc=$?
 if [[ $rc -ne 0 ]] ; then
-  echo '$NETWORK compilation with $BACKEND backend failed'; exit $rc
+  echo "$NETWORK compilation with $BACKEND backend failed"; exit $rc
 else
-  echo '$NETWORK successfully compiled with $BACKEND backend';
+  echo "$NETWORK successfully compiled with $BACKEND backend";
 fi
 
 echo "***END*** $0 $(date -R)"
