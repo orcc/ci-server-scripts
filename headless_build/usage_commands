@@ -1,0 +1,15 @@
+#Example commands:
+#Orcc Build#
+/home/junaid/develop/orcc/ci-server-scripts/headless_build/orcc_build /home/junaid/develop/orcc/orcc
+
+#Eclipse Setup#
+/home/junaid/develop/orcc/ci-server-scripts/headless_build/orcc_eclipse_setup eclipse_dir file:/home/junaid/develop/orcc/orcc/eclipse/plugins/net.sf.orcc.site/target/repository/
+
+#Compile with C Backend#
+/home/junaid/develop/orcc/ci-server-scripts/headless_build/orcc_run_compilation eclipse_dir /home/junaid/develop/github/orc-apps c JPEG jpeg.decoder.Top_Decoder output_dir "-as -s 512" eclipse_ws
+
+#Simulate with an input#
+/home/junaid/develop/orcc/ci-server-scripts/headless_build/orcc_run_simulation eclipse_dir /home/junaid/develop/github/orc-apps JPEG jpeg.decoder.Top_Decoder 512 /home/junaid/develop/sequences/jpeg/foreman_qcif.mjpg
+
+#Orcc tests#
+/home/junaid/develop/orcc/ci-server-scripts/headless_build/orcc_tests eclipse_dir /home/junaid/develop/orcc/orcc
