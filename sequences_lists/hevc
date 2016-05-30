@@ -123,7 +123,7 @@ HEVC/jctvc/avconv/CAINIT_H_SHARP_3.bit,                                  50,  83
 HEVC/jctvc/avconv/CIP_A_Panasonic_3.bit,                                  2,  416x240
 HEVC/jctvc/avconv/cip_B_NEC_3.bit,                                        5,  416x240
 HEVC/jctvc/avconv/CIP_C_Panasonic_2.bit,                                  2,  416x240
-HEVC/jctvc/avconv/CONFWIN_A_Sony_1.bit,								 	 								 60,  412x236		ADD
+HEVC/jctvc/avconv/CONFWIN_A_Sony_1.bit,                                  60,  412x236		ADD
 #HEVC/jctvc/avconv/DBLK_A_MAIN10_VIXS_3.bit,                              8,  176x144		REP
 HEVC/jctvc/avconv/DBLK_A_SONY_3.bit,                                     30,  832x480
 HEVC/jctvc/avconv/DBLK_B_SONY_3.bit,                                     30,  832x480
@@ -142,7 +142,7 @@ HEVC/jctvc/avconv/ENTP_A_Qualcomm_1.bit,                                 25,  19
 HEVC/jctvc/avconv/ENTP_B_Qualcomm_1.bit,                                 25,  1920x1080
 HEVC/jctvc/avconv/ENTP_C_Qualcomm_1.bit,                                 25,  1920x1080
 HEVC/jctvc/avconv/EXT_A_ericsson_4.bit,                                   3,  416x240
-HEVC/jctvc/avconv/FILLER_A_Sony_1.bit,									 								 60,  416x240		ADD
+HEVC/jctvc/avconv/FILLER_A_Sony_1.bit,                                   60,  416x240		ADD
 HEVC/jctvc/avconv/HRD_A_Fujitsu_3.bin,                                   96,  416x240		REP
 HEVC/jctvc/avconv/INITQP_A_Sony_1.bit,                                   60,  416x240		ADD
 #HEVC/jctvc/avconv/INITQP_B_Main10_Sony_1.bit,                           90,  416x240		ADD
