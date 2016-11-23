@@ -3,8 +3,9 @@
 NBARGS=1
 function print_usage() {
     echo
-    echo "Usage: $0 <orcc_directory>"
-    echo "    <orcc_directory>           Path to the directory where orcc is cloned"
+    echo "Usage: $0 <orcc_directory> <empty_maven_repository>"
+    echo "    <orcc_directory>     Path to the directory where orcc is cloned"
+    echo "    <maven_repository>  (optional) the local maven repository path (current data will be erased)"
 }
 
 if [ $# -lt $NBARGS ]; then
@@ -17,11 +18,27 @@ fi
 
 ORCC_DIR=$1
 CURR_DIR=${pwd}
+MAVEN=$2
 
 echo "***START*** $(date -R)"
 
+if [ -n "$MAVEN" ]; then
+	if [ ! -d "$MAVEN" ]; then
+		mkdir -p $MAVEN
+	else
+		rm -fR $MAVEN/*
+	fi
+fi
+
 cd $ORCC_DIR/eclipse/plugins/
-mvn install
+if [ -z "$MAVEN" ]; then
+	mvn install 
+else
+	mvn install -Dmaven.repo.local=$MAVEN
+fi
+
+rm -fR $MAVEN
+
 rc=$?
 cd $CURR_DIR
 
