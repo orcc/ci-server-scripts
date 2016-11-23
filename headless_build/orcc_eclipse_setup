@@ -20,7 +20,7 @@ ECLIPSE_DIR=$1
 ORCC_REPO=$2
 
 # The Eclipse download url (if you want to change the mirror just select one from https://eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/neon/R/eclipse-rcp-neon-R-linux-gtk-x86_64.tar.gz&format=xml )
-ECLIPSE_DOWNLOAD_URL="http://mirror.switch.ch/eclipse/technology/epp/downloads/release/mars/R/eclipse-rcp-mars-R-linux-gtk-x86_64.tar.gz"
+ECLIPSE_DOWNLOAD_URL="http://mirror.switch.ch/eclipse/technology/epp/downloads/release/neon/R/eclipse-rcp-neon-R-linux-gtk-x86_64.tar.gz"
 ORCC_FEATURES="net.sf.orcc.feature.feature.group"
 
 echo "***START*** $0 $(date -R)"
